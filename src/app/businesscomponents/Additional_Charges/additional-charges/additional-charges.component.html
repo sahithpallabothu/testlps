@@ -1,0 +1,122 @@
+<div class="container">
+	<div class="container" >
+	 <mat-card fxFlex="100%" style="max-height:400px !important" fxFlexAlign="start">
+		 <mat-card-content style="overflow-x:hidden !important;margin-bottom: -40px;">
+			<div fxLayout="column" fxLayoutGap="25px" >
+				<form class="additionalChargesAndInsertsForm"  [formGroup]="additionalChargesForm">
+					<div fxLayout="row" fxLayoutGap="2%" style="display: flex;position: sticky;z-index: 2;	top: 0px;background-color: white;padding: 10px 0px;">
+						<mat-label fxFlex="17%" class="insertLables">Customer Name<span class="mandatorySign">*</span></mat-label>
+						<mat-label fxFlex="10%" class="insertLables">Customer Code<span class="mandatorySign">*</span></mat-label>
+						<mat-label fxFlex="11%" class="insertLables">Job Name</mat-label>
+						<mat-label fxFlex="11%" class="insertLables">Fee Description<span class="mandatorySign">*</span></mat-label>
+						<mat-label fxFlex="9%"  class="insertLables">Amount<span class="mandatorySign">*</span></mat-label>
+						<mat-label fxFlex="16%"  class="insertLables">Description</mat-label>
+						<mat-label fxFlex="10%" class="insertLables">Date<span class="mandatorySign">*</span></mat-label>						
+					</div>
+					<div formArrayName="itemRows" style="margin-top:0px;">
+						<div fxLayout="row" *ngFor="let itemrow of formArr.controls; let i=index"  [formGroupName]="i"  fxLayoutGap="1%">
+										 <mat-form-field  fxFlex="18%">												 
+											  <input type="text" placeholder=""  matInput formControlName="applicationName" matTooltip="Select Customer Name" (keyup)="validateCustomer($event,itemrow,'applicationName',i,false)"
+											   [matAutocomplete]="auto"  #focusElement tabIndex="{{tabIndex+1}}"  >
+												<mat-autocomplete class="autoCompleteAddChargeType" autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayFn"><!-- (onSelectionChange)="setFocusOnSelect('customer')" -->
+												  <mat-option *ngFor="let cust of filteredOptionsCustomer | async" matTooltip='{{cust.customerName}}' (onSelectionChange)="isChangeInCustomer($event,itemrow,'applicationName',i, true)" [value]="cust">
+													 {{cust.customerName}}
+												  </mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('applicationName',itemrow,'required')">
+													Customer Name is required.
+												</mat-error>
+												<mat-error *ngIf="itemrow.controls['applicationName'].hasError('incorrectAppName')">
+													Please enter a valid Customer Name.
+												</mat-error>
+
+										  </mat-form-field>
+										 <mat-form-field  fxFlex="11%" >												 
+											  <input type="text" placeholder=""  #focusElementCode maxlength="4"  matInput formControlName="applicationCode" matTooltip="Select Customer Code" (keyup)="validateApplication($event,itemrow,'applicationCode',i,false)"
+											   [matAutocomplete]="autoCode"  tabIndex="{{tabIndex+1}}">
+												<mat-autocomplete class="autoCompleteAddChargeType" autoActiveFirstOption #autoCode="matAutocomplete"  [displayWith]="displayFnForCode" >
+												  <mat-option *ngFor="let cust of filteredOptionsApplicationCode | async" matTooltip='{{cust.applicationCode}}' (onSelectionChange)="isChangeInApplication($event,itemrow,'applicationCode',i,true)" [value]="cust">
+													 {{cust.applicationCode}}
+												  </mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('applicationCode',itemrow,'required')">
+													Customer Code is required.
+												</mat-error>
+												<mat-error *ngIf="itemrow.controls['applicationCode'].hasError('incorrectAppCode')">
+													Please enter a valid Customer Code.
+												</mat-error>
+										  </mat-form-field>
+
+											<mat-form-field fxFlex="12%">
+												<input matInput type="text"  #jobNameForFocus formControlName="jobName" (keypress)="restrictSpecialCharacters($event)" (blur)="validateSpaces($event)" (keypress) ='avoidSpecialCharcters($event)' matTooltip="Enter Job Name" maxlength="20" placeholder="" autocomplete="off" tabIndex="{{tabIndex+1}}"> 
+												<mat-error *ngIf="hasError('jobName', itemrow, 'minlength')">Job Name minimum length 5.</mat-error>
+												<mat-error *ngIf="itemrow.controls['jobName'].hasError('inValid')">Invalid Job Name.</mat-error>
+											</mat-form-field>
+											
+											<mat-form-field fxFlex="12%">												 
+											
+												<input type="text" placeholder="" (blur)="validateSpaces($event)" (keypress)="restrictSpecialCharacters($event)" matInput formControlName="chargeType" matTooltip="Select Fee Description" maxlength="40" [matAutocomplete]="autoChargeType"  tabIndex="{{tabIndex+1}}" errorMatcher>
+												<mat-autocomplete class="autoCompleteAddChargeType" autoActiveFirstOption #autoChargeType="matAutocomplete"  [displayWith]="displayFnForChargeType" >
+													<mat-option *ngFor="let feeDesc of filteredOptionsChargeTypes | async"  [value]="feeDesc" matTooltip='{{feeDesc.description}}' (onSelectionChange)="setFocusOnSelect('chargeType')">
+														{{feeDesc.description}}
+													  </mat-option>
+												</mat-autocomplete>
+												<!-- <mat-error *ngIf="hasError('chargeType', itemrow, 'space')">{{SpaceMessage}}</mat-error> -->
+												<mat-error *ngIf="hasError('chargeType',itemrow,'required')">
+													Fee Description is required.
+												</mat-error>
+											</mat-form-field>
+														
+											<mat-form-field fxFlex="10%">
+												<input matInput type="text" #amountToFocus autocomplete="off" formControlName="amount" matTooltip="Enter Amount" (keypress)="validateDecimals($event)" autocomplete="off" (blur)="changeToAmountFormat('amount',itemrow)" maxlength="11" style="text-align:right;" placeholder="" tabIndex="{{tabIndex+1}}" errorMatcher> 
+												<mat-error *ngIf="hasError('amount',itemrow,'pattern')">
+													Please enter a valid Amount.
+												</mat-error>
+												<mat-error *ngIf="itemrow.controls['amount'].hasError('incorrect')">
+													Please enter a valid Amount.
+												</mat-error>
+												<mat-error *ngIf="hasError('amount',itemrow,'required')">
+													Amount is required.
+												</mat-error>	
+											</mat-form-field>
+											
+											<mat-form-field fxFlex="17%" >
+												<input matInput formControlName="description" matTooltip="Enter Description" (keypress)="restrictSpecialCharacters($event)" (blur)="validateSpaces($event)" maxlength="100" placeholder="" autocomplete="off" tabIndex="{{tabIndex+1}}"> 
+												<mat-error *ngIf="hasError('description', itemrow, 'required')">Description is required.</mat-error>
+												<mat-error *ngIf="hasError('description', itemrow, 'maxlength')">Description cannot have more than 100 characters.</mat-error>	 
+												<!-- <mat-error *ngIf="hasError('description', itemrow, 'space')">{{SpaceMessage}}</mat-error> -->
+											</mat-form-field>
+											<mat-form-field fxFlex="10%" class="startDate" > 
+												<mat-label></mat-label>
+												<input matInput [textMask]="{mask: datemask}" autocomplete="off" formControlName="runDate"  (blur)="checkForRunDateDate(itemrow,'runDate')" matTooltip="Enter Date" placeholder="MM/DD/YY" 
+												tabIndex="{{tabIndex+1}}" (input)="setDateInDatePicker('runDate','runDateWithPicker',itemrow)" errorMatcher>
+												<mat-error *ngIf="hasError('runDate',itemrow,'required')">Date is required.</mat-error>
+												<mat-error *ngIf="hasError('runDate',itemrow,'pattern')">Invalid Date.</mat-error>
+												<mat-error *ngIf="itemrow.controls['runDate'].hasError('incorrectDate')">Date should be less than or equal to current date.</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="1px"> <!-- (dateChange)="addEvent($event,itemrow,'runDate','runDateWithPicker')" -->
+											<input  matInput formControlName="runDateWithPicker"  [max]="maxDate" [matDatepicker]="acRunDatepicker" tabIndex="-1" (blur)="checkForRunDateDate(itemrow,'runDate')" (dateChange)="addRunDateEvent($event,itemrow,'runDate','runDateWithPicker')">
+											<mat-datepicker-toggle matSuffix [for]="acRunDatepicker" tabIndex="-1"  class = "startDatePicker" ></mat-datepicker-toggle>
+											<mat-datepicker  #acRunDatepicker></mat-datepicker>			
+										</mat-form-field >
+											<button type="button" *ngIf="itemrow.showDeleteButton" style="color:red;" class="operationButtons" mat-flat-button (click)="deleteRow(i)" tabIndex="{{tabIndex+1}}"><mat-icon >delete_outline</mat-icon></button> 
+											<button type="button"  (click)="addNewRow(itemrow)" [disabled]="!additionalChargesForm.valid " *ngIf="!itemrow.showAddButton"   style="color:blue;font-size:20px;background-color:white; " class="operationButtons" mat-flat-button color="Basic"
+											 tabIndex="{{tabIndex+1}}"><mat-icon>add</mat-icon></button>
+								</div>
+						   </div>
+						   <p id="scrollToDown" style="visibility:hidden">Scroll Down </p>
+					 </form>
+						  <div fxLayout="row"  fxLayoutAlign="center center" >
+							  <mat-dialog-actions  fxLayoutGap="10px"> 
+							   <button mat-raised-button class="mat-primary filterButtonClass" (click)="submitAdditionalChargesForm()"  
+							   [disabled]="!(additionalChargesForm.valid ) || !(hasScreenInsertPrivilege) " tabIndex="{{tabIndex+1}}" > <mat-icon>save</mat-icon> Save</button>
+							   <button mat-raised-button class="filterButtonClass" (click)="resetForm()" tabIndex="{{tabIndex+1}}"> <mat-icon>clear_all</mat-icon> Reset</button>      						  
+							</mat-dialog-actions>
+						</div>
+					<br>
+			</div>
+		</mat-card-content>
+	  </mat-card>
+	</div>	
+</div>
+

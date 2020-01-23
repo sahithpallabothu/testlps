@@ -1,0 +1,171 @@
+<div>
+  <mat-card>
+    <mat-card-content>
+	  <!-- <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"> -->
+			 <!-- <mat-form-field fxFlex="25" class="control-space applicationControls"> -->
+				<!-- <mat-label>Customer Name</mat-label> -->
+				<!-- <mat-select disableOptionCentering [(ngModel)]="selectedCustomerNameInViewPostage" matTooltip="Select Customer Name"> -->
+				  <!-- <mat-option [value]="-1">(Select)</mat-option> -->
+				  <!-- <mat-option *ngFor="let customer of customerDetails" [value]="customer.customercode">{{ customer.customername }}</mat-option> -->
+				<!-- </mat-select> -->
+			  <!-- </mat-form-field> -->
+			  <!-- <mat-form-field fxFlex="23" class="control-space applicationControls"> -->
+				<!-- <mat-label>Customer Code</mat-label> -->
+				<!-- <mat-select disableOptionCentering [(ngModel)]="selectedCustomerNameInViewPostage" matTooltip="Select Customer Code"> -->
+				  <!-- <mat-option [value]="-1">(Select)</mat-option> -->
+				  <!-- <mat-option *ngFor="let customer of customerDetails" [value]="customer.customercode">{{ customer.customercode }}</mat-option> -->
+				<!-- </mat-select> -->
+			  <!-- </mat-form-field> -->
+			  <!-- <mat-form-field fxFlex="25" class="control-space applicationControls" > -->
+				<!-- <mat-label>Application Name</mat-label> -->
+				<!-- <mat-select disableOptionCentering [(ngModel)]="selectedApplicationNameInViewPostage" matTooltip="Select Application Name"> -->
+				  <!-- <mat-option [value]="-1">(Select)</mat-option> -->
+				  <!-- <mat-option *ngFor="let application of applicationDetails" [value]="application.applicationcode">{{ application.applicationname  }}</mat-option> -->
+				<!-- </mat-select> -->
+			  <!-- </mat-form-field > -->
+			  <!-- <mat-form-field  fxFlex="23" class="control-space applicationControls"> -->
+				<!-- <mat-label>Application Code</mat-label> -->
+				<!-- <mat-select disableOptionCentering [(ngModel)]="selectedApplicationNameInViewPostage" matTooltip="Select Application Code"> -->
+				  <!-- <mat-option [value]="-1">(Select)</mat-option> -->
+				  <!-- <mat-option *ngFor="let application of applicationDetails" [value]="application.applicationcode">{{ application.applicationcode }}</mat-option> -->
+				<!-- </mat-select> -->
+			  <!-- </mat-form-field> -->
+	<!-- </div> -->
+	<div fxLayout="row"  fxLayoutAlign="start" fxLayout.sm="column" fxLayout.xs="column" >			
+				 <!-- <mat-form-field fxFlex="15" class="control-space applicationControls"> -->
+				 <!-- <mat-label>Search Criteria</mat-label> -->
+					<!-- <mat-select disableOptionCentering [(ngModel)]="selectedDateFieldInViewPostage" (selectionChange)="checkDateSelected()" matTooltip="Select Search Criteria"> -->
+					   
+					  <!-- <mat-option *ngFor="let dateField of DateFieldInViewPostage" [value]="dateField.id">{{ dateField.name }}</mat-option> -->
+					<!-- </mat-select> -->
+				  <!-- </mat-form-field> -->
+				 <!-- <mat-form-field fxFlex="15" class="control-space applicationControls">  -->
+				 <!-- <mat-label>Start Date</mat-label> -->
+					<!-- <input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="selectedStartDate" placeholder="MM/DD/YYYY" [disabled]="ifDateSelected" matTooltip="Select Start Date"> -->
+					<!-- <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle> -->
+					<!-- <mat-datepicker #fromDatepicker></mat-datepicker> -->
+				 <!-- </mat-form-field> -->
+				 <!-- <mat-form-field fxFlex="15" class="control-space applicationControls"> -->
+					<!-- <mat-label>End Date</mat-label> -->
+					<!-- <input matInput [matDatepicker]="toDatepicker" [(ngModel)]="selectedEndDate" placeholder="MM/DD/YYYY" [disabled]="ifDateSelected" matTooltip="Select End Date"> -->
+					<!-- <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle> -->
+					<!-- <mat-datepicker #toDatepicker></mat-datepicker> -->
+				 <!-- </mat-form-field> -->
+				 <!-- <mat-form-field fxFlex="10" class="control-space applicationControls"> -->
+					<!-- <mat-label>Search by</mat-label> -->
+					<!-- <mat-select disableOptionCentering [(ngModel)]="selectedFilterByInViewPostage" (selectionChange)="checkFilterBySelected()" matTooltip="Select Search by"> -->
+					  
+					  <!-- <mat-option *ngFor="let filterValue of filterByInViewPostage" [value]="filterValue.id">{{ filterValue.name }}</mat-option> -->
+					<!-- </mat-select> -->
+				  <!-- </mat-form-field> -->
+				  <mat-form-field fxFlex="18" class="control-space applicationControls">
+					<!-- <mat-label>Search Text</mat-label> -->
+					<input matInput type="text"  #filterText [(ngModel)]="searchText"  placeholder="Job Name"  matTooltip="Enter Search Text"><!--[disabled]="ifFilterBySelected"-->
+				 </mat-form-field>  
+				 <div style="display:inline"  fxLayout.sm="row" fxLayout.xs="row" fxLayout.md="row" fxLayoutAlign.xs="center" fxLayoutAlign.sm="center" fxLayoutAlign.md="center" >		
+					 <button  type="submit" mat-raised-button color="primary" (click)="doFilter(searchText)" > <mat-icon>search</mat-icon> Search</button>
+					 <button type="reset" mat-raised-button  (click)="clearSearchFields()"   ><mat-icon>cancel</mat-icon> Clear</button>
+				 </div>
+		</div>
+				
+	  
+		<div class="tableViewPostage" fxLayout>
+			<div class="scrollgrid-container mat-elevation-z8">
+				<table mat-table [dataSource]="dataSource" matSort matSortActive="inputName" matSortDirection="asc">
+					<!-- <ng-container matColumnDef="jobName" style="width: 150px;"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px; padding-top: 15px;" >Job Name</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" style="width: 150px; padding-top: 15px;">{{postageDetails.jobName}}</td> -->
+					<!-- </ng-container> -->
+
+					<ng-container  matColumnDef="inputName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="12%"  style="padding-top: 15px;">Input Name</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="12%" style="padding-top: 15px; " >{{postageDetails.inputName}}</td>
+					</ng-container>
+				  
+					<ng-container  matColumnDef="outputName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  fxFlex="12%" style="padding-top: 15px;">Output Name</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="12%" style=" padding-top: 15px; " >{{postageDetails.outputName}}</td>
+					</ng-container>
+				  
+					<ng-container  matColumnDef="upload" >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="13%"  style="padding-top: 15px;">Upload</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="13%" style=" padding-top: 15px; " >{{postageDetails.upload}}</td>
+					</ng-container>
+					<ng-container  matColumnDef="received" >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  fxFlex="14%" style=" padding-top: 15px;">Received</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="14%" style=" padding-top: 15px; " >{{postageDetails.received}}</td>
+					</ng-container>
+					<ng-container  matColumnDef="processed" >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  fxFlex="14%" style=" padding-top: 15px;">Processed</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="14%" style=" padding-top: 15px; " >{{postageDetails.processed}}</td>
+					</ng-container>
+					<ng-container  matColumnDef="accounts" >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  fxFlex="10%" style="padding-top: 15px;">Accounts</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="10%" style=" padding-top: 15px; padding-left: 40px;" >{{postageDetails.accounts}}</td>
+					</ng-container>
+
+					<ng-container  matColumnDef="runDate" >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="8%" style="padding-top: 15px;">Run Date</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="8%" style="padding-top: 15px;" >{{postageDetails.runDate}}</td>
+					</ng-container>
+
+					<ng-container  matColumnDef="billDate"  >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="8%" style="padding-top: 15px;" >Bill Date</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="8%" style="padding-top: 15px;" >{{postageDetails.billDate}}</td>
+					</ng-container> 
+					<ng-container  matColumnDef="postedDate"  >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10%" style="padding-top: 15px;" >Posted Date</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="10%" style="padding-top: 15px;" >{{postageDetails.postedDate}}</td>
+					</ng-container>
+					<ng-container  matColumnDef="print"  >
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="7%" style="padding-top: 15px;padding-left:25px" >Print</th>
+                      <td mat-cell *matCellDef="let postageDetails" fxFlex="7%" style="padding-top: 15px;padding-left:25px" >{{postageDetails.print}}</td>
+					</ng-container>
+				  
+					<!-- <ng-container  matColumnDef="mixedAadc"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" style="padding-top: 15px;" >Mixed AADC</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="120px" style="padding-top: 15px;" >{{postageDetails.mixedAadc}}</td> -->
+					<!-- </ng-container> -->
+					<!-- <ng-container  matColumnDef="oZPermit2"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" style="padding-top: 15px;" >2 Oz Permit</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="120px" style="padding-top: 15px;" >{{postageDetails.oZPermit2}}</td> -->
+					<!-- </ng-container> -->
+					<!-- <ng-container  matColumnDef="oZSingle2" > -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" style="padding-top: 15px;" >2 Oz Single</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="120px" style="padding-top: 15px;" >{{postageDetails.oZSingle2}}</td> -->
+					<!-- </ng-container> -->
+					<!-- <ng-container  matColumnDef="digit5"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="90px" style="padding-top: 15px;" >5 Digit</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="90px" style="padding-top: 15px;" >{{postageDetails.digit5}}</td> -->
+					<!-- </ng-container> -->
+					<!-- <ng-container  matColumnDef="aadc"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="90px" style="padding-top: 15px;" >AADC</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="90px" style="padding-top: 15px;" >{{postageDetails.aadc}}</td> -->
+					<!-- </ng-container> -->
+
+					<!-- <ng-container  matColumnDef="single"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="90px" style="padding-top: 15px;" >Single</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="90px" style="padding-top: 15px;" >{{postageDetails.single}}</td> -->
+					<!-- </ng-container>  -->
+					<!-- <ng-container  matColumnDef="globalInsert"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" style="padding-top: 15px;" >Global Insert</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="120px" style="padding-top: 15px;" >{{postageDetails.globalInsert}}</td> -->
+					<!-- </ng-container>  -->
+					<!-- <ng-container  matColumnDef="held"> -->
+                      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="90px" style="padding-top: 15px;" >Held</th> -->
+                      <!-- <td mat-cell *matCellDef="let postageDetails" fxFlex="90px" style="padding-top: 15px;" >{{postageDetails.held}}</td> -->
+					<!-- </ng-container> -->
+					
+					<tr mat-header-row *matHeaderRowDef="custableColumns; sticky: true"></tr>
+					<tr mat-row (click)="selectRow(postageDetails)"  (dblclick)="openPostageScreen()" *matRowDef="let postageDetails; columns: custableColumns" [style.background]="highlightedRows.indexOf(postageDetails) != -1 ? '#eaf4f9' : ''"></tr>
+		  
+				</table>
+				<div class = "notFoundData" [hidden]="isTableHasData">
+					No data found
+				</div>
+			</div>
+		   
+	  </div>
+	</mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,58 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+
+.mat-dialog-title{
+    align-content: left;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 5px;
+    margin: 0px;
+}
+
+.inputNumberClass{
+    text-align:right;
+}
+
+.mat-card-header-text{
+	margin: 0px 12px;
+}
+
+
+.dialogButtons{
+    height:39px !important;
+    width: 163.8px;
+    background-color:#218cad;
+	color:white;
+}
+
+
+.commonSpaceBwControls{
+	margin-right: 30px;
+}
+
+@media only screen and (max-width: 1920px) {  
+    .serviceMatCard{
+        height: 35vh !important;     
+   }
+}
+
+@media only screen and (max-height: 600px) {  
+    .serviceMatCard{
+        height: 25vh !important;     
+   }
+}
+
+/* customer Name text overlap use elipsis */
+.columnTextElipsisName
+{	
+    /* width: 100px; */
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}

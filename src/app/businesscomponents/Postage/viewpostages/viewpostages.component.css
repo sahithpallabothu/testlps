@@ -1,0 +1,85 @@
+.mat-raised-button
+{
+    width: 18%;
+    height: 35px;
+    margin: 4px;
+}
+
+/*.mat-form-field
+{
+    width: 150px;
+    margin: 5px;
+}*/
+
+.mat-option {
+height: 25px !important;
+line-height: 25px !important;
+font-size:12px !important;
+}
+.scrollgrid-container {
+	width:100%;
+    height: 400px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+  
+  .mat-table {
+  /*  margin-top: 10px;*/
+    max-height: 100px;
+    overflow: auto;
+	width:100%;
+  }
+
+  
+  .state {
+    margin-top: 8px;
+  }
+  
+  .notFoundData
+{
+	color:red;
+	margin-top:10%;
+	text-align:center;
+	font-size:25px;
+}
+
+.mat-raised-button
+{
+ width: 120px; 
+ align-content: center;
+ font-size: 15px;
+}
+
+.mat-header-row {
+  top: 0;
+  position: sticky;
+  z-index: 1;
+  background-color: inherit;
+}
+
+.control-space{
+	padding-right:15px;
+}
+.mat-row:hover {
+  cursor:pointer;
+}
+
+@media only screen and (max-width: 600px) {
+	.applicationControls{
+		min-width:100%;
+		flex-direction:column;
+	}
+	 .tableViewPostage{
+		 margin-top:20px;
+	 }
+}
+/* /deep/.mat-select-panel { */
+	/* margin-top:11px; */
+/* } */

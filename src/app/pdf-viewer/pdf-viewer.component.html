@@ -1,0 +1,24 @@
+<header mat-dialog-title>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="90" fxLayoutAlign="center">
+      <label style="font-size: 20px;padding-bottom:3px;">{{title}}</label>
+    </div>
+    <div fxFlex="4"></div>
+  </div>
+</header>
+<mat-card style="height: auto !important;">
+  <mat-card-content>
+      
+      <div style="height:60vh;width: 60vw; overflow-y: auto">
+      <!--   <pdf-viewer [src]="FileData" [render-text]="true" style="display: block;"></pdf-viewer> -->
+      <ngx-extended-pdf-viewer [src]="FileData" [showOpenFileButton] = "false" [showScrollingButton]="false" [showPropertiesButton]="false" useBrowserLocale="true" [filenameForDownload]=nameOfDownloadedFile [showBookmarkButton]="false"
+        type="application/pdf" ></ngx-extended-pdf-viewer>
+      </div>
+
+      <div style="margin-top:10px" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column" fxLayoutGap="15px"
+      fxLayoutAlign="end end">
+      <button type="button" mat-raised-button style="width: 100px" (click)="closeViewer()"><mat-icon style="color:black">cancel</mat-icon>Close	</button>
+    </div>
+    </mat-card-content>
+    </mat-card>
+

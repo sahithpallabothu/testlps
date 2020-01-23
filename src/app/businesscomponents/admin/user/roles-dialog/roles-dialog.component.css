@@ -1,0 +1,43 @@
+@import "../../../../shared/Panel.css";
+@import "../../../../shared/Common.css";
+
+
+.control-space{
+	width:47%;
+}
+
+mat-item{
+	padding:0px;
+}
+
+.mat-select-panel {
+	padding-left:14px;
+}
+.mat-dialog-title
+{
+     background-color: #256275;
+	 color : white;
+	 font-size: 15px;
+	  text-align: center;
+	  size: 200px;
+	   margin: 0px;
+}
+
+/* table column text overlap use elipsis */
+.columnTextElipsisUsers
+{
+	
+    width:100px;
+   /* color: #0079c1;*/
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+	display: pre-line;
+    max-width: 80px;
+}
+ 
+ 
+
+

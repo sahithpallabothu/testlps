@@ -1,0 +1,53 @@
+.scrollgrid-container {
+    height: 460px;
+    overflow: auto;
+    width:100%;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-table {
+    max-height: 100px;
+    overflow: auto;
+  }
+  
+  .form-field-width
+  {
+      width:95%;
+  }
+  
+  .notFoundData
+  {
+      color:red;
+     /*  margin-top:15%; */
+      text-align:center;
+      font-size:25px;
+  }
+
+
+/deep/ tr.mat-footer-row, tr.mat-row {
+  height: 39px;
+}
+.mat-icon {
+	font-size:17px;
+	padding-top:3px;
+}
+
+.mat-header-row {
+  top: 0; 
+ position: sticky;
+  z-index: 1;
+/* background-color: inherit; */
+}
+/* input type number controls style*/
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; 
+} 
+
+

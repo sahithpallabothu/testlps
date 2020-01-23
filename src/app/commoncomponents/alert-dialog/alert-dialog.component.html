@@ -1,0 +1,47 @@
+<table style="width:400px; height: 220px; background-color: white"  [formGroup]="form"> 
+  <tr mat-dialog-title><mat-icon > info </mat-icon> 
+    <label style="display: inline-block; width:300px; position: absolute;
+    font-size: 25px;
+    text-align: center;">{{title}}</label>
+
+  </tr>
+  <tr style="background-color: white" > 
+    <td [ngStyle]="{'text-align': alignLeft == true ? 'left' : 'center','padding-left':alignLeft == true ?'10px':'0px' }" >
+      <mat-dialog-content>
+          {{description}}
+        </mat-dialog-content>
+      </td>
+    </tr>
+    <tr *ngIf="isOptionalMessageExist">
+      <td [ngStyle]="{'text-align': alignLeft == true ? 'left' : 'center','padding-left':alignLeft == true ?'10px':'0px' }" style="padding-top: 15px;" >     
+           <u style="cursor: pointer;color:blue" (click)="toggleTextBox()">{{messageText}} </u>
+      </td>
+    </tr>
+    <tr *ngIf="textBoxState">
+      <td [ngStyle]="{'text-align': alignLeft == true ? 'left' : 'center','padding-left':alignLeft == true ?'10px':'0px' }">
+      <mat-form-field style="width:100%">
+        <textarea matInput formControlName="OptionalData" readonly rows="5" style="resize: none" placeholder=""></textarea>
+      </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+        <mat-dialog-actions>
+            <button class="mat-raised-button mat-primary filterButtonClass"  style=" margin-top:-5px !important" (click)="close()">Close</button>
+        </mat-dialog-actions>
+  </tr>
+</table>
+
+
+
+<!-- <h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content [formGroup]="form">
+  
+  {{description}}
+   
+ 
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button mat-primary"(click)="close()">Close</button>
+</mat-dialog-actions> -->

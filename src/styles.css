@@ -1,0 +1,116 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Comment the below line for CDN loading  */
+@import '~material-design-icons/iconfont/material-icons.css';
+
+ 
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+/* @import '@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+
+/* for sidenav to take a whole page */
+
+html, body { 
+    margin: 0;
+    height: 100%;
+	font-family:'Open Sans',sans-serif;
+}
+
+.mat-header-cell
+{
+  background-color: teal;
+  color : white;
+  font-size: 15px;
+  /* width:100%; */
+}
+
+.mat-sort-header-arrow
+{
+    color: white;
+}
+
+.mat-raised-button
+{
+ width: 20%; 
+ align-content: center;
+ font-size: 15px;
+}
+
+.mat-dialog-container
+{
+   background-color: #f1f1f1;
+}
+
+
+.mat-menu-panel
+{
+    position: relative;
+    left: 200px;
+    right: 95px;
+    width: auto !important;
+}
+.mat-drawer,.mat-menu-panel{
+background-color:#256275;}
+.mat-drawer-backdrop.mat-drawer-shown{
+	/* background-color:transparent; */
+}
+
+.layout-wrapper{
+overflow:hidden;	
+}
+
+/* table column text overlap use elipsis */
+.columnTextElipsis
+{
+	
+    width:100px;
+   /* color: #0079c1;*/
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+	display: pre-line;
+    /*max-width: 307px;*/
+}
+
+.mat-select-panel {  
+      margin-top:20px !important;  
+ }
+
+ .mat-row:hover {
+    cursor:pointer;
+  }
+  .mat-option {
+  height: 25px !important;
+  line-height: 25px !important;
+  font-size:12px !important;
+  }
+
+ 
+
+  
+  /*Common css for input controls*/
+  .inputTextBoxControls{
+    width: 125px;
+  }
+  
+  .inputContactNumberControls{
+    width: 125px;
+  }
+  
+  .filterButtonClass{
+    width: 110px !important;
+  }
+  
+  /*For Admin Screens. */
+  .descriptionControls{
+    width:93%;
+  }
+
+  .matCardAlign{
+    margin-left: 15px;
+  }
+
+  .jobNameTextBoxClass{
+    width: 200px;
+  }

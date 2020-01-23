@@ -1,0 +1,98 @@
+<div>
+  <mat-card style="padding:30px">
+    <mat-card-content [formGroup]="viewAddlChargeForm">
+        <div fxLayout="row">
+        <mat-form-field style="width:395px;" class="control-space applicationControls">
+          <input type="text" placeholder="Customer Name" aria-label="Assignee" (keyup.enter)="loadDataInGrid()" matInput
+            formControlName="CustomerName" [matAutocomplete]="auto" matTooltip="Enter Customer Name"
+            (input)="validateCustomerNameAutoCompletes($event)"  tabindex="1" #customerNameAuto>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="isChangeInCustomer($event,true)">
+            <mat-option *ngFor="let name of filteredOptionsCustomer | async" [value]="name"
+             > 
+              {{name.customerName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="viewAddlChargeForm.controls['CustomerName'].hasError('incorrectCustomerName')">
+            Invalid Customer Name.
+           </mat-error>
+        </mat-form-field>
+        <mat-form-field class="control-space applicationControls inputTextBoxControls">
+          <input type="text" placeholder="Customer Code" aria-label="Assignee" matInput formControlName="CustomerCode"
+            [matAutocomplete]="CCode" matTooltip="Enter Customer Code" (keyup.enter)="loadDataInGrid()"
+            (keyup)="ViewAdditionalChargesCustomerCode($event)"  tabindex="2" #customerCodeAuto>
+          <mat-autocomplete #CCode="matAutocomplete" [displayWith]="displayFnCustCode" (optionSelected)="isChangeInApplication($event,true)">
+            <mat-option *ngFor="let name of filteredOptionsCustomerCode | async" [value]="name"
+              >
+              {{name.applicationCode}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="viewAddlChargeForm.controls['CustomerCode'].hasError('incorrect')">
+            Invalid Customer Code.
+           </mat-error>	
+        </mat-form-field>
+        <button type="submit" class="filterButtonClass" mat-raised-button color="primary" (click)="loadDataInGrid()"
+          [disabled]="!viewAddlChargeForm.valid" tabindex="5">
+          <mat-icon>search</mat-icon>Search
+        </button>
+        <button type="button" class="filterButtonClass" (click)="resetForm()" mat-raised-button tabindex="6">
+          <mat-icon>clear_all</mat-icon>Reset
+        </button>
+      </div>
+      <div  fxLayout="row">
+        <div class="scrollgrid-container mat-elevation-z8">
+          <table mat-table matSort #sortCharges="matSort" [dataSource]="dataSourceViewAddlCharge"  matSortActive="customerCode"
+            matSortDirection="asc" [matSortDisableClear]="true">
+            <ng-container matColumnDef="customerCode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="13" fxLayoutAlign="start center" >Customer Code</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="13" >{{acDetails.customerCode}}</td>
+            </ng-container>
+            <ng-container matColumnDef="jobName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10" fxLayoutAlign="start center" >Job Name</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="10" >{{acDetails.jobName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="runDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10" fxLayoutAlign="center center" >Run Date</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="10"  style="flex: 1 1 100%; box-sizing: border-box; max-width: 10%;text-align: center;padding-right: 20px;" >{{getDateOnly(acDetails.runDate)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="feeDesc">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="13"  fxLayoutAlign="start center" >Fee Description</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="13" class="columnTextElipsis" [matTooltip]="acDetails.feeDesc">{{acDetails.feeDesc}}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="8" fxLayoutAlign="end center">Amount</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="8" style="text-align: right;padding-right: 15px;" > {{acDetails.amount | number: '1.3-3'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="comments">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="20" fxLayoutAlign="start center">Description</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="20"  class="columnTextElipsis" [matTooltip]="acDetails.comments">
+                {{acDetails.comments}}</td>
+            </ng-container>
+            <ng-container matColumnDef="enteredUser">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="16" style="padding-top:18px;" >User</th>
+              <td mat-cell *matCellDef="let acDetails" fxFlex="16" >{{acDetails.enteredUser}}</td>
+            </ng-container>
+            <ng-container matColumnDef="dateEntered">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10" fxLayoutAlign="center center" style="padding-top:0px;white-space: nowrap;">Date Entered</th>
+              <td mat-cell *matCellDef="let acDetails" fxflex="10" style="flex: 1 1 100%; box-sizing: border-box; max-width: 10%;text-align: center;padding-right: 20px;">
+                {{getDateOnly(acDetails.dateEntered)}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="addlChargeColumns; sticky: true"></tr>
+            <tr style="padding-top: 18px;" mat-row (click)="selectRow(acDetails)"
+              (click)="hasScreenAdditionalChargeUpdatePriviledge ? showAdditionalChargesDialog(acDetails) : $event.stopPropagation()"
+              *matRowDef="let acDetails; columns: addlChargeColumns"
+              [style.background]="highlightedRows.indexOf(acDetails) != -1 ? '#eaf4f9' : ''"></tr>
+          </table>
+          <div class="notFoundData" [hidden]="isTableHasData">
+            No data found
+          </div>
+
+          <div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv">
+            <div class="loader"></div>
+            <p class="spinnerLoadingText">{{spinnerText}}</p>
+          </div>
+
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

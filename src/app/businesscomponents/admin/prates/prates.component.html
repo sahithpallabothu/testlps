@@ -1,0 +1,204 @@
+<div>
+	<mat-card class="matCardAlign">
+		<mat-card-content>
+			<div fxLayout="row" fxLayoutGap="25px" fxLayout.sm="column" fxLayout.xs="column" style="margin-top:15px; ">
+				<div fxFlex="55" fxLayout="column">
+					<!-- search fields -->
+					<div fxLayout="row" fxLayoutGap="15px" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+						<mat-form-field style="width:38%" fxFlex.md="30%" fxFlex.xs="30%" fxFlexOffset="3px">
+							<mat-label>Search By</mat-label>
+							<mat-select disableOptionCentering [(ngModel)]="selectedoption"
+								(selectionChange)="checkFilterBySelected()" matTooltip="Select Search By">
+								<mat-option *ngFor="let option of searchOptions" [value]="option.id">{{ option.name }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+
+						<mat-form-field style="width:48%" fxFlex.md="50" fxFlex.xs="30%">
+							<input matInput type="text" #filterText [(ngModel)]="searchText" placeholder="Search Text"
+							(keydown.enter)="doFilter(selectedoption,searchText)" (keypress)="omit_special_char($event)"	 matTooltip="Enter Search Text">
+						</mat-form-field>
+						<div>
+							<button type="button" mat-raised-button color="primary" class="filterButtonClass"
+								style="text-align:center;margin-top: 5px;"
+								(click)="doFilter(selectedoption,searchText)">
+								<mat-icon>search</mat-icon>Search
+							</button>
+						</div>
+					</div>
+
+					<div class="scrollgrid-container mat-elevation-z8">
+						<table mat-table [dataSource]="dataSource" matSort matSortActive="typeCode"
+							matSortDirection="asc" [matSortDisableClear]="true">
+							<!-- table columns -->
+
+							<ng-container matColumnDef="typeCode">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center" fxFlex="18" fxFlex.md="15" class="typeCode" mat-sort-header>Type Code</th>
+								<td mat-cell fxFlex="18" fxLayoutAlign="center center" *matCellDef="let pRate"  fxFlex.md="15" class="columnTextElipsis"  [matTooltip]="pRate.typeCode">{{pRate.typeCode}}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="startDate">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center" fxFlex="14" fxFlex.md="16" mat-sort-header>Start Date</th>
+								<td mat-cell fxFlex="14" fxLayoutAlign="center center" *matCellDef="let pRate"  fxFlex.md="16">{{ convertToCustomDate(pRate.startDate) }}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="rate">
+								<th mat-header-cell fxFlex="11" *matHeaderCellDef mat-sort-header  fxFlex.md="14" fxLayoutAlign="end center">Rate
+								</th>
+								<td mat-cell fxFlex="11" *matCellDef="let pRate" style="padding-left:-9px"  fxFlex.md="14" fxLayoutAlign="end center" >
+									{{pRate.rate | number: '1.4-4'}}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="description">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="start center" fxFlex="27"  fxFlex.md="18" mat-sort-header>Description</th>
+								<td mat-cell  style="padding-top:15px;text-align: left;"  *matCellDef="let pRate" fxFlex="27"  fxFlex.md="18" class="columnTextElipsis descWidth"  [matTooltip]="pRate.description">{{pRate.description}}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="displayOrder">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center" fxFlex="20"  fxFlex.md="16" mat-sort-header >Display Order</th>
+								<td mat-cell fxFlex="20" *matCellDef="let pRate" fxLayoutAlign="center center"  fxFlex.md="16">
+									{{pRate.displayOrder}}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="active">
+								<th mat-header-cell *matHeaderCellDef  fxLayoutAlign="center center"
+									fxFlex="10"  fxFlex.md="10">Active</th>
+
+								<td mat-cell *matCellDef="let pRate" fxLayoutAlign="center center"
+									fxFlex="10"  fxFlex.md="10">
+
+									<mat-icon [ngStyle]="{'color':pRate.active? 'green':'orange'}">
+										<b>{{pRate.active ? 'check':'close'}}</b></mat-icon>
+								</td>
+							</ng-container>
+
+							<!-- Delete  buttons start -->
+							
+
+							<ng-container matColumnDef="delete">
+								<th mat-header-cell fxLayoutAlign="center center"  *matHeaderCellDef> Delete </th>
+								<td mat-cell   *matCellDef="let pRate" fxLayoutAlign="center center">
+									<button mat-icon-button color="warn" (click)= "$event.stopPropagation()"
+									(click)="deletePRate(pRate.postalTypeID)">
+										<mat-icon class="mat-18">delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<!-- Delete / Update buttons End -->
+
+							<tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></tr>
+							<tr mat-row (click)="selectRow(pRate)" *matRowDef="let pRate; columns: tableColumns"
+								[style.background]="highlightedRows.indexOf(pRate) != -1 ? '#eaf4f9' : ''"></tr>
+						</table>
+						<div class="notFoundData" [hidden]="isTableHasData">
+							{{noDataFound}}
+						</div>
+					</div>
+				</div>
+				<div fxFlex="35" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" style="margin-left:15px;">
+					<mat-card style="margin-top:57px;height:330px;">
+						<mat-card-header>
+							<p style="margin-top:5px;">Postage Rates Information</p>
+						</mat-card-header>
+						<mat-card-content>
+							<!-- form fields -->
+							<form [formGroup]="prateForm" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()"  #f="ngForm">
+								<div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column"
+								style="margin-left: 4px;">
+									<div>
+										<mat-form-field class="inputTextBoxControls" style="margin-right: 15px;">
+											<input matInput #typeCode formControlName="typeCode" Numerics numericType="number"  style="text-align:right"
+												maxlength="5" matTooltip="Enter Type Code" matInput placeholder="Type Code"
+												(input)="isChange()" [errorStateMatcher]="errorMatcher" required>
+											<mat-error *ngIf="hasError('typeCode', 'required')">Type Code is required.
+											</mat-error>
+											<mat-error *ngIf="hasError('typeCode', 'pattern')">Type Code should be an integer.
+											</mat-error>
+										</mat-form-field>
+
+										<mat-form-field class="inputTextBoxControls" >
+											<mat-label>Start Date</mat-label>
+											<input matInput [textMask]="{mask: dateMask}" formControlName="startDate"
+												[min]="startOfEndDate" (input)="setDateInDatePicker('startDate','startDateWithPicker')"
+												matTooltip="Enter Start Date" placeholder="MM/DD/YY" autocomplete="off" required>
+											<mat-error *ngIf="hasError('startDate','required')">
+												Start Date is required.
+											</mat-error>
+											<mat-error *ngIf="hasError('startDate','pattern')">
+												Invalid Start Date.
+											</mat-error>
+											<mat-error *ngIf="prateForm.controls['startDate'].hasError('incorrect')" matTooltip="Start Date should not be less than current date." style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+												Start Date should not be less than current date.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="1px">
+											<input matInput #stDateFocus formControlName="startDateWithPicker"
+											[min]="startOfEndDate" [matDatepicker]="startDatepicker" tabindex="-1" (dateChange)="addStartEvent($event)"
+											>
+											<mat-datepicker-toggle matSuffix [for]="startDatepicker" style="margin-left:-18px"
+												tabindex="-1">
+											</mat-datepicker-toggle>
+											<mat-datepicker #startDatepicker>
+											</mat-datepicker>
+										</mat-form-field>
+				
+
+									</div>
+
+									<div fxLayoutGap="15px">
+									<mat-form-field  class="inputTextBoxControls">
+										<input matInput formControlName="rate"   type="text"
+											matTooltip="Enter Rate" matInput placeholder="Rate" style="text-align:right"
+											(blur) = "changeToAmount('rate')" (keypress)="validateDecimals($event)"
+											(input)="isChange()" [errorStateMatcher]="errorMatcher" required>
+										<mat-error *ngIf="hasError('rate', 'required')">Rate is required.</mat-error>
+										<mat-error *ngIf="this.prateForm.controls['rate'].hasError('incorrect')">Invalid Rate.</mat-error>
+										
+									</mat-form-field>
+
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="displayOrder" Numerics numericType="number"
+										maxlength="5" type="text" matTooltip="Enter Display Order" matInput
+											placeholder="Display Order" style="text-align:right" (input)="isChange()"
+											[errorStateMatcher]="errorMatcher" >
+										<mat-error *ngIf="hasError('displayOrder', 'pattern')"> Display Order should be
+											an integer.</mat-error>
+									</mat-form-field>
+									</div>
+
+									<mat-form-field class="descriptionControls">
+										<input matInput formControlName="description" matTooltip="Enter Description"
+											maxlength="50" matInput placeholder="Description" (input)="isChange()"
+											[errorStateMatcher]="errorMatcher" required>
+										<mat-error *ngIf="hasError('description', 'required')">Description required.
+										</mat-error>
+										<mat-error *ngIf="hasError('description', 'space')">{{SpaceMessage}}</mat-error>
+									</mat-form-field>
+
+									<mat-checkbox checked="true" formControlName="active" matTooltip="Select Active"
+										(input)="isChange()">Active
+									</mat-checkbox>
+
+
+									
+
+									<div fxLayout="row" fxLayoutGap="10px" fxLayoutGap="15px"
+										fxLayoutAlign="center center">
+										<button type="submit" mat-raised-button class="filterButtonClass" color="primary"
+											[disabled]="!(prateForm.valid || isAllowSave)">
+											<mat-icon>save</mat-icon> Save
+										</button>
+										<button type="button" mat-raised-button class="filterButtonClass"
+											(click)="resetForm()">
+											<mat-icon>clear_all</mat-icon>Reset
+										</button>
+									</div>
+								</div>
+							</form>
+						</mat-card-content>
+					</mat-card>
+				</div>
+			</div>
+		</mat-card-content>
+	</mat-card>
+</div>

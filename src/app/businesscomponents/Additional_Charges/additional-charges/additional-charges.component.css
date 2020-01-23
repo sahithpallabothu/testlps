@@ -1,0 +1,156 @@
+
+	
+.dynamicList{
+	height:227px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+	
+	
+}
+.dateInChargesComponent{
+	margin-left:3.1px !important;
+}	
+.mat-dialog-title
+{
+     background-color: #256275;
+	 color : white;
+	 font-size: 15px;
+	  text-align: center;
+	  size: 200px;
+	   margin: 0px;
+
+}
+.mat-raised-button
+{
+ width: 120px; 
+ align-content: center;
+ font-size: 15px;
+}
+.mat-icon{
+	font-size: 21px;
+    padding-top: 3px;
+}
+ .operationButtons {	
+	color:red;
+	margin-left:-15px !important;
+	line-height:0px;
+	min-width:0px;
+	padding:0px !important;
+}
+.additionalChargesAndInsertsForm{
+	margin-bottom: 5px;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+	border:1px solid rgba(0,0,0,0.5);
+	padding: 15px;
+	padding-top: 0px;
+    margin-left: 2px;
+}
+.deleteMatIcon{	
+	    font-size: 20px;
+    padding-top: 0px;
+}
+.mat-dialog-actions{
+		margin-bottom:0px;
+}
+
+.startDatePicker{
+	margin-left: -30px;
+}
+
+@media only screen and (max-width: 600px) {
+	
+	.mat-dialog-actions{
+		margin-bottom:10px;
+	}
+	/*to set the buttons i.e save ,cancel ,reset in proper alignment*/
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+/*to set the buttons i.e save ,cancel ,reset in proper alignment*/
+@media only screen and (min-width: 601px) {
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+
+
+.mat-option {
+height: 25px !important;
+line-height: 25px !important;
+font-size:12px;
+}
+
+.mandatorySign{
+	color: red;
+}
+
+
+/* addtional charges and inserts height media queries*/
+  
+/*Height media queries*/
+
+@media only screen and (min-height: 999px) {
+	.additionalChargesAndInsertsForm {		 
+		height: 750px !important;
+	}
+}
+@media only screen and (min-height: 969px) and (max-height: 998px) {
+	.additionalChargesAndInsertsForm {		 
+		height: 755px !important;
+	}
+}
+@media only screen and (min-height: 939px) and (max-height: 968px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 720px !important;
+	}
+}
+@media only screen and (min-height: 913px) and (max-height: 938px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 690px !important;
+	}
+}
+@media only screen and (min-height: 849px) and (max-height: 912px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 630px !important;
+	}
+}
+@media only screen and (min-height: 790px) and (max-height: 848px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 575px !important;
+	}
+}
+@media only screen and (min-height: 753px) and (max-height: 789px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 535px !important;
+	}
+}
+@media only screen and (min-height: 689px) and (max-height: 752px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 460px !important;
+	}
+}
+@media only screen and (min-height: 657px) and (max-height: 688px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 445px !important;
+	}
+}
+@media only screen and (min-height: 609px) and (max-height: 656px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 388px !important;
+	}
+}
+@media only screen and (min-height: 489px) and (max-height: 608px)  {
+	.additionalChargesAndInsertsForm {		 
+		height: 280px !important;
+	}
+}

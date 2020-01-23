@@ -1,0 +1,218 @@
+<div>
+	<!-- Service Agrement Form -->
+	<form [formGroup]="serviceagrementForm" (ngSubmit)="onFormSubmit()">
+		<header mat-dialog-title>
+			<div fxLayout="row" fxLayoutAlign="center center">
+				<div fxFlex="90" fxLayoutAlign="center">
+					<label style="font-size: 20px;padding-bottom:3px;">{{title}}</label>
+				</div>
+				<div fxFlex="4"></div>
+			</div>
+		</header>
+		<mat-card style="height: auto !important;" class="serviceMatCard">
+			<mat-card-content>
+				<div fxLayout="row" style="height:30px; margin-top: 4px; font-size:13px;">
+					<p style="margin-left:20px;margin-top: 2px;width: 500px;" class="columnTextElipsisName" [matTooltip]="clientName+(clientCode)">
+						<mat-icon style="position: absolute;margin-top: -6px; ">person</mat-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Customer Name: &nbsp;</b>
+						{{clientName}} ({{clientCode}})
+					</p>
+				</div>
+				<div style="height:auto; overflow-y: auto">
+					<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" fxLayout.md="row" fxLayoutGap="15px" style="margin-left:20px;">
+						<div fxFlex="70" fxLayout="row" >
+						<!--Start Date-->
+						<mat-form-field  class="serviceAgreementInputControls inputContactNumberControls">
+							<mat-label>Start Date</mat-label>
+							<input matInput #focusStartDate [textMask]="{mask: dateMask}" formControlName="serviceAggStartDate" (input)="isChange()" 
+								(input)="setDateInDatePicker('serviceAggStartDate','serviceAggStartDateWithPicker')" (input)="checkForValidDates('serviceAggStartDate','serviceAggStartDateWithPicker')" 
+								matTooltip="Enter Start Date" placeholder="MM/DD/YY" autocomplete="off"  [errorStateMatcher]="errorMatcher">
+							<mat-error *ngIf="hasError('serviceAggStartDate','pattern')">Invalid Start Date.</mat-error>
+							<mat-error *ngIf="serviceagrementForm.controls['serviceAggStartDate'].hasError('incorrect')">
+								Please enter a valid Start Date.
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="0.5px"  class="commonSpaceBwControls">
+							<input matInput formControlName="serviceAggStartDateWithPicker" (input)="setDateInDatePicker('serviceAggStartDate','serviceAggStartDateWithPicker')" tabindex ="-1"
+							 (input)="isChange()" (input)="checkForValidDates('serviceAggStartDate','serviceAggStartDateWithPicker')" 
+							[matDatepicker]="serviceAggStartDatepicker" (dateChange)="addserviceAggStartDateEvent()">
+							<mat-datepicker-toggle matSuffix [for]="serviceAggStartDatepicker" tabindex ="-1" style="margin-left:-18px"></mat-datepicker-toggle>
+							<mat-datepicker #serviceAggStartDatepicker ></mat-datepicker>
+						</mat-form-field>
+						<!--End Date-->
+						<mat-form-field class="inputContactNumberControls serviceAgreementInputControls">
+							<mat-label>End Date</mat-label>
+							<input matInput [textMask]="{mask: dateMask}" formControlName="serviceAggEndDate" (input)="isChange()" 
+								(input)="setDateInDatePicker('serviceAggEndDate','serviceAggEndDateWithPicker')" (input)="checkForValidDates('serviceAggEndDate','serviceAggEndDateWithPicker')" matTooltip="Enter End Date" placeholder="MM/DD/YY"
+								autocomplete="off" [errorStateMatcher]="errorMatcher">					
+								<mat-error *ngIf="hasError('serviceAggEndDate','pattern')">Invalid End Date.</mat-error>						
+							<mat-error *ngIf="serviceagrementForm.controls['serviceAggEndDate'].hasError('incorrectDate')">
+								End date must be greater than start date.
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="0.5px" class="commonSpaceBwControls">
+							<input matInput formControlName="serviceAggEndDateWithPicker" (input)="isChange()" tabindex ="-1"
+								[matDatepicker]="serviceAggEndDatepicker" [min]="startOfEndDate" (input)="checkForValidDates('serviceAggEndDate','serviceAggEndDateWithPicker')" (dateChange)="addserviceAggEndDateEvent()">
+							<mat-datepicker-toggle matSuffix [for]="serviceAggEndDatepicker" tabindex ="-1" style="margin-left:-18px"></mat-datepicker-toggle>
+							<mat-datepicker #serviceAggEndDatepicker></mat-datepicker>
+						</mat-form-field>
+						<!--Termination Notice Date-->
+						<mat-form-field class="inputContactNumberControls"  style="width: 131px;">
+							<mat-label>Termination Notice Date</mat-label>
+							<input matInput [textMask]="{mask: dateMask}" formControlName="termNoticeDate" (input)="isChange()" (input)="checkForValidDates('termNoticeDate','termNoticeDateWithPicker')"
+								(input)="setDateInDatePicker('termNoticeDate','termNoticeDateWithPicker')" matTooltip="Enter Termination Notice Date" placeholder="MM/DD/YY"
+								autocomplete="off"  [errorStateMatcher]="errorMatcher">
+							<mat-error *ngIf="hasError('termNoticeDate','pattern')">Invalid Termination Notice Date.</mat-error>
+							<mat-error *ngIf="serviceagrementForm.controls['termNoticeDate'].hasError('incorrect')">
+								Please enter a valid Termination Notice Date.
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="0.5px"  class="commonSpaceBwControls">
+							<input matInput formControlName="termNoticeDateWithPicker" (input)="isChange()" tabindex ="-1"
+								[matDatepicker]="termNoticeDatepicker" (dateChange)="termDateEvent()" (input)="checkForValidDates('termNoticeDate','termNoticeDateWithPicker')" >
+							<mat-datepicker-toggle matSuffix [for]="termNoticeDatepicker" tabindex ="-1" style="margin-left:-18px"></mat-datepicker-toggle>
+							<mat-datepicker #termNoticeDatepicker></mat-datepicker>
+						</mat-form-field>
+					</div>
+						<!-- dialogButtons -->
+						<button type="button"  mat-raised-button class="dialogButtons billingButtons1280" (click)="openContract()">
+							<mat-icon>message</mat-icon> Contract(s)
+						</button>
+					</div>
+
+					<div fxLayout="row" fxLayoutGap="15px" fxLayout.xs="column" fxLayout.sm="row" fxLayout.md="row" style="margin-top:10px;margin-left:20px;" >
+						<div fxFlex="70" fxLayout="row">
+							<!--SLA-->
+							<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls ">
+								<input matInput formControlName="sla" matTooltip="Enter SLA" Numerics numericType="number" maxlength="3" 
+									matInput placeholder="SLA (in hours)" (input)="isChange()" class="inputNumberClass" 
+									[errorStateMatcher]="errorMatcher">
+								<mat-error *ngIf="hasError('sla','pattern')">Invalid SLA.</mat-error>																						
+							</mat-form-field>
+							<!--Initial Term-->
+							<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls ">
+								<input matInput formControlName="initialTerm"  maxlength="3" Numerics numericType="number"  matTooltip="Enter Initial Term"
+									matInput placeholder="Initial Term (in months)" class="inputNumberClass" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+								<mat-error *ngIf="hasError('initialTerm','pattern')">Invalid Initial Term.</mat-error>																							
+							</mat-form-field>
+							<!--Renewal Term-->
+							<mat-form-field style="width: 132.5px;">
+								<input  matInput formControlName="renewalTerm" maxlength="3" matTooltip="Enter Renewal Term"
+									matInput placeholder="Renewal Term (in months)" class="inputNumberClass" (input)="isChange()"
+									Numerics numericType="number" [errorStateMatcher]="errorMatcher">
+								<mat-error *ngIf="hasError('renewalTerm','pattern')">Invalid Renewal Term.</mat-error>										
+							</mat-form-field>
+
+						</div>
+						<!-- dialogButtons -->
+						<button type="button"  mat-raised-button class="dialogButtons billingButtons1280" (click) = "openBillingRate()" >
+							<mat-icon>rate_review</mat-icon> Billing Rates
+						</button>
+
+					</div>
+					
+					<!--General Billing Information-->
+					<mat-card>
+						<mat-card-header><p>General Billing Information</p></mat-card-header>
+						<mat-card-content>
+							<div fxLayout="row" fxflex ="100" fxLayout.sm="column" fxLayout.xs="column" 
+								style="margin-top:10px;margin-left:20px;">							
+								<!--Minimum Charge Amount-->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls" >
+									<input matInput class="inputNumberClass" maxlength="12"
+										(blur)="changeToAmount('minChargeAmt')" formControlName="minChargeAmt" matInput
+										(input)="isChange()" (keypress)="validateDecimals($event)"
+										placeholder="Minimum Charge Amount" matTooltip="Enter Minimum Charge Amount" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('minChargeAmt','pattern')">Invalid Minimum Charge Amount.</mat-error>						
+								</mat-form-field>
+								
+								<!--SEDC MBR Number-->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls ">
+									<input matInput #focusSedc maxlength="50" formControlName="sedcmbrno" 
+										matInput (input)="isChange()" 
+										placeholder="SEDC MBR Number" matTooltip="Enter SEDC MBR Number"  [errorStateMatcher]="errorMatcher"  >
+									<mat-error *ngIf="hasError('sedcmbrno','space')">{{SpaceMessage}}</mat-error>
+								</mat-form-field>
+
+								<!--Bill Type-->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls ">
+									<mat-label>Bill Type</mat-label>
+									<mat-select disableOptionCentering formControlName="billType" matTooltip="Select Bill Type" (selectionChange)="billTypeChange()"    >
+										<mat-option [value]="">(Select)</mat-option>
+										<mat-option [value]="1">Detail</mat-option>
+										<mat-option [value]="2">Summary</mat-option>									
+									</mat-select>
+								</mat-form-field>
+								<!--System Number-->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls ">
+									<input matInput #focusSystemNumber  maxlength="50" formControlName="systemNumber"
+										matInput (input)="isChange()" 
+										placeholder="System Number" matTooltip="Enter System Number" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('systemNumber','space')">{{SpaceMessage}}</mat-error>
+								</mat-form-field>
+							</div>
+							<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"  style="margin-top:10px;margin-left:20px;">
+								<!--PG Bill Rate -->
+								<mat-form-field class="serviceAgreementInputControls  inputContactNumberControls commonSpaceBwControls">
+									<input matInput class="inputNumberClass" maxlength="12"
+										(blur)="changeToAmount('PGBillRate')" (keypress)="validateDecimals($event)"
+										formControlName="PGBillRate" matInput (input)="isChange()"
+										placeholder="PG Bill Rate" matTooltip="Enter PG Bill Rate " [errorStateMatcher]="errorMatcher"> 
+									<mat-error *ngIf="hasError('PGBillRate','pattern')">Invalid PG Bill Rate.</mat-error>						
+								</mat-form-field>
+								<!--CS Bill Rate -->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls">
+									<input matInput class="inputNumberClass" maxlength="12" formControlName="CSBillRate"
+										matInput (input)="isChange()" placeholder="CS Bill Rate"
+										matTooltip="Enter CS Bill Rate" (blur)="changeToAmount('CSBillRate')"
+										(keypress)="validateDecimals($event)" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('CSBillRate','pattern')">Invalid CS Bill Rate.
+									</mat-error>
+								</mat-form-field>
+								<!--Non Auto Fee Rate -->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls">
+									<input matInput class="inputNumberClass" maxlength="12"formControlName="NonAutoFeeRate" matInput (input)="isChange()"
+										placeholder="Non-Auto Fee Rate" matTooltip="Enter Non-Auto Fee Rate"(blur) = "changeToAmount('NonAutoFeeRate')" 
+										(keypress)="validateDecimals($event)" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('NonAutoFeeRate','pattern')">Invalid Non-Auto Fee Rate.</mat-error>						
+								</mat-form-field>
+								<!--PDF Processing Rate -->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls">
+									<input matInput class="inputNumberClass" maxlength="12"
+										formControlName="PDFProcessingFee" matInput (input)="isChange()"
+										placeholder="PDF Processing Fee" matTooltip="Enter PDF Processing Fee"
+										 (blur) = "changeToAmount('PDFProcessingFee')" (keypress)="validateDecimals($event)" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('PDFProcessingFee','pattern')">Invalid PDF Processing Fee.</mat-error>						
+								</mat-form-field> 
+								<!-- EBP PProcessing Rate-->
+								<mat-form-field class="serviceAgreementInputControls inputContactNumberControls commonSpaceBwControls">
+									<input matInput class="inputNumberClass" maxlength="12"
+										formControlName="EBPPProcessingRate" matInput (input)="isChange()"
+										placeholder="EBPP Processing Rate" matTooltip="Enter EBPP Processing Rate"
+										 (blur) = "changeToAmount('EBPPProcessingRate')" (keypress)="validateDecimals($event)" [errorStateMatcher]="errorMatcher">
+									<mat-error *ngIf="hasError('EBPPProcessingRate','pattern')">Invalid EBPP Processing Rate .</mat-error>						
+								</mat-form-field>
+							</div>
+						</mat-card-content>
+					</mat-card>
+					<!--General Billing Information-->
+				</div>
+				<!--Actions-->
+				<div style="margin-top:10px" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column" fxLayoutGap="15px"
+					fxLayoutAlign="center center">
+					<button type="submit" mat-raised-button color="primary" class="filterButtonClass"
+						[disabled]="!(serviceagrementForm.valid) || !isAllowSave" >
+						<mat-icon>save</mat-icon> Save
+					</button>
+					<button type="button" mat-raised-button  class="filterButtonClass" (click)="resetServiceAgreement()" 
+						[disabled]="!isAllowSave" >
+						<mat-icon>clear_all</mat-icon > Reset
+					</button>
+					<button type="button" mat-raised-button class="filterButtonClass" (click)="dialogCancel()">
+						<mat-icon style="color:black">cancel</mat-icon> Close
+					</button>
+				</div><br>
+			</mat-card-content>
+		</mat-card>
+	</form>
+	<!-- Service Agrement Form -->
+</div>

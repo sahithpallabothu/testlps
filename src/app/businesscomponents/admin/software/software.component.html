@@ -1,0 +1,83 @@
+<div>
+  <mat-card class="matCardAlign">
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutGap="25px" fxLayout.sm="column" fxLayout.xs="column" style="margin-top:15px; ">
+        <div fxFlex="50" fxLayout="column">
+          <!--Search fields-->
+          <div fxLayout="row" fxLayoutGap="15px" fxLayout.md="row" fxLayout.sm="column" fxLayout.xs="column">
+            <mat-form-field style="width:87%" fxFlex.md="78%" fxFlex.xs="30%">
+              <mat-label>Software</mat-label>
+              <input matInput type="text" #filterText [(ngModel)]="searchText" (keypress)="omit_special_char($event)" (keydown.enter)="doFilter(searchText)" placeholder="Software" matTooltip="Enter Software">
+            </mat-form-field> 
+            <div>
+              <button type="submit" mat-raised-button color="primary" class="filterButtonClass"
+                style="text-align:center;margin-top: 5px;" (click)="doFilter(searchText)">
+                <mat-icon>search</mat-icon>Search
+              </button>
+            </div>
+          </div>
+
+          <!--Software table-->
+          <div class="scrollgrid-container mat-elevation-z8" >
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="software"  [matSortDisableClear]="true" matSortDirection="asc">
+              <ng-container matColumnDef="software" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center" fxFlex="90">Software</th>
+                <td mat-cell *matCellDef="let soft"fxLayoutAlign="start center" fxFlex="90" class="columnTextElipsis"  [matTooltip]="soft.software" >{{soft.software}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="active">
+                <th mat-header-cell *matHeaderCellDef fxFlex="10" fxLayoutAlign="center center">Active</th>
+                <td mat-cell *matCellDef="let soft" fxFlex="10" fxLayoutAlign="center center"
+                  [ngStyle]="{'color':soft.active?'green':'orange'}">
+                  <mat-icon class="mat-18"><b>{{soft.active ? 'done' : 'clear'}}</b></mat-icon></td>
+              </ng-container>	
+
+              <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center"> Delete </th>
+                <td mat-cell *matCellDef="let soft" fxLayoutAlign="center center">
+                  <button mat-icon-button color="warn" (click)= "$event.stopPropagation()"
+                  (click)="deleteSoftware(soft.id)">
+                    <mat-icon class="mat-18">delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <!-- Delete / Update buttons End -->
+              <tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></tr>
+              <tr mat-row (click)="selectRow(soft)"  *matRowDef="let soft; columns: tableColumns"
+                [style.background]="highlightedRows.indexOf(soft) != -1 ? '#eaf4f9' : ''"></tr>
+            </table>
+            <div class="notFoundData" [hidden]="isTableHasData">No data found </div>
+          </div>
+        </div>
+
+        <!--Form fields-->
+        <div fxFlex="35" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" style="margin-left:15px;">
+          <mat-card style="margin-top:60px;">
+            <mat-card-header> <p style="margin-top:5px;">Software Information</p> </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="softwareForm" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()">
+                <div fxLayout="column">      
+                  <mat-form-field class="descriptionControls" style="margin-left: 4px;"> 
+                    <input matInput #software formControlName="software" matTooltip="Enter Software" (input)="isChange()"
+                      matInput placeholder="Software"  maxlength="50" [errorStateMatcher]="errorMatcher" required >
+                    <mat-error *ngIf="hasError('software', 'required')">Software is required.</mat-error>
+                    <mat-error *ngIf="hasError('software', 'space')">{{SpaceMessage}}</mat-error>
+                  </mat-form-field>
+                  <mat-checkbox fxLayoutAlign="left" checked="true" style="margin-left:15px"
+                    formControlName="active" matTooltip="Select Active"   (change)="isChange()">Active
+                  </mat-checkbox>
+              <mat-error *ngIf="isInUse"  style="font-size:11px;padding-left:14px;">Software in use.</mat-error>  
+                </div>
+                <div fxLayout.lg="row" fxLayout.sm="row" fxLayout.md="row" fxLayout.xs="row" fxLayoutGap="15px" fxLayoutAlign="center center">
+									<button type="submit" mat-raised-button color="primary" class="filterButtonClass" [disabled]="!(softwareForm.valid && isAllowSave)"> <mat-icon>save</mat-icon> Save</button>
+									<button type="button" mat-raised-button  class="filterButtonClass" (click)="resetForm()" ><mat-icon>clear_all</mat-icon> Reset </button> 
+								</div>	
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

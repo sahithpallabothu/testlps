@@ -1,0 +1,243 @@
+<div>
+	<mat-card>
+		<mat-card-content [formGroup]="viewInsertsForm">
+			<div fxLayout="row" fxLayoutGap="15px">
+				<mat-form-field style="width:395px;" >
+					<input type="text" placeholder="Customer Name" aria-label="Assignee" (keyup.enter)="loadDataInGrid()" matInput
+					  formControlName="CustomerName" [matAutocomplete]="auto" matTooltip="Enter Customer Name"
+					  (input)="validateCustomerNameAutoCompletes($event)"  tabindex={{tabIndexCount+1}} #customerNameAuto>
+					<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="isChangeInCustomer($event,true)">
+					  <mat-option *ngFor="let name of filteredOptionsCustomer | async" [value]="name"
+					   > 
+						{{name.customerName}}
+					  </mat-option>
+					</mat-autocomplete>
+					<mat-error *ngIf="viewInsertsForm.controls['CustomerName'].hasError('incorrectCustomerName')">
+					  Invalid Customer Name.
+					 </mat-error>
+				  </mat-form-field>
+				  <mat-form-field  class="inputTextBoxControlsCustCode">
+					<input type="text" placeholder="Customer Code" aria-label="Assignee" matInput formControlName="CustomerCode"
+					  [matAutocomplete]="CCode" matTooltip="Enter Customer Code" (keyup.enter)="loadDataInGrid()"
+					  (keyup)="ViewAdditionalChargesCustomerCode($event)"  tabindex={{tabIndexCount+1}} #customerCodeAuto>
+					<mat-autocomplete #CCode="matAutocomplete" [displayWith]="displayFnCustCode" (optionSelected)="isChangeInApplication($event,true)">
+					  <mat-option *ngFor="let name of filteredOptionsCustomerCode | async" [value]="name"
+						>
+						{{name.applicationCode}}
+					  </mat-option>
+					</mat-autocomplete>
+					<mat-error *ngIf="viewInsertsForm.controls['CustomerCode'].hasError('incorrect')">
+					  Invalid Customer Code.
+					 </mat-error>	
+				  </mat-form-field>
+				 
+				<div class="inputTextBoxControls">
+					<mat-form-field fxFlex="100%">
+						<mat-label>Start Date</mat-label>
+						<input matInput [textMask]="{mask: datemask}" formControlName="startDateInViewInserts"
+							matTooltip="Enter Start Date" placeholder="MM/DD/YY" (keyup.enter)="loadDataInGrid()"
+							(input)="setDateToPicker('startDateInViewInserts','startDateInViewInserts1')" tabindex={{tabIndexCount+1}}
+							#formRowStartDate>
+						<mat-error *ngIf="hasError('startDateInViewInserts','pattern')">
+							Invalid Start Date.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+						<input matInput formControlName="startDateInViewInserts1"
+							[matDatepicker]="insertsStartDatepicker"
+							(dateChange)="setDateToControl($event, 'startDateInViewInserts','startDateInViewInserts1')"
+							tabindex="-1">
+						<mat-datepicker-toggle matSuffix [for]="insertsStartDatepicker" (keyup.enter)="loadDataInGrid()"
+							tabindex="-1"></mat-datepicker-toggle>
+						<mat-datepicker #insertsStartDatepicker></mat-datepicker>
+					</mat-form-field>
+				</div>
+			
+				<div class="inputTextBoxControls">
+					<mat-form-field fxFlex="100%">
+						<mat-label>End Date</mat-label>
+						<input matInput [textMask]="{mask: datemask}" formControlName="endDateInViewInserts"
+							matTooltip="Enter End Date" placeholder="MM/DD/YY" (keyup.enter)="loadDataInGrid()"
+							(input)="setDateToPicker('endDateInViewInserts','endDateInViewInserts1')" tabindex={{tabIndexCount+1}}>
+						<mat-error *ngIf="hasError('endDateInViewInserts','pattern')">
+							Invalid End Date.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+						<input matInput formControlName="endDateInViewInserts1" [matDatepicker]="insertsEndDatepicker"
+							(dateChange)="setDateToControl($event, 'endDateInViewInserts','endDateInViewInserts1' )">
+						<mat-datepicker-toggle matSuffix [for]="insertsEndDatepicker" (keyup.enter)="loadDataInGrid()"
+							tabindex="-1"></mat-datepicker-toggle>
+						<mat-datepicker #insertsEndDatepicker></mat-datepicker>
+					</mat-form-field>
+				</div>
+				<div>
+					<mat-checkbox class="commonSpaceBwControls" formControlName="active" 
+					tabindex={{tabIndexCount+1}} >Active</mat-checkbox>
+				</div>
+				<div class="buttonsInInsert" fxLayout="row" fxLayoutAlign="center">
+					<button class="filterButtonClass" type="submit" mat-raised-button color="primary" (click)="loadDataInGrid()"
+						[disabled]="!viewInsertsForm.valid" tabindex={{tabIndexCount+1}}>
+						<mat-icon>search</mat-icon>Search
+					</button>
+					<button  class="filterButtonClass" type="button" (click)="resetForm()" mat-raised-button tabindex={{tabIndexCount+1}} >
+						<mat-icon>clear_all</mat-icon>Reset
+					</button>
+					<button type="button"  mat-raised-button color="primary" (click)="generateReports()" [disabled]= "!printButtonEnabled" style="width:150px;" tabindex={{tabIndexCount+1}}>
+                        <mat-icon>print</mat-icon>Review / Print
+                      </button> 
+                      <button type="button"  mat-raised-button color="primary" (click)="exportDataToCSV()" [disabled]= "!printButtonEnabled" style="width:150px;" tabindex={{tabIndexCount+1}}>
+                        <mat-icon>arrow_upward</mat-icon>Export to CSV
+                      </button> 
+				</div>
+			</div>
+			<div class="tableViewInsert" fxLayout>
+				<div class="scrollgrid-container mat-elevation-z8">
+					<table mat-table #sort="matSort" [dataSource]="dataSourceviewInsert" matSort
+						matSortActive="applicationCode" matSortDirection="asc" [matSortDisableClear]="true">
+						<!-- 	      <ng-container matColumnDef="applicationName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-top: 5px;" fxFlex = "5" >Application Name</th>
+                      <td mat-cell *matCellDef="let insertDetails" style="padding-top: 5px;" fxFlex = "5" >{{insertDetails.applicationName}}</td>
+               </ng-container> -->
+						<ng-container matColumnDef="applicationCode">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center" fxFlex="6">
+								App</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="start center">
+								{{insertDetails.applicationCode}}</td>
+						</ng-container>
+						<ng-container matColumnDef="startDate">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="7">
+								Start <br /> Date</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex="7" fxLayoutAlign="center center">
+								{{(insertDetails.startDate.split(" "))[0]}}</td>
+						</ng-container>
+						<ng-container matColumnDef="endDate">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="6">
+								End <br /> Date</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="center center">
+								{{insertDetails.endDate!=null ?(insertDetails.endDate.split(" "))[0] : ""}}</td>
+						</ng-container>
+						<ng-container matColumnDef="insertType">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center" fxFlex="7">
+								Type</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex="7" fxLayoutAlign="start center">
+								{{insertDetails.insertTypeName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="number">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="5" fxFlex.lg="6">
+								Insert Number</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex.lg="6" fxLayoutAlign="center center"
+								fxFlex="5">{{insertDetails.number|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="returnInserts">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="5" fxFlex.lg="6">
+								Return</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="center center"
+								fxFlex="5" fxFlex.lg="6">{{insertDetails.returnInserts	?"Y":"N"}}</td>
+						</ng-container>
+						<ng-container matColumnDef="returnedQuantity">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="7">
+								Return Quantity</th>
+							<td mat-cell *matCellDef="let insertDetails"  fxLayoutAlign="center center"
+								fxFlex="7">{{insertDetails.returnedQuantity|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="usedQuantity">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="5" fxFlex.lg="6">
+								Used Quantity</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex.lg="6" fxLayoutAlign="center center"
+								fxFlex="5">{{insertDetails.usedQuantity|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="weight">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="5">
+								Weight</th>
+							<td mat-cell *matCellDef="let insertDetails" style="text-align:right" fxLayoutAlign="center center"
+								fxFlex="5">{{insertDetails.weight|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="receivedQuantity">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="7">
+								Received Quantity</th>
+							<td mat-cell *matCellDef="let insertDetails"  fxLayoutAlign="center center"
+								fxFlex="7">{{insertDetails.receivedQuantity|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="receivedDate">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="7">
+								Received Date</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="center center"
+								fxFlex="7">
+								{{insertDetails.receivedDate!=null ?convertToCustomerDateFormat(insertDetails.receivedDate) : ""}}
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="reorderQuantity">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="7">
+								Reorder Quantity</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="center center"
+								fxFlex="7">{{insertDetails.reorderQuantity|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="total">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center" fxFlex="6">
+								Total Quantity</th>
+							<td mat-cell *matCellDef="let insertDetails" 
+								fxFlex="6">{{insertDetails.total|number}}</td>
+						</ng-container>
+						<ng-container matColumnDef="receivedBy">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center" fxFlex="9">
+								Received By</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="start center"
+								fxFlex="9" class="columnTextElipsis" [matTooltip]="insertDetails.receivedBy">
+								{{insertDetails.receivedBy}}</td>
+						</ng-container>
+						<ng-container matColumnDef="binLocation">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="4">
+								Bin</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="center center"
+							 fxFlex="4"
+								class="columnTextElipsis" [matTooltip]="insertDetails.binLocation">
+								{{insertDetails.binLocation}}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="description">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center"
+								fxFlex="10">Desc</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="start center"
+								 fxFlex="10"
+								class="columnTextElipsis" [matTooltip]="insertDetails.description">
+								{{insertDetails.description}}</td>
+						</ng-container>
+						<ng-container matColumnDef="code">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center">Code</th>
+							<td mat-cell *matCellDef="let insertDetails" >
+								{{insertDetails.code}}</td>
+						</ng-container>
+						<ng-container matColumnDef="locationInserts">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center"
+								 fxFlex="5">Loc</th>
+							<td mat-cell *matCellDef="let insertDetails" fxLayoutAlign="center center"
+								fxFlex="5">{{insertDetails.locationInserts==="W"?"W":"D"}}</td>
+						</ng-container>
+						<ng-container matColumnDef="active">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="center center" fxFlex="4" fxFlex.lg="5">
+								Active</th>
+							<td mat-cell *matCellDef="let insertDetails" fxFlex.lg="5" fxLayoutAlign="center center"
+								fxFlex="4">
+								<mat-icon [ngStyle]="{'color': insertDetails.active?'green':'orange'}">
+									<b>{{insertDetails.active ? 'check':'close'}}</b></mat-icon>
+								</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="insertColumns; sticky: true"></tr>
+						<tr mat-row style="padding-top:15px;" (click)="selectRow(insertDetails)"
+							(click)="openInsert(insertDetails.applicationID,insertDetails.insertTypeName,insertDetails.number)"
+							*matRowDef="let insertDetails; columns: insertColumns"
+							[style.background]="highlightedRows.indexOf(insertDetails) != -1 ? '#eaf4f9' : ''"></tr>
+					</table>
+					<div class="notFoundData" [hidden]="isTableHasData">
+						No data found
+					</div>
+					<div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv">
+						<div class="loader"></div>
+						<p class="spinnerLoadingText">{{spinnerText}}</p>
+					</div>
+				</div>
+			</div>
+		</mat-card-content>
+	</mat-card>
+</div>

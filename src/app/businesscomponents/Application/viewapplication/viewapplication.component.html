@@ -1,0 +1,87 @@
+<div style="margin-left: 15px;">
+	<mat-card>
+		<mat-card-content>
+		  <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"> 		
+			  <div fxFlex="100">
+						  <mat-form-field  class="control-space applicationControls" matTooltip="Select Search By">
+							  <mat-label>Search By</mat-label>
+						  <mat-select disableOptionCentering [(ngModel)]="selectedoption1" (selectionChange)="checkFilterBySelected()">
+							  <mat-option *ngFor="let option of options2" [value]="option.id">{{option.name}}</mat-option>
+							  </mat-select>
+						  </mat-form-field>
+						  <mat-form-field style="width:200px;"  class="control-space applicationControls">
+								  <input matInput type="text"  #filterText [(ngModel)]="searchText"  placeholder="Search Text" (keypress)="omit_special_char($event)" (keyup.enter)="doFilter(selectedoption1)" matTooltip="Enter Search Text">
+						  </mat-form-field> 
+					  <button type="submit" class="filterButtonClass" style="margin-right: 15px;" mat-raised-button color="primary" (click)="doFilter(selectedoption1)"> <mat-icon>search</mat-icon> Search</button>
+					  <button type="button" class="filterButtonClass" style="margin-right: 15px;" mat-raised-button (click)="clearCustomerData()"><mat-icon>clear_all</mat-icon> Reset</button>
+			   </div>
+		  </div>
+		  <div>
+			  <div class="scrollgrid-container mat-elevation-z8" >
+				  <table mat-table #sort="matSort" [dataSource]="dataSource" matSort matSortActive="applicationName" matSortDirection="asc" style="width:100%" [matSortDisableClear]="true">
+					  <!-- Columns -->
+						<ng-container matColumnDef="applicationName" >
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="15" fxLayoutAlign="start center">Application Name</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="15" class="columnTextElipsis" [matTooltip]="applicationobj.applicationName" style="padding-top: 15px;">{{applicationobj.applicationName}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="applicationCode"  >
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="8.5"  fxLayoutAlign="start center">Application<br> Code</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="8.5" style="padding-top: 15px;" >{{applicationobj.applicationCode}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="customerName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="15" fxLayoutAlign="start center">Customer Name</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="15" class="columnTextElipsis" [matTooltip]="applicationobj.customerName" style="padding-top: 15px;" >{{applicationobj.customerName}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="customerCode">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="8" fxLayoutAlign="start center">Customer<br> Code</th>
+							<td mat-cell *matCellDef="let applicationobj"  fxFlex="8"  style="padding-top: 15px;" >{{applicationobj.customerCode}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="customerState"  >
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="7.5" fxLayoutAlign="start center" >Customer<br> State</th>
+							<td mat-cell *matCellDef="let applicationobj"  fxFlex="7.5" style="padding-top: 15px;" >{{applicationobj.customerState}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="customerFlag">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10" fxLayoutAlign="start center">Customer<br/>Flag</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="10" class="columnTextElipsis" [matTooltip]="applicationobj.customerFlag"  style="padding-top: 15px;" >{{applicationobj.customerFlag}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="appType">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11"  fxLayoutAlign="start center">Application Type</th>
+							<td mat-cell *matCellDef="let applicationobj"  fxFlex="11"  class="columnTextElipsis" [matTooltip]="applicationobj.appType" style="padding-top: 15px;" >{{applicationobj.appType}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="software">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="7"  fxLayoutAlign="start center" >Software</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="7" class="columnTextElipsis" [matTooltip]="applicationobj.software"
+							style="padding-top: 15px;" >{{applicationobj.software}}</td>
+						</ng-container>
+						<ng-container  matColumnDef="perfPatternDescription">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="5" fxLayoutAlign="start center" >Perf</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="5" class="columnTextElipsis" style="padding-top: 15px;" [matTooltip]="applicationobj.perfPatternDescription">{{applicationobj.perfPatternDescription}}</td>
+						</ng-container>
+					   <ng-container  matColumnDef="runFrequencyName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="13"  fxLayoutAlign="start center">Run Frequency</th>
+							<td mat-cell *matCellDef="let applicationobj" fxFlex="13"  style="padding-top: 15px;" >{{applicationobj.runFrequencyName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="delete">
+							<th mat-header-cell *matHeaderCellDef fxLayoutAlign="start center"> Delete </th>
+							<td mat-cell *matCellDef="let applicationobj" (click)="$event.stopPropagation()">
+							  <button mat-icon-button color="warn" (click)="deleteApplication(applicationobj.applicationID)">
+								<mat-icon class="mat-18">delete</mat-icon>
+							  </button>
+							</td>
+						  </ng-container>
+					  <tr mat-header-row *matHeaderRowDef="custableColumns; sticky: true"></tr>
+					  <tr mat-row (click)="selectRow(applicationobj)"  (click)="openApplicationScreen(applicationobj)"  *matRowDef="let applicationobj; columns: custableColumns" [style.background]="highlightedRows.indexOf(applicationobj) != -1 ? '#eaf4f9' : ''"></tr>
+			  </table>
+			  <div class="notFoundData" [hidden]="isTableHasData">{{noDataFound}}</div>	
+		  </div>
+	  </div>
+	  
+	  <div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv">
+		  <div class="loader"></div>
+		  <p class="spinnerLoadingText">{{spinnerText}}</p>
+		</div>
+		
+		</mat-card-content>
+	</mat-card>
+  </div>
+  

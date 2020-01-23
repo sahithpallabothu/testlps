@@ -1,0 +1,17 @@
+mat-toolbar{
+    border-radius: 0px;
+	background-color:#256275;
+}
+
+.FooterToolBar{
+    height: 30px;
+    font-size:12px;
+    position: absolute; bottom: 0px; 
+}
+
+.linkButtons{
+	line-height:25px;
+	font-size:12px;
+	background-color:transparent;
+	margin-top:10px;
+}

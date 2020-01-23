@@ -1,0 +1,64 @@
+<div class="container">
+  <form [formGroup]="postalReportsForm" (ngSubmit)="onpostalReportsFormFormSubmit()" style="overflow:hidden">
+	<mat-card  fxFlexAlign="start" class="postalReportsFormCard" style="min-width:99.5% !important" >
+	  <mat-card-content>
+	        <div fxLayout="column" fxFlex.lg="70" fxFlex.sm="100" fxFlex.md="90" fxFlex.xs="100">
+			     <mat-card  class="details_postalReports" style="border:1px solid;padding:0px;margin-top:5px;">
+					 <mat-card-content style="padding:10px;">
+							 <div fxLayout="row"  fxLayout.xs="column wrap"  fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="25px">
+								<mat-form-field fxFlex="30">
+								   <input matInput formControlName="postalReports_JobName" matTooltip="Enter Job Name"  placeholder="Job Name"> 
+								</mat-form-field>
+								<mat-form-field  fxFlex="15">
+									  <mat-label>Run Month</mat-label>
+									  <mat-select disableOptionCentering formControlName="postalReportsRunMonth" [(ngModel)]="runMonthInPostage" matTooltip="Run Month">
+										<mat-option *ngFor="let name of months" [value]="name.id">
+												{{name.month}}
+												</mat-option>
+									  </mat-select>
+								</mat-form-field>
+								<mat-form-field  fxFlex="30">
+									  <mat-label>Save reports to</mat-label>
+									  <mat-select disableOptionCentering formControlName="postalReports_SaveReports" [(ngModel)]="saveReportsInPostage" matTooltip="Save reports to">
+										<mat-option *ngFor="let name of savereports" [value]="name.id">
+												{{name.saveReportTo}}
+												</mat-option>
+										</mat-select>
+								</mat-form-field>		
+							 </div>	
+					    </mat-card-content>
+				    </mat-card>
+					 <mat-card style="margin-top: 10px;">
+						 <mat-card-header style="">
+						   <mat-card-title>Select reports to copy</mat-card-title>
+						 </mat-card-header>
+						 <mat-card-content style="padding:10px 10px 4px 10px">
+						   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap.gt-lg="40px" fxLayoutGap.lg="30px" fxLayoutGap.sm="15px" fxLayoutGap.md="27px" >
+								<mat-checkbox  formControlName="reports_2OZDetail">2 Oz Detail</mat-checkbox>
+								<mat-checkbox  formControlName="reports_form3600">Form 3600</mat-checkbox>
+								<mat-checkbox formControlName="reports_rrp">RRP</mat-checkbox>
+								<mat-checkbox  formControlName="reports_workorder">Work Order</mat-checkbox>
+								<mat-checkbox  formControlName="reports_jobControlLog">Job Control Log</mat-checkbox>
+								<mat-checkbox  formControlName="reports_cass">CASS</mat-checkbox>
+								<mat-checkbox  formControlName="reports_rmt">RMT</mat-checkbox>
+								<mat-checkbox formControlName="reports_tags">Tags</mat-checkbox>
+						  
+						  </div>
+						   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap" fxLayout.md="row wrap">
+						   </div>
+						   <div style="margin-top:0px;" fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutAlign="end" fxLayoutGap="0px">
+							  <button mat-button type="button" class="linkButtons" (click)="selectAllCheckBoxes()" style=""> Select All</button><span class="spanClass" style="">|</span>
+							 <button  mat-button type="button"  class="linkButtons" (click)="clearAllCheckBoxes()">Clear All</button>
+			
+						   </div>
+						 </mat-card-content>
+					</mat-card>	
+					<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px"  fxLayoutAlign="center" fxLayoutAlign.xs="center center" style="margin:15px 0px 10px 0px;">
+						<button  type="button" mat-raised-button color="primary" style=""> <mat-icon>save</mat-icon> Submit</button>
+						<button type="button" mat-raised-button (click)="resetAll()" ><mat-icon>clear_all</mat-icon> Reset</button>
+					</div>
+			</div>
+		</mat-card-content>
+	</mat-card>	
+   </form> 			
+</div>			

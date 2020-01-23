@@ -1,0 +1,489 @@
+<div class="container">
+	<form [formGroup]="homeScreenForm">
+		<mat-card>
+			<mat-card-content>
+				<fieldset  style="border:2px solid rgba(0,0,0,0.3);border-radius: 10px;padding: 15px;padding-left: 40px;">
+					<div fxLayout="row">
+						<mat-form-field style="width:395px;" class="commonSpaceBwControls">
+							<input type="text" placeholder="Customer Name" aria-label="Assignee" matInput
+								formControlName="CustomerName" #custName [matAutocomplete]="auto" maxlength="255"
+								(keyup)="validateCustomerNameAutoCompletes($event)" matTooltip="Select Customer Name"
+								tabindex={{tabIndexValue+1}}>
+							<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+								(optionSelected)="isChangeInCustomer($event)">
+								<mat-option (keydown.enter)="searchHomeFormData()"
+									*ngFor="let name of filteredOptionsCustomer | async" [value]="name">
+									{{name.customerName}}
+								</mat-option>
+							</mat-autocomplete>
+							<mat-error *ngIf="homeScreenForm.controls['CustomerName'].hasError('incorrect')">
+								Invalid Customer Name.
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field class="inputTextBoxControls" style="margin-right:212px !important;">
+							<input type="text" placeholder="Customer Code"  aria-label="Assignee" matInput
+								formControlName="CustomerCode" [matAutocomplete]="CCode" #custCode
+								(keyup)="validateCustomerCodeAutoCompletes($event)" matTooltip="Select Customer Code"
+								maxlength="255" tabindex={{tabIndexValue+1}}>
+							<mat-autocomplete #CCode="matAutocomplete" [displayWith]="displayFnCustCode"
+								(optionSelected)="isChangeInCustomer($event)">
+								<mat-option (keydown.enter)="searchHomeFormData()"
+									*ngFor="let name of filteredOptionsCustomerCode | async" [value]="name">
+									{{name.customerCode}}
+								</mat-option>
+							</mat-autocomplete>
+							<mat-error *ngIf="homeScreenForm.controls['CustomerCode'].hasError('incorrect')">
+								Invalid Customer Code.
+							</mat-error>
+						</mat-form-field>
+
+						<div fxLayout="column" class="homeCustomerBtn" style="width:185px;">
+							<button type="button" mat-raised-button (click)="openCustomerScreen()"
+								[disabled]="!hasCustomerScreenPrivilege" class="btnColor" tabindex={{tabIndexValue+1}}>
+								<mat-icon>portrait</mat-icon> Customer
+							</button>
+						</div>
+					</div>
+
+					<div fxLayout="row">
+						<mat-form-field class="inputContactNumberControls commonSpaceBwControls" >
+							<mat-label>Telephone</mat-label>
+							<input matInput [textMask]="{mask: telephonemask}" (keypress)="validateIntegers($event)"
+								formControlName="Telephone" matTooltip="Enter Telephone" matInput
+								placeholder="(___)___-___" tabindex={{tabIndexValue+1}}
+								(keydown.enter)="searchHomeFormData()">
+						</mat-form-field>
+
+						<mat-form-field class="inputContactNumberControls commonSpaceBwControls">
+							<mat-label>Fax </mat-label>
+							<input matInput [textMask]="{mask: telephonemask}" (keypress)="validateIntegers($event)"
+								formControlName="Fax" matTooltip="Enter Fax" matInput placeholder="(___)___-___"
+								tabindex={{tabIndexValue+1}} (keydown.enter)="searchHomeFormData()">
+						</mat-form-field>
+
+						<mat-form-field class="inputContactNumberControls" style="margin-right:327px;">
+							<mat-label>IVR</mat-label>
+							<input matInput [textMask]="{mask: telephonemask}" (keypress)="validateIntegers($event)"
+								formControlName="IVRPhoneNumber" matTooltip="Enter IVR" matInput placeholder="(___)___-___"
+								tabindex={{tabIndexValue+1}} (keydown.enter)="searchHomeFormData()">
+						</mat-form-field>
+<!-- 
+						<div style="width:280px">
+						</div> -->
+						<div fxLayout="column" class="homeContactsBtn" style="width:185px;" fxLayout.xs="column">
+							<button type="button" mat-raised-button (click)="openContactDialog()"
+								[disabled]="!hasCustomerScreenPrivilege" class="btnColor" tabindex={{tabIndexValue+1}}>
+								<mat-icon>contacts</mat-icon> Contacts
+							</button>
+						</div>
+					</div>
+
+					<div fxLayout="row">
+						<mat-form-field style="width:551px;margin-right: 211px;" class="addressInputField">
+							<textarea matInput formControlName="comments" placeholder="Comments" maxlength="255"
+								style="resize: none" matTooltip="Enter Comments" rows="1" tabindex={{tabIndexValue+1}}
+								(keydown.enter)="searchHomeFormData()"></textarea>
+						</mat-form-field>
+						<div fxLayout="column" class="homeAddressBtn" style="width:185px;" fxLayout.xs="column">
+							<button type="button" mat-raised-button class="btnColor"
+								[disabled]="!hasApplicationScreenPrivilege" (click)="openApplicationScreen()"
+								tabindex={{tabIndexValue+1}}>
+								<mat-icon>phone_iphone</mat-icon> Application
+							</button>
+						</div>
+					</div>
+
+					<div fxLayout="row" style="padding-top:4px">
+						<div style="width:500px;margin-right:262px" class="servicesCheckbox">
+							<mat-label class="homeServiceLabel commonSpaceBwControls" >Services </mat-label>
+							<mat-checkbox formControlName="DM" class="commonSpaceBwControls" (keydown.enter)="searchHomeFormData()"
+								tabIndex={{tabIndexValue+1}} >DM</mat-checkbox>
+							<mat-checkbox class="commonSpaceBwControls" formControlName="EBPP" (keydown.enter)="searchHomeFormData()"
+								tabIndex={{tabIndexValue+1}} >EBPP</mat-checkbox>
+							<mat-checkbox class="commonSpaceBwControls" formControlName="IVR" (keydown.enter)="searchHomeFormData()"
+								tabIndex={{tabIndexValue+1}} >IVR</mat-checkbox>
+							<mat-checkbox class="commonSpaceBwControls" formControlName="PDF" (keydown.enter)="searchHomeFormData()"
+								tabIndex={{tabIndexValue+1}} >PDF</mat-checkbox>
+						</div>
+						<div fxLayout="column" class="serviceAgreBtn" style="width:185px;" fxLayout.xs="column">
+							<button type="button" mat-raised-button (click)="openServiceAgreement()"
+								[disabled]="!hasCustomerScreenPrivilege" class="btnColor" tabindex={{tabIndexValue+1}}>
+								<mat-icon>assignment</mat-icon> Service Agreement
+							</button>
+						</div>
+					</div>
+
+					<div fxLayout="row" style="margin-top:-7px;margin-bottom:20px">	<!--margin-bottom: 35px;-->
+						<mat-form-field class="inputTextBoxControls commonSpaceBwControls" >
+							<input matInput formControlName="MailerID" matTooltip="Enter Mailer ID" matInput
+								autocomplete="off" maxlength="9" tabindex={{tabIndexValue+1}} placeholder="Mailer ID"
+								Numerics numericType="number" (keydown.enter)="searchHomeFormData()">
+						</mat-form-field>
+						<mat-form-field class="inputTextBoxControls">
+							<input matInput formControlName="CRID" matTooltip="Enter CRID" matInput maxlength="9"
+								autocomplete="off" placeholder="CRID" Numerics numericType="number"
+								tabindex={{tabIndexValue+1}} (keydown.enter)="searchHomeFormData()">
+						</mat-form-field>
+					</div>
+
+					<div fxLayout="row">
+						<mat-form-field style="width:395px;" class="commonSpaceBwControls" >
+							<input type="text" placeholder="Application Name" aria-label="Assignee" matInput
+								maxlength="50" tabindex={{tabIndexValue+1}} formControlName="ApplicationName"
+								[matAutocomplete]="autoApplicationName" #appName
+								(keyup)="validateApplicationNameAutoCompletes($event)"
+								matTooltip="Select Application Name">
+							<mat-autocomplete #autoApplicationName="matAutocomplete"
+								[displayWith]="displayFnApplicationName"
+								(optionSelected)="isChangeInApplication($event)">
+								<mat-option (keydown.enter)="searchHomeFormData()"
+									*ngFor="let app of filteredOptionsApplicationName | async" [value]="app">
+									{{app.applicationName}}
+								</mat-option>
+							</mat-autocomplete>
+							<mat-error *ngIf="homeScreenForm.controls['ApplicationName'].hasError('incorrect')">
+								Please select a valid Application Name.
+							</mat-error>
+						</mat-form-field>
+
+						<mat-form-field class="inputTextBoxControls">
+							<mat-label>Start Date</mat-label>
+							<input matInput [textMask]="{mask: dateMask}" formControlName="startDate"
+								(input)="setDateInDatePicker('startDate','startDateWithPicker')"
+								matTooltip="Enter Start Date" placeholder="MM/DD/YY" autocomplete="off" tabindex="18"
+								(keydown.enter)="searchHomeFormData()">
+							<mat-error *ngIf="hasError('startDate','required')">
+								Start Date is required
+							</mat-error>
+							<mat-error *ngIf="hasError('startDate','pattern')">
+								Invalid Start Date
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="1px">
+							<input matInput #stDateFocus formControlName="startDateWithPicker"
+								[matDatepicker]="startDatepicker" tabindex="-1" (dateChange)="addStartEvent($event)"
+								(keydown.enter)="searchHomeFormData()">
+							<mat-datepicker-toggle matSuffix [for]="startDatepicker" style="margin-left:-18px"
+								tabindex="-1">
+							</mat-datepicker-toggle>
+						<mat-datepicker #startDatepicker>
+							</mat-datepicker>
+						</mat-form-field>
+
+					</div>
+
+					<div fxLayout="row">
+						<mat-form-field class="inputTextBoxControls">
+							<input type="text" placeholder="Application Code" aria-label="Assignee" matInput
+								formControlName="ApplicationCode" [matAutocomplete]="autoApplicationCode" #appCode
+								maxlength="4" (keyup)="validateApplicationCodeAutoCompletes($event)"
+								tabindex={{tabIndexValue+1}} matTooltip="Select Application Code">
+							<mat-autocomplete (optionSelected)="isChangeInApplication($event)"
+								#autoApplicationCode="matAutocomplete" [displayWith]="displayFnApplicationCode">
+								<mat-option (keydown.enter)="searchHomeFormData()"
+									*ngFor="let app of filteredOptionsApplicationCode | async" [value]="app">
+									{{app.applicationCode}}
+								</mat-option>
+							</mat-autocomplete>
+							<mat-error *ngIf="homeScreenForm.controls['ApplicationCode'].hasError('incorrect')">
+								Please select a valid Application Code.
+							</mat-error>
+						</mat-form-field>
+						<div style="width:300px"  [matTooltip]="AppCode">
+							<p *ngIf="holdFlag" class="columnTextElipsis" style="color:indianred">{{AppCode}}</p>
+							<!-- <p *ngIf="holdFlag" style="color:indianred">AlB,QWE,RTY,UIO,ASD,GHJ,KLZ,XCV,AlB,QWE,RTY,UIO,ASD,GHJ,KLZ,XCV{{AppCode}}</p> -->
+						</div>
+
+						<mat-form-field class="inputTextBoxControls">
+							<mat-label>End Date</mat-label>
+							<input matInput [textMask]="{mask: dateMask}" formControlName="endDate"
+								(input)="setDateInDatePicker('endDate','endDateWithPicker')" tabindex="19"
+								matTooltip="Enter End Date" placeholder="MM/DD/YY" [min]="startOfEndDate"
+								autocomplete="off" (keydown.enter)="searchHomeFormData()">
+							<mat-error *ngIf="hasError('endDate','required')">
+								End Date is required.
+							</mat-error>
+							<mat-error *ngIf="hasError('endDate','pattern')">
+								Invalid End Date.
+							</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="1px" style="margin-right: 211px;">
+							<input matInput formControlName="endDateWithPicker" [matDatepicker]="endDatepicker"
+								tabindex="-1" [min]="startOfEndDate" (dateChange)="addEndEvent($event)"
+								(keydown.enter)="searchHomeFormData()">
+							<mat-datepicker-toggle matSuffix [for]="endDatepicker" style="margin-left:-18px"
+								tabindex="-1">
+							</mat-datepicker-toggle>
+							<mat-datepicker #endDatepicker>
+							</mat-datepicker>
+						</mat-form-field>
+						<div fxLayoutAlign="center center">
+							<div fxLayout="row" fxLayoutGap="15px">
+								<button type="submit" mat-raised-button class="filterButtonClass"  color="primary" (click)="searchHomeFormData()"
+									tabindex="20" style="text-align:center">
+									<mat-icon>search</mat-icon> Search
+								</button>
+								<button type="button" mat-raised-button  class="filterButtonClass"  color="basic" (click)="resetForm()"
+									tabindex="21">
+									<mat-icon>clear_all</mat-icon> Reset
+								</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<br>
+				<div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv">
+					<div class="loader"></div>
+					<p class="spinnerLoadingText">{{spinnerText}}</p>
+				</div>
+
+				<mat-accordion #matCardContentMoveSmooth tabindex="22">
+					<mat-expansion-panel (opened)="jobsDataPanelOpenState = true" tabindex="-1"
+						(closed)="jobsDataPanelOpenState = false" [disabled]="!hasPostageScreenPrivilege"
+						[expanded]="jobsDataPanelOpenState" (afterExpand)="scrollToDown()">
+						<mat-expansion-panel-header>
+							<mat-panel-title>
+								<b>Job Results</b>
+							</mat-panel-title>
+							<mat-panel-description style="padding-left:185px;">
+								<b>{{jobsDataPanelOpenState ? 'Click to close ' : 'Click for'}} Job Results</b>
+							</mat-panel-description>
+						</mat-expansion-panel-header>
+
+						<div class=" jobs scrollgrid-container mat-elevation-z8">
+							<table mat-table #sortJob="matSort" class=" jobs" [dataSource]="jobsDataSource" matSort
+								matSortActive="inputName" matSortDirection="asc" [matSortDisableClear]="true">
+								<!-- Position Column -->
+								<ng-container matColumnDef="inputName">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="start center">Job Name</th>
+									<td mat-cell *matCellDef="let homejobs" fxFlex="11" fxLayoutAlign="start center">{{homejobs.inputName}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="upload">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Upload</th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{jobs.upload}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="received">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Received </th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{jobs.received }}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="processedDate">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Processed </th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{jobs.processedDate }}</td>
+								</ng-container>
+
+
+								<ng-container matColumnDef="accountsDetail">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="12" fxLayoutAlign="end center">Accounts </th>
+									<td mat-cell *matCellDef="let jobs" fxLayoutAlign="end center" fxFlex="12" style="padding-right:5px">
+										{{jobs.accountsDetail| number}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="runDate">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Run Date</th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{jobs.runDate }}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="billDate">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Bill Date </th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{jobs.billDate }}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="postDate">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Posted Date</th>
+									<td mat-cell *matCellDef="let jobs" fxFlex="11" fxLayoutAlign="center center">{{ convertToCustomDate(jobs.postDate) }}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="printed">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="11" fxLayoutAlign="center center">Print</th>
+									<td mat-cell *matCellDef="let jobs"  fxFlex="11" fxLayoutAlign="center center">
+										{{jobs.printed==false?'D':'W'}}</td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="tableColumnsForJobs; sticky: true"></tr>
+								<tr mat-row (click)="selectRow(jobs)" (click)="openPostageScreen(jobs)"
+									*matRowDef="let jobs; columns: tableColumnsForJobs"
+									[style.background]="highlightedRows.indexOf(jobs) != -1 ? '#eaf4f9' : ''"></tr>
+							</table>
+							<div class="notFoundData" [hidden]="isTableHasData">
+								{{noDataFound}}
+							</div>
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+				<mat-accordion #matCardContentMoveSmoothInserts tabindex="23">
+					<mat-expansion-panel (opened)="isInsertsResultsPanelOpen = true"
+						[expanded]="isInsertsResultsPanelOpen" tabindex="-1"
+						(closed)="isInsertsResultsPanelOpen = false" [disabled]="!hasInsertScreenPrivilege"
+						(afterExpand)="scrollToDown()">
+						<mat-expansion-panel-header>
+							<mat-panel-title>
+								<b>Insert Results</b>
+							</mat-panel-title>
+							<mat-panel-description style="padding-left:178px;">
+								<b>{{isInsertsResultsPanelOpen ? 'Click to close ' : 'Click for'}} Insert Results</b>
+							</mat-panel-description>
+						</mat-expansion-panel-header>
+						<div class=" inserts scrollgrid-container mat-elevation-z8">
+							<table mat-table class=" inserts" #sortInsert="matSort" [dataSource]="insertsDataSource"
+								matSort matSortActive="applicationCode" matSortDirection="asc"
+								[matSortDisableClear]="true">
+								<!-- Position Column -->
+								<ng-container matColumnDef="applicationCode">
+									<th mat-header-cell fxFlex="6" fxLayoutAlign="start center" *matHeaderCellDef mat-sort-header
+										class="align-header">App</th>
+									<td mat-cell fxFlex="6"  *matCellDef="let inserts" fxLayoutAlign="start center" class="align-header">
+										{{inserts.applicationCode}}</td>
+								</ng-container>
+								<ng-container matColumnDef="startDate">
+									<th mat-header-cell fxFlex="6"  fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Start<br /> Date
+									</th>
+									<td mat-cell fxFlex="6" *matCellDef="let inserts" fxLayoutAlign="center center"
+										class="align-header">
+										{{inserts.startDate}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="endDate">
+									<th mat-header-cell fxFlex="6" fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">End <br />  Date</th>
+									<td mat-cell fxFlex="6" fxLayoutAlign="center center" *matCellDef="let inserts"
+										class="align-header">
+										{{inserts.endDate}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="insertType">
+									<th mat-header-cell fxFlex="7" fxLayoutAlign="start center" *matHeaderCellDef mat-sort-header
+										class="align-header">Type
+									</th>
+									<td mat-cell  fxFlex="7" *matCellDef="let inserts"
+									class="columnTextElipsis" [matTooltip]="inserts.insertTypeName"  style="padding-top:13px">
+										{{inserts.insertTypeName }}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="number">
+									<th mat-header-cell fxFlex="5"  fxFlex.lg="6" *matHeaderCellDef mat-sort-header
+										class="align-header" fxLayoutAlign="center center" >Insert Number</th>
+									<td mat-cell fxFlex="5" fxFlex.lg="6"  *matCellDef="let inserts" class="align-header"
+									         fxLayoutAlign="center center">
+										{{inserts.number|number}}</td>
+								</ng-container>
+								<ng-container matColumnDef="returnInserts">
+									<th mat-header-cell fxFlex="5" fxFlex.lg="6"  fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Return </th>
+									<td mat-cell fxFlex="5" fxFlex.lg="6"  fxLayoutAlign="center center"
+										*matCellDef="let inserts" class="align-header">
+										{{inserts.returnInserts === true ? 'Y':'N'}}</td>
+								</ng-container>
+								<ng-container matColumnDef="receivedQuantity">
+									<th mat-header-cell fxFlex="7"  *matHeaderCellDef mat-sort-header
+									fxLayoutAlign="center center" class="align-header">Received Quantity</th>
+									<td mat-cell  *matCellDef="let inserts" class="align-header"
+										fxFlex="7" fxLayoutAlign="center center">{{inserts.receivedQuantity|number}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="usedQuantity">
+									<th mat-header-cell fxFlex="5" fxFlex.lg="6" *matHeaderCellDef mat-sort-header
+									fxLayoutAlign="center center" class="align-header">Used Quantity</th>
+									<td mat-cell fxFlex="5" fxFlex.lg="6"  *matCellDef="let inserts" class="align-header"
+										fxLayoutAlign="center center">{{inserts.usedQuantity|number}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="receivedDate">
+									<th mat-header-cell fxFlex="7" *matHeaderCellDef mat-sort-header
+									fxLayoutAlign="center center" class="align-header">Received Date</th>
+									<td mat-cell fxFlex="7" *matCellDef="let inserts" class="align-header"
+										fxLayoutAlign="center center">
+										{{convertToCustomDate(inserts.receivedDate)}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="receivedBy">
+									<th mat-header-cell fxFlex="10"  fxLayoutAlign="start center" *matHeaderCellDef mat-sort-header
+										class="align-header">Received By
+									</th>
+									<td mat-cell fxFlex="10"  style="padding-top: 12px;" *matCellDef="let inserts" class="align-header" 
+									class="columnTextElipsis" [matTooltip]="inserts.receivedBy" >{{inserts.receivedBy}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="binLocation">
+									<th mat-header-cell fxFlex="4"  fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Bin
+									</th>
+									<td mat-cell  *matCellDef="let inserts" class="align-header"
+									fxFlex="4"  class="columnTextElipsis" [matTooltip]="inserts.binLocation" style="padding-top:13px;text-align: center;">{{inserts.binLocation}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="returnedQuantity">
+									<th mat-header-cell fxFlex="5" fxFlex.lg="6" fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Return Quantity</th>
+									<td mat-cell fxFlex="5" fxFlex.lg="6"  fxLayoutAlign="center center" *matCellDef="let inserts" class="align-header"
+									>{{inserts.returnedQuantity|number}}
+									</td>
+								</ng-container>
+								<ng-container matColumnDef="reorderQuantity">
+									<th mat-header-cell fxFlex="7" fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Reorder Quantity</th>
+									<td mat-cell  *matCellDef="let inserts" class="align-header"
+									fxFlex="7" fxLayoutAlign="center center">{{inserts.reorderQuantity |number}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="weight">
+									<th mat-header-cell fxFlex="5"  fxLayoutAlign="center center"*matHeaderCellDef mat-sort-header
+										class="align-header">Weight </th>
+									<td mat-cell fxFlex="5"  fxLayoutAlign="center center" *matCellDef="let inserts" class="align-header">{{inserts.weight|number}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="description">
+									<th mat-header-cell fxFlex="10"  fxLayoutAlign="start center" *matHeaderCellDef mat-sort-header
+										class="align-header">Desc
+									</th>
+									<td mat-cell fxFlex="10"  style="padding-top: 12px;"  *matCellDef="let inserts" 
+										class="columnTextElipsis" [matTooltip]="inserts.description">
+										{{inserts.description}}</td>
+								</ng-container>
+
+								<ng-container matColumnDef="locationInserts">
+									<th mat-header-cell fxFlex="5" fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Loc
+									</th>
+									<td mat-cell fxFlex="5" fxLayoutAlign="center center" *matCellDef="let inserts" class="align-header">
+										{{inserts.locationInserts==='False'?'D':'W'}}
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="active">
+									<th mat-header-cell fxFlex="4" fxFlex.lg="5" fxLayoutAlign="center center" *matHeaderCellDef mat-sort-header
+										class="align-header">Active </th>
+									<td mat-cell fxFlex="4" fxFlex.lg="5" fxLayoutAlign="center center"
+										*matCellDef="let inserts" class="align-header">
+										<mat-icon [ngStyle]="{'color': inserts.active?'green':'orange'}">
+											<b>{{inserts.active ? 'check':'close'}}</b></mat-icon></td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="tableColumnsForInserts; sticky: true"></tr>
+								<tr mat-row (click)="selectRow(inserts)"
+									(click)="openInsert(inserts,inserts.insertTypeName,inserts.number)"
+									*matRowDef="let inserts; columns: tableColumnsForInserts"
+									[style.background]="highlightedRows.indexOf(inserts) != -1 ? '#eaf4f9' : ''">
+								</tr>
+							</table>
+							<div class="notFoundData" [hidden]="isTableHasDataForInserts">
+								{{noDataFound}}
+							</div>
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+			</mat-card-content>
+		</mat-card>
+	</form>
+
+</div>

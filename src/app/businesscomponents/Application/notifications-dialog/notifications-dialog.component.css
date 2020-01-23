@@ -1,0 +1,170 @@
+
+.left {
+    float:left;
+    width:250px;
+    height:100px;
+}
+.right {
+    float:right;
+    width:250px;
+    height:100px;
+}
+ 
+
+fieldset, input {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+fieldset {
+    margin:0;
+}
+
+  .control-space{
+	padding-right:30px;
+}
+.mat-row:hover {
+  cursor:pointer;
+}
+  
+  /*new css*/
+  
+  .mat-icon
+{
+  font-size: 18px;
+} 
+
+
+
+.mat-dialog-title
+{
+    align-content: left;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: left;
+    padding-left: 10px;
+    margin: 0px;
+	line-height:44px;
+}
+
+.headerdisplay
+{
+    background-color: #256275;
+    color : white;
+    font-size: 18px;
+} 
+
+
+.mat-raised-button
+{
+ align-content: center;
+ font-size: 15px;
+}
+
+.mat-dialog-actions
+{
+  background-color: white;
+}
+
+.notificationFieldSet{
+	/* height:480px; */
+	margin-top:7px !important;
+}
+
+/*unorder list css for notifications*/
+.mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-line{
+	background: #f7f1f1;
+    height: 50px !important;
+    border-bottom: 1px solid #bfafaf;
+}
+.mat-list-base .mat-list-item.mat-2-line:hover, .mat-list-base .mat-list-option.mat-2-line:hover{
+	 background: #ccf2ff;
+	 cursor:pointer;
+}
+
+.mat-list-base .mat-list-item.mat-2-line:active, .mat-list-base .mat-list-option.mat-2-line:active{
+
+	 
+}
+
+
+@media only screen and (max-width: 600px) {
+	mat-card-content{
+		height:300px;
+		overflow:scroll;
+	}
+	.cdk-overlay-pane{
+		height:300px;
+		overflow:scroll;
+	}
+	.applicationControls{
+		min-width:100%;
+		flex-direction:column;
+	}
+	
+}
+@media only screen and (min-width: 600px)  and (max-width: 1152px){
+	.leftAlignment{
+    padding-left: 0px;
+  }
+
+}
+@media only screen and (min-width: 1152px)  and (max-width: 1279px){
+	.leftAlignment{
+    padding-left: 5px;
+  }
+
+}
+
+
+@media only screen and (min-width: 1280px)  and (max-width: 1360px){
+	.leftAlignment{
+    padding-left: 18px;
+  }
+  
+}
+
+@media only screen and (min-width: 1360px)  and (max-width: 1365px){
+	.leftAlignment{
+    padding-left: 19px;
+  }
+  
+}
+@media only screen and (min-width: 1366px) and (max-width: 1399px) {
+  .leftAlignment{
+    padding-left: 20px;
+  }
+  
+}
+@media only screen and (min-width: 1400px) and (max-width: 1439px){
+  .leftAlignment{
+    padding-left: 25px;
+  }
+  
+}
+@media only screen and  (min-width:1440px) and (max-width: 1590px){
+	.leftAlignment{
+    padding-left: 25px;
+  }
+  
+}
+@media only screen and (min-width: 1600px) and (max-width:1670px) {
+	.leftAlignment{
+    padding-left: 155px;
+  }
+  
+}
+@media only screen and (min-width: 1680px) and (max-width: 1910px){
+  .leftAlignment{
+    padding-left: 155px;
+  }
+  
+}
+@media only screen and (min-width: 1920px) {
+  .leftAlignment{
+    padding-left: 20p;
+  }
+  
+}

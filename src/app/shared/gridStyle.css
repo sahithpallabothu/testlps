@@ -1,0 +1,92 @@
+@media only screen and (min-height: 999px) {
+	.scrollgrid-container {		 
+		height: 760px;
+	}
+	.notFoundData
+	{
+		margin-top:320px;
+	} 
+}
+@media only screen and (min-height: 969px) and (max-height: 998px) {
+	.scrollgrid-container {		 
+		height: 730px;
+	}
+	.notFoundData
+	{
+		margin-top:292px;
+	} 
+}
+@media only screen and (min-height: 939px) and (max-height: 968px)  {
+	.scrollgrid-container {		 
+		height: 680px;
+	}
+	.notFoundData
+	{
+		margin-top:285px;
+	} 
+}
+@media only screen and (min-height: 913px) and (max-height: 938px)  {
+	.scrollgrid-container {		 
+		height: 638px;
+	}
+	.notFoundData
+	{
+		margin-top:235px;
+	} 
+}
+@media only screen and (min-height: 849px) and (max-height: 912px)  {
+	.scrollgrid-container {		 
+		height: 599px;
+	}
+	.notFoundData
+	{
+		margin-top:250px;
+	} 
+}
+@media only screen and (min-height: 753px) and (max-height: 848px)  {
+	.scrollgrid-container {		 
+		height: 538px;
+	}
+	.notFoundData
+	{
+		margin-top:190px;
+	} 
+}
+@media only screen and (min-height: 689px) and (max-height: 752px)  {
+	.scrollgrid-container {		 
+		height: 450px;
+	}
+	.notFoundData
+	{
+		margin-top:160px;
+	} 
+}
+@media only screen and (min-height: 657px) and (max-height: 688px)  {
+	.scrollgrid-container {		 
+		/* height: 402px; */
+		height: 393px;
+	}
+	.notFoundData
+	{
+		margin-top:135px;
+	} 
+}
+@media only screen and (min-height: 609px) and (max-height: 656px)  {
+	.scrollgrid-container {		 
+		height: 354px;
+	}
+	.notFoundData
+	{
+		margin-top:120px;
+	} 
+} 
+@media only screen and (min-height: 489px) and (max-height: 608px)  {
+	.scrollgrid-container {		 
+		height: 320px;
+	}
+	.notFoundData
+	{
+		margin-top:100px;
+	} 
+}
+

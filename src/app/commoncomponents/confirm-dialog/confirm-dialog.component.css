@@ -1,0 +1,25 @@
+.mat-icon
+{
+    font-size: 40px;
+    padding-right: 20px;
+}
+
+.mat-dialog-title
+{
+    align-content: left;
+    background-color: #3f51b5;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.headerdisplay
+{
+    background-color: #3f51b5;
+    color : white;
+    font-size: 15px;
+} 
+ 

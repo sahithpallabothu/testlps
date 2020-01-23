@@ -1,0 +1,320 @@
+<div class="container">
+	<form [formGroup]="insertsForm">
+		<header mat-dialog-title>
+			<label>{{title}}</label>
+		</header>
+		<div class="container">
+			<mat-card fxFlex="100%" style="max-height:400px !important" fxFlexAlign="start">
+				<mat-card-content style="overflow-x:hidden !important;">
+					<div fxLayout="column" fxLayoutGap="25px">
+						<div fxLayout="row" *ngIf="isUpdate">
+							<fieldset style="width:100%;border:1px solid rgba(0,0,0,0.5) !important">
+								<div fxLayoutGap="15px" fxLayout="row">
+									<mat-form-field style="width:395px;" class="">
+										<mat-label>Customer Name</mat-label>
+										<input matInput formControlName="insertsCustomerName" matTooltip="Customer Name"
+											placeholder="Customer Name">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<mat-label>Customer Code</mat-label>
+										<input matInput formControlName="insertsCustomerCode" matTooltip="Customer Code"
+											placeholder="Customer Code">
+									</mat-form-field>
+									<mat-form-field style="width:395px;">
+										<input matInput formControlName="insertsApplicationName"
+											matTooltip="Application Name" placeholder="Application Name">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls" >
+										<input matInput formControlName="insertsApplicationCode"
+											matTooltip="Application Code" placeholder="Application Code">
+									</mat-form-field>
+								</div>
+							</fieldset>
+						</div>
+						<form [ngClass]="applicationID ? 'InsertsUpdateForm' : 'InsertsAddForm' " [formGroup]="AdditionalInsertsForm">
+							<div fxLayout="row" fxLayoutGap="1%"
+								style="display: flex;position: sticky;z-index: 2;top:0px;background-color: white;padding:10px 0px;">
+								<div fxFlex="3.5%">
+									<mat-label class="insertLables" title="Application Code">App<span
+											style="color: red">*</span></mat-label>
+								</div>
+								<div fxFlex="6.5%">
+									<mat-label class="insertLables" fxLayoutAlign="center center">Start <br> Date<span style="color: red ;">*</span>
+									</mat-label>
+								</div>
+								<div fxFlex="6%">
+									<mat-label class="insertLables"  fxLayoutAlign="center center">End <br> Date </mat-label>
+								</div>
+								<div fxFlex="8%">
+									<mat-label class="insertLables"  fxLayoutAlign="start center">Type<span style="color: red">*</span></mat-label>
+								</div>
+								<div fxFlex="4%">
+									<mat-label class="insertLables"  fxLayoutAlign="center center">Insert Number</mat-label>
+								</div>
+								<div fxFlex="2%">
+									<mat-label class="insertLables"  fxLayoutAlign="center center">Return</mat-label>
+								</div>
+								<div fxFlex="5%">
+									<mat-label class="insertLables" title="Return Quantity"  fxLayoutAlign="center center">Return <br> Quantity</mat-label>
+								</div>
+								<div fxFlex="5%" *ngIf="showUsedQuantity" title="Used Quantity">
+									<mat-label class="insertLables" fxLayoutAlign="center center">Used <br> Quantity</mat-label>
+								</div>
+								<div fxFlex="5%">
+									<mat-label class="insertLables" fxLayoutAlign="center center">Weight</mat-label>
+								</div>
+								<div fxFlex="5%">
+									<mat-label class="insertLables" title="Reorder Quantity" fxLayoutAlign="center center">Reorder <br> Quantity</mat-label>
+								</div>
+								<div fxFlex="5%">
+									<mat-label class="insertLables" title="Received Quantity" fxLayoutAlign="center center">Received <br> Quantity</mat-label>
+								</div>
+								<div fxFlex="6.5%">
+									<mat-label class="insertLables" title="Received Date" fxLayoutAlign="center center">Received <br> Date</mat-label>
+								</div>
+								<div fxFlex="6%">
+									<mat-label class="insertLables" title="Received By" fxLayoutAlign="start center">Received By</mat-label>
+								</div>
+								<div fxFlex="5%">
+									<mat-label class="insertLables" fxLayoutAlign="center center">Bin</mat-label>
+								</div>
+								<div fxFlex="{{applicationID ? '5%' : '9.8%'}}">
+									<mat-label class="insertLables" fxLayoutAlign="start center" title="Description">Desc</mat-label>
+								</div>
+								<div>
+									<mat-label class="insertLables" fxLayoutAlign="center center">Active<span style="color: red">*</span></mat-label>
+								</div>
+								<div>
+									<mat-label class="insertLables" title="Location" fxLayoutAlign="center center">Loc</mat-label>
+								</div>
+							</div>
+							<div formArrayName="itemRows" style="margin-top:0px;">
+								<div fxLayout="row" *ngFor="let itemrow of formArr.controls; let i=index" [formGroupName]="i"
+									fxLayoutGap="1%">
+									<mat-form-field fxFlex="3.5%" *ngIf="applicationID===null || applicationID ==='' ">
+										<input type="text" placeholder="" matInput formControlName="applicationCode"
+											matTooltip="Enter Application Code" [matAutocomplete]="auto"
+											tabindex="{{tIndex+1}}" #formRow>
+										<mat-autocomplete class="autoCompleteAddInsert" autoActiveFirstOption
+											#auto="matAutocomplete" [displayWith]="displayFn"
+											(optionSelected)="isChange('appcode')">
+											<mat-option *ngFor="let app of filteredOptions | async"
+												matTooltip='{{app.applicationName}}  ({{app.applicationCode}})'
+												(onSelectionChange)="setLocation($event)" [value]="app">
+												{{app.applicationName}} ({{app.applicationCode}})
+											</mat-option>
+										</mat-autocomplete>
+										<mat-error *ngIf="hasError('applicationCode',itemrow,'required')">
+											App is required.
+										</mat-error>
+										<mat-error *ngIf="hasError('applicationCode',itemrow,'space')">{{SpaceMessage}}
+										</mat-error>
+										<mat-error *ngIf="hasError('applicationCode',itemrow,'maxlength')">Max Length is
+											4.</mat-error>
+									</mat-form-field>
+									<mat-form-field fxFlex="3.5%" *ngIf="applicationID!=null ">
+										<input type="text" matInput formControlName="applicationCode1"
+											matTooltip="Enter Application Code" tabindex="{{tIndex+1}}">
+									</mat-form-field>
+									<div fxFlex="6.5%">
+										<mat-form-field fxFlex="98%" class="startDate">
+											<mat-label></mat-label>
+											<input matInput [textMask]="{mask: datemask}"
+												formControlName="startDateInInserts" matTooltip="Enter Start Date"
+												(input)="checkError('startDateInInserts','startDateInInserts1',itemrow)"
+												placeholder="MM/DD/YY" tabindex="{{tIndex+1}}">
+											<mat-error *ngIf="hasError('startDateInInserts',itemrow,'required')">
+												Start Date is required.
+											</mat-error>
+											<mat-error *ngIf="hasError('startDateInInserts',itemrow,'pattern')">
+												Invalid Start Date.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+											<input matInput formControlName="startDateInInserts1"
+												[matDatepicker]="insertsStartDatepicker" [min]="todayDate"
+												(dateChange)="addEvent($event,itemrow, 'startDateInInserts','startDateInInserts1')"
+												tabIndex="-1">
+											<mat-datepicker-toggle matSuffix [for]="insertsStartDatepicker"
+												tabIndex="-1"></mat-datepicker-toggle>
+											<mat-datepicker #insertsStartDatepicker></mat-datepicker>
+										</mat-form-field>
+									</div>
+									<div fxFlex="6.5%">
+										<mat-form-field fxFlex="98%">
+											<mat-label></mat-label>
+											<input matInput [textMask]="{mask: datemask}"
+												formControlName="endDateInInserts" matTooltip="Enter End Date"
+												placeholder="MM/DD/YY"
+												(input)="checkError('endDateInInserts','endDateInInserts1',itemrow)"
+												tabindex="{{tIndex+1}}" #endDate>
+											<mat-error *ngIf="hasError('endDateInInserts',itemrow,'pattern')">
+												Invalid End Date.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+											<input matInput formControlName="endDateInInserts1" [min]="todayDate"
+												[matDatepicker]="insertsEndDatepicker"
+												(dateChange)="addEvent($event,itemrow, 'endDateInInserts','endDateInInserts1')"
+												tabIndex="-1">
+											<mat-datepicker-toggle matSuffix [for]="insertsEndDatepicker" tabIndex="-1">
+											</mat-datepicker-toggle>
+											<mat-datepicker #insertsEndDatepicker></mat-datepicker>
+										</mat-form-field>
+									</div>
+									<mat-form-field fxFlex="7.5%">
+										<mat-select disableOptionCentering formControlName="type"
+											(selectionChange)="onTypeChange(itemrow,$event)" matTooltip="Select Type"
+											tabIndex="{{tIndex+1}}">
+											<mat-option *ngFor="let option of InsertsTypeList"
+												[value]="option.insertTypeId">
+												{{option.description}}
+											</mat-option>
+										</mat-select>
+										<mat-error *ngIf="hasError('type',itemrow,'required')">
+											Type is required.
+										</mat-error>
+									</mat-form-field>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="number" (input)="isChange('number')"
+											matTooltip="Enter Insert Number" style="text-align:right;" placeholder=""
+											tabindex="{{tIndex+1}}" min="0" maxlength="6"
+											(keypress)="checkNegativeValue($event)">
+									</mat-form-field>
+									<div fxFlex="2%">
+										<mat-checkbox formControlName="returnInInserts" class="alignCheckBox"
+											(input)="isChangeInReturn('returnInInserts',itemrow,$event)"
+											matTooltip="Select Return" tabIndex="{{tIndex+1}}"></mat-checkbox>
+									</div>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="returnedQuantity"
+											matTooltip="Enter Returned Quantity" (input)="isChange('returnedQuantity')"
+											style="text-align:right;" maxlength="6" placeholder=""
+											tabindex="{{tIndex+1}}" min="0" (keypress)="checkNegativeValue($event)"
+											#retQty>
+									</mat-form-field>
+									<mat-form-field fxFlex="5%" *ngIf="showUsedQuantity">
+										<input matInput formControlName="usedQuantity" matTooltip="Enter Used Quantity"
+											(input)="isChange('usedQuantity')" style="text-align:right;" maxlength="6"
+											placeholder="" tabindex="{{tIndex+1}}"
+											(keypress)="checkNegativeValue($event)">
+									</mat-form-field>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="weight" matTooltip="Enter Weight"
+											(input)="isChange('weight')" maxlength="4" style="text-align:right;"
+											placeholder="" tabindex="{{tIndex+1}}"
+											(keypress)="checkNegativeValue($event)">
+									</mat-form-field>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="reorderQuantity"
+											matTooltip="Enter Reorder Quantity" maxlength="6"
+											(input)="isChange('reorderQuantity')" style="text-align:right;"
+											placeholder="" tabindex="{{tIndex+1}}"
+											(keypress)="checkNegativeValue($event)">
+									</mat-form-field>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="receivedQuantity"
+											matTooltip="Enter Received Quantity" maxLength="6"
+											(input)="isChange('receivedQuantity')" style="text-align:right;"
+											placeholder="" tabindex="{{tIndex+1}}"
+											(keypress)="checkNegativeValue($event)">
+									</mat-form-field>
+									<div fxFlex="6.5%">
+										<mat-form-field fxFlex="98%">
+											<mat-label></mat-label>
+											<input matInput [textMask]="{mask: datemask}" formControlName="receivedDate"
+												matTooltip="Enter Received Date"
+												(input)="checkError('receivedDate','receivedDate1',itemrow)"
+												tabindex="{{tIndex+1}}" placeholder="MM/DD/YY">
+											<mat-error *ngIf="hasError('receivedDate',itemrow,'pattern')">
+												Invalid Recvd Date.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+											<input matInput formControlName="receivedDate1"
+												[matDatepicker]="receivedQuantityDatepicker"
+												(dateChange)="addEvent($event,itemrow, 'receivedDate','receivedDate1')"
+												tabindex="-1">
+											<mat-datepicker-toggle matSuffix [for]="receivedQuantityDatepicker"
+												tabindex="-1"></mat-datepicker-toggle>
+											<mat-datepicker #receivedQuantityDatepicker></mat-datepicker>
+										</mat-form-field>
+									</div>
+									<mat-form-field fxFlex="6%">
+										<input matInput type="text" formControlName="receivedBy"
+											matTooltip="Enter Received By" (input)="isChange('receivedBy')"
+											placeholder="" maxlength="50" tabindex="{{tIndex+1}}">
+										<mat-error *ngIf="hasError('receivedBy',itemrow,'space')">{{SpaceMessage}}
+										</mat-error>
+										<mat-error *ngIf="hasError('receivedBy',itemrow,'maxlength')">Max Length is 50.
+										</mat-error>
+									</mat-form-field>
+									<mat-form-field fxFlex="5%">
+										<input matInput formControlName="binLocation" matTooltip="Enter Bin Location"
+											placeholder="" maxlength="50" tabindex="{{tIndex+1}}" (input)="isChange('binLocation')">
+										<mat-error *ngIf="hasError('binLocation',itemrow,'space')">{{SpaceMessage}}
+										</mat-error>
+										<mat-error *ngIf="hasError('binLocation',itemrow,'maxlength')">Max Length is 50.
+										</mat-error>
+									</mat-form-field>
+									<mat-form-field fxFlex="{{applicationID ? '5%' : '9.5%'}}">
+										<input matInput formControlName="description" matTooltip="Enter Description"
+											(input)="isChange('description')" maxlength="255" placeholder=""
+											tabindex="{{tIndex+1}}">
+										<mat-error *ngIf="hasError('description',itemrow,'space')">{{SpaceMessage}}
+										</mat-error>
+										<mat-error *ngIf="hasError('description',itemrow,'maxlength')">Max Length is
+											255.</mat-error>
+									</mat-form-field>
+									<div>
+										<mat-checkbox formControlName="insertActiveCheckBox" class="alignCheckBox"
+											(input)="isChange('insertActiveCheckBox')" matTooltip="Select Active"
+											tabIndex="{{tIndex+1}}"></mat-checkbox>
+									</div>
+									<!-- <mat-form-field fxFlex="{{applicationID ? '1%' : '2.5%'}}" class="cssForLoc">
+										<input matInput formControlName="locationInInserts" matTooltip="Enter Location"
+											placeholder="" tabindex="-1">
+									</mat-form-field> -->
+									<mat-form-field fxFlex="{{applicationID ? '3%' : '3.5%'}}" class="cssForLoc">
+										<mat-select disableOptionCentering matNativeControl formControlName="locationInInserts"  matTooltip="Select Print Location" required [errorStateMatcher]="errorMatcher" (selectionChange)="isChange('locationInInserts')"> 
+										  <mat-option >(Select)</mat-option>
+										  <mat-option *ngFor="let data of locationArray" [value]="data.code">{{data.code}}</mat-option>
+										</mat-select>
+										<!-- <mat-error *ngIf="hasError('locationInInserts', 'required')">Print Location is required.</mat-error> -->
+									  </mat-form-field>
+									<button type="button" *ngIf="itemrow.showDeleteButton" class="operationButtons"
+										[disabled]="!hasScreenDeletePriviledge" tabindex="{{tIndex+1}}" mat-flat-button
+										(click)="deleteRow(i)">
+										<mat-icon>delete_outline</mat-icon>
+									</button>
+									<button type="button" (click)="addNewRow(itemrow)" *ngIf="!itemrow.showAddButton"
+										[disabled]="(!AdditionalInsertsForm.valid) || isAllowSave || !hasScreenInsertPriviledge"
+										style="color:blue;font-size:20px;background-color:white; "
+										class="operationButtons" mat-flat-button color="Basic" tabindex="{{tIndex+1}}">
+										<mat-icon>add</mat-icon>
+									</button>
+
+								</div>
+							</div>
+							<p id="scrollToDown" style="visibility:hidden">Scroll Down </p>
+						</form>
+						<div fxLayout="row" fxLayoutAlign="center center">
+							<mat-dialog-actions fxLayoutGap="10px">
+								<button mat-raised-button class="mat-primary filterButtonClass" (click)="onFormSubmit()"
+									[disabled]="(!AdditionalInsertsForm.valid) || isAllowSave">
+									<mat-icon>save</mat-icon> Save
+								</button>
+								<button mat-raised-button class="filterButtonClass" (click)="resetForm()">
+									<mat-icon>clear_all</mat-icon> Reset
+								</button>
+								<button (click)="backToHome()" class="filterButtonClass" *ngIf="!isSearchVisible" mat-raised-button>
+									<mat-icon> arrow_back</mat-icon> Back
+								</button>
+							</mat-dialog-actions>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,28 @@
+/*Panel css start */
+mat-card-header p{
+    margin-top: 3px;
+margin-left: -21px;
+}
+mat-card-header{
+padding: 0px;
+color: white;
+background-color: #008080;
+border-radius: 5px 5px 0px 0px;
+height:25px;
+border-bottom:1px solid rgba(0,0,0,0.5)
+}
+mat-card{
+margin-right: 15px;
+margin-top: 15px;
+padding: 0px;
+border-radius: 5px 5px 0px 0px;
+ border:1px solid rgba(0,0,0,0.5) 
+}mat-card-content{
+padding: 10px;
+}
+.mat-card-header-text{
+margin: 0px 12px;
+
+}
+
+/*Panel css end */

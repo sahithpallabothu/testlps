@@ -1,0 +1,674 @@
+<div class="container">
+	<form [formGroup]="updatePostageForm" style="overflow:hidden">
+		<mat-card fxFlex fxFlexAlign="start" class="postageMatCard" style="min-width:100% !important;border:0px">
+			<mat-card-content>
+				<div fxLayout="row" fxLayoutGap="10px"
+					*ngIf="isSearchVisible">
+					<div fxLayout="row"  fxLayoutAlign="start" fxLayoutGap="10px">
+						<mat-form-field class ="jobNameTextBoxClass">
+							<input matInput type="text" #jobNameForFocus autofocus
+								formControlName="postageJobNameForSearch" autocomplete="off" placeholder="Job Name"
+								matTooltip="Enter Job Name">
+						</mat-form-field>
+						<!-- <div fxLayout.sm="row" fxLayout.xs="row" fxLayout.md="row" fxLayoutAlign.xs="center"
+							fxLayoutAlign.sm="center" fxLayoutAlign.md="center" fxLayoutGap="10px"> -->
+							<button type="submit"  class ="filterButtonClass" style="height: 36px !important;" color="primary" (click)="searchData()" mat-raised-button>
+								<mat-icon>search</mat-icon> Search
+							</button>
+						<!-- </div> -->
+					</div>
+				</div>
+				<div>
+					<div fxFlex="30" fxLayoutAlign="start" *ngIf="showJobsGrid && isSearchVisible">
+						<fieldset style="height:auto;overflow: hidden;" fxFlex="60">
+							<legend>Please select appropriate Job Name</legend>
+							<mat-list class="jobsList" style="height:100px;overflow-y: scroll">
+								<mat-list-item (click)="populateDataFromGrid(job.recordID)" *ngFor="let job of jobsList"
+									[ngStyle]="{'background-color': job.recordID==currentRecordId ? 'rgb(234, 244, 249)' : '#f7f1f1' }">
+									<h4 mat-line style="font-size: 14px;"
+										title="{{job.jobName}} (Run Date: {{job.runDate}}) ">{{job.jobName}} (Run Date:
+										{{job.runDate}})</h4>
+								</mat-list-item>
+							</mat-list>
+						</fieldset>
+					</div>
+					<mat-card class="details_mainPostage" style="border:1px solid;padding:0px;margin-top:5px;"
+						fxFlex="100">
+						<mat-card-content style="padding:10px 10px 0px 10px;">
+							<div fxLayout="row" fxLayout.xs="column wrap" fxLayout.sm="row wrap" fxLayout.md="row wrap"
+								fxLayoutGap="30px" fxLayoutGap.md="20px">
+								<mat-form-field  [ngStyle] = "{ 'width' : showJobsGrid && isSearchVisible  ? '272px' :'428px' }" [ngClass]="showJobsGrid && isSearchVisible  ?'controls1152WidthGrid': 'customerControls1152Width' "><!--[ngClass] = " showJobsGrid && isSearchVisible  ? 'postageControlsWidthWithGrid' : 'postageControlsWidth' "-->
+									<input matInput formControlName="customerName" matTooltip="Enter Customer Name"
+										placeholder="Customer Name">
+								</mat-form-field>
+								<mat-form-field class="inputTextBoxControls"> <!--fxFlex="20" fxFlex.sm="20"-->
+									<input matInput formControlName="customerCode" matTooltip="Enter Customer Code"
+										placeholder="Customer Code">
+								</mat-form-field>
+								<mat-form-field   [ngStyle] = "{ 'width' : showJobsGrid && isSearchVisible  ? '232px' :'428px' }" [ngClass]="showJobsGrid && isSearchVisible  ?'controls1152WidthGrid': 'controls1152Width' ">
+									<input matInput formControlName="applicationName"
+										matTooltip="Enter Application Name" placeholder="Application Name">
+								</mat-form-field>
+								<mat-form-field class="inputTextBoxControls"> 
+									<input matInput formControlName="applicationCode"
+										matTooltip="Enter Application Code" placeholder="Application Code">
+								</mat-form-field>
+							</div>
+							<div fxLayout="row" fxLayout.xs="column wrap" fxLayout.sm="row wrap" fxLayout.md="row wrap"
+								fxLayoutGap="20px">
+								<mat-form-field class ="jobNameTextBoxClass"><!--fxFlex="25" fxFlex.sm="20"-->
+									<input matInput formControlName="jobName" matTooltip="Enter Job Name"
+										placeholder="Job Name">
+								</mat-form-field>
+								<mat-form-field class ="jobNameTextBoxClass"><!--fxFlex="20" fxFlex.sm="20"-->
+									<input matInput formControlName="inputName" matTooltip="Enter Input Name"
+										placeholder="Input Name">
+								</mat-form-field>
+								<mat-form-field class="inputTextBoxControls"><!--fxFlex="25" fxFlex.sm="20"-->
+									<input matInput formControlName="runDatepicker" matTooltip="Select Run Date"
+										placeholder="Run Date">
+								</mat-form-field>
+								<mat-form-field class="inputTextBoxControls"><!--fxFlex="20" fxFlex.sm="20"-->
+									<input matInput formControlName="billDatepicker" matTooltip="Select Bill Date"
+										placeholder="Bill Date">
+								</mat-form-field>
+							</div>
+						</mat-card-content>
+					</mat-card>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column wrap" fxLayout.sm="row wrap" fxLayout.md="row wrap"
+					fxLayoutGap="7px" fxLayoutGap.md="3px"  style="margin-top:10px">
+					<div fxFlex="26"  fxFlex.sm="50">
+						<mat-card style="padding:0px;margin-top:5px;">
+							<mat-card-header>
+								<mat-card-title></mat-card-title>
+							</mat-card-header>
+							<mat-card-content style="padding:0px 14px 10px 10px;min-height:476px;">
+								<div fxLayout="row" fxLayoutAlign="center" fxLayout.xs="row" fxLayout.sm="row wrap"
+									fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label fxFlexOffset="36" fxFlexOffset.md="32" fxFlex="30">Detail</label>
+									<label fxFlex="30">Invoice</label>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" class="alignHeightforControls"
+									fxLayout.sm="column wrap" fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label fxFlex="24">Accounts</label>
+									<mat-form-field fxFlex="30">
+										<input matInput 
+											formControlName="accountsDetail" matTooltip="Enter Accounts Detail"
+											type="text" autocomplete="off" class="NumberInputAlignment">
+									</mat-form-field>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="accountsInvoice"
+											matTooltip="Enter Accounts Invoice" type="text" class="NumberInputAlignment"
+											autocomplete="off" >
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" class="alignHeightforControls"
+									fxLayout.sm="column wrap" fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label fxFlex="24">Pages</label>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="pagesDetail" matTooltip="Enter Pages Detail"
+											type="text" class="NumberInputAlignment" autocomplete="off">
+									</mat-form-field>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="pagesInvoice" matTooltip="Enter Pages Invoice"
+											type="text" class="NumberInputAlignment" autocomplete="off">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" class="alignHeightforControls"
+									fxLayout.sm="column wrap" fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label fxFlex="24">Overflow</label>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="overflowDetail"
+											matTooltip="Enter Overflow Detail" type="text" class="NumberInputAlignment"
+											autocomplete="off">
+									</mat-form-field>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="overflowInvoice"
+											matTooltip="Enter Overflow Invoice" type="text" class="NumberInputAlignment"
+											autocomplete="off">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" style="margin-top:56px" fxLayout.xs="column"
+									class="alignHeightforControls" fxLayout.sm="column wrap" fxLayout.md="row wrap"
+									fxLayoutGap="15px">
+									<label fxFlex.md="26" fxFlex="24">Suppressed</label>
+									<mat-form-field fxFlex="30">
+										<input matInput formControlName="suppressed" matTooltip="Enter Suppressed"
+											type="text" autocomplete="off" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+							</mat-card-content>
+						</mat-card>
+					</div>
+					<div fxFlex="31" fxFlex.lg="29" fxFlex.md="29" fxFlex.sm="100">
+						<mat-card style="margin-top: 5px;">
+							<mat-card-header>
+								<mat-card-title>Postage</mat-card-title>
+							</mat-card-header>
+							<mat-card-content style="min-height:476px;padding-top: 0px;">
+								<div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="center" fxLayout.sm="column wrap"
+									fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label  fxFlexOffset.lg="37"  fxFlexOffset.md="18" fxFlexOffset="44"  fxFlex="27">Pieces</label><!--fxFlexOffset="41"-->
+									<label fxFlex="28">$ Amount</label>
+								</div>
+								<div fxLayout="row" fxLayoutAlign="center" fxLayout.xs="column" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">5-Digit</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="digit5" type="text" autocomplete="off"
+											matTooltip="Enter 5-Digit Pieces" class="NumberInputAlignment"
+											(keypress)="validateIntegers($event)" (blur)="changeInPieces('digit5')">
+
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls"><!--fxFlex="28"-->
+										<input matInput formControlName="digit5Amount" type="text" autocomplete="off"
+											matTooltip="Enter 5-Digit Amount" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">AADC</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="aadc" type="text" autocomplete="off"
+											matTooltip="Enter AADC Pieces" class="NumberInputAlignment"
+											>
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="aadcAmount" type="text" autocomplete="off"
+											matTooltip="Enter AADC Amount" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">Mixed AADC</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="mixedAADC" type="text" autocomplete="off"
+											matTooltip="Enter Mixed AADC Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="mixedAADCAmount" type="text" autocomplete="off"
+											matTooltip="Enter Mixed AADC Amount" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">Presorted</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="pressorted" type="text" autocomplete="off"
+											matTooltip="Enter Presorted Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="pressortedAmount" type="text"
+											autocomplete="off" matTooltip="Enter Presorted Amount"
+											class="NumberInputAlignment" >
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">Single Piece</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="singlePieces"
+											matTooltip="Enter Single Piece Pieces" autocomplete="off"
+											class="NumberInputAlignment" type="text">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="singlePiecesAmount"
+											matTooltip="Enter Single Piece Amount" autocomplete="off"
+											class="NumberInputAlignment" type="text">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="15px"
+									class="alignHeightforControls">
+									<label fxFlex="25">Total</label>
+									<mat-form-field fxFlex="27">
+										<input matInput formControlName="postageTotalPieces" type="text"
+											matTooltip="Enter Total Pieces" autocomplete="off"
+											class="NumberInputAlignment">
+									</mat-form-field>
+									<mat-form-field class="inputTextBoxControls">
+										<input matInput formControlName="postageTotalAmount" type="text"
+											matTooltip="Enter Total Amount" autocomplete="off"
+											class="NumberInputAlignment" >
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" style="margin-top:20px"  fxLayoutAlign="center">
+									<button type="button" mat-raised-button class ="ouncesButton" class="filterButtonClass" [disabled]="isJobNameEntered"
+										(click)="showOuncesDialog()" style=" background-color: #218cad;color:white;">
+										<mat-icon>polymer</mat-icon> Ounces
+									</button>
+								</div>
+							</mat-card-content>
+						</mat-card>
+					</div>
+					<div fxLayout="column" fxFlex="25" fxFlexOffset.lg="0px" fxFlex.lg="25" fxFlex.md="27"
+						fxFlex.sm="100" fxLayoutGap="5px">
+						<div>
+							<mat-card style="margin-top: 5px;">
+								<mat-card-header>
+									<mat-card-title>Metered</mat-card-title>
+								</mat-card-header>
+								<mat-card-content style="padding:0px 10px 8px 10px">
+									<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column wrap"
+										fxLayout.md="row wrap" fxLayoutGap="15px">
+										<label fxLayoutAlign="center" fxFlexOffset="20"  fxFlex="35">Pieces</label>
+										<label fxLayoutAlign="center" fxFlex="35">$ Amount</label>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutAlign="center"
+										class="alignHeightforControls">
+										<label fxFlex="15">Pieces</label>
+										<mat-form-field fxFlex="30">
+											<input matInput formControlName="pieces" matTooltip="Enter Pieces Pieces" #piecesFocus autofocus
+												type="text" autocomplete="off" class="NumberInputAlignment"
+												(keypress)="validateIntegers($event)" (blur)="changeInPieces('pieces')">
+											<mat-error *ngIf="hasError('pieces', 'pattern')">Invalid Pieces.</mat-error>
+											<mat-error *ngIf="hasError('pieces', 'required')">Pieces Pieces is required.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field  class="inputTextBoxControls"><!--fxFlex="30"-->
+											<input matInput formControlName="piecesAmount"
+												matTooltip="Enter Pieces Amount" type="text" autocomplete="off"
+												class="NumberInputAlignment">
+										</mat-form-field>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutAlign="center"
+										class="alignHeightforControls">
+										<label fxFlex="15">Held</label>
+										<mat-form-field fxFlex="30">
+											<input matInput formControlName="held" matTooltip="Enter Held Pieces"
+												type="text" autocomplete="off" class="NumberInputAlignment"
+												(keypress)="validateIntegers($event)" (blur)="changeInPieces('held')">
+											<mat-error *ngIf="hasError('held', 'pattern')">Invalid Pieces.</mat-error>
+											<mat-error *ngIf="hasError('held', 'required')">Held Pieces is required.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field  class="inputTextBoxControls">
+											<input matInput formControlName="heldAmount" matTooltip="Enter Held Amount"
+												type="text" autocomplete="off" class="NumberInputAlignment">
+										</mat-form-field>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutAlign="center"
+										class="alignHeightforControls">
+										<label fxFlex="15">Foreign</label>
+										<mat-form-field fxFlex="30">
+											<input matInput formControlName="foreign" matTooltip="Enter Foreign Pieces"
+												type="text" autocomplete="off" class="NumberInputAlignment"
+												(keypress)="validateIntegers($event)"
+												(blur)="changeInPieces('foreign')">
+											<mat-error *ngIf="hasError('foreign', 'pattern')">Invalid Pieces.
+											</mat-error>
+											<mat-error *ngIf="hasError('foreign', 'required')">Foreign Pieces is
+												required.</mat-error>
+										</mat-form-field>
+										<mat-form-field class="inputTextBoxControls">
+											<input matInput formControlName="foreignAmount"
+												matTooltip="Enter Foreign Amount" type="text" autocomplete="off"
+												class="NumberInputAlignment" type="text">
+										</mat-form-field>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutAlign="center"
+										class="alignHeightforControls">
+										<label fxFlex="15">OOB</label>
+										<mat-form-field fxFlex="30">
+											<input matInput formControlName="oob" matTooltip="Enter OOB Pieces"
+												type="text" class="NumberInputAlignment" autocomplete="off"
+												(keypress)="validateIntegers($event)" (blur)="changeInPieces('oob')">
+											<mat-error *ngIf="hasError('oob', 'pattern')">Invalid Pieces.</mat-error>
+											<mat-error *ngIf="hasError('oob', 'required')">OOB Pieces is required.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field class="inputTextBoxControls">
+											<input matInput formControlName="oobAmount" matTooltip="Enter OOB Amount"
+												type="text" class="NumberInputAlignment" autocomplete="off">
+										</mat-form-field>
+									</div>
+								</mat-card-content>
+							</mat-card>
+						</div>
+						<div fxFlex="25">
+							<mat-card style="padding:0px;margin-top:0px;">
+								<mat-card-content style="padding:0px 10px 8px 10px;">
+									<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap"
+										fxLayout.md="row wrap" fxLayoutGap="5px">
+										<mat-checkbox formControlName="post"
+											(change)="postChangeEvent($event.source.checked)">Post</mat-checkbox>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap"
+										fxLayout.md="row wrap" fxLayoutGap="32px">
+										<div fxFlex="42"><!--fxFlex="60"-->
+											<mat-form-field class="inputTextBoxControls"><!-- fxFlex="95%"-->
+												<mat-label>Posted Date</mat-label>
+												<input matInput [textMask]="{mask: datemask}"
+													formControlName="postedDate" matTooltip="Enter Posted Date"
+													autocomplete="off" placeholder="MM/DD/YY"
+													(input)="setDateToPicker('postedDate','postedDate1')">
+												<mat-error *ngIf="hasError('postedDate','pattern')">Invalid Posted Date.
+												</mat-error>
+											</mat-form-field>
+											<mat-form-field fxFlex="0.5px" class="pickerAlignment">
+												<input matInput formControlName="postedDate1"
+													[matDatepicker]="postedDatepicker" autocomplete="off"
+													(dateChange)="setDateToControl('postedDate','postedDate1' )"
+													tabIndex="-1">
+												<mat-datepicker-toggle matSuffix [for]="postedDatepicker" tabIndex="-1">
+												</mat-datepicker-toggle>
+												<mat-datepicker #postedDatepicker></mat-datepicker>
+											</mat-form-field>
+										</div>
+										<mat-form-field fxFlex = "40">
+											<mat-label>Trip</mat-label>
+											<mat-select matNativeControl formControlName="trip" autocomplete="off"
+												matTooltip="Select Trip">
+												<mat-option value="-1">(Select)</mat-option>
+												<mat-option value="1">1</mat-option>
+												<mat-option value="2">2</mat-option>
+												<mat-option value="3">3</mat-option>
+												<mat-option value="M">M</mat-option>
+											</mat-select>
+										</mat-form-field>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap"
+										fxLayout.md="row wrap" fxLayoutGap="5px">
+										<mat-form-field class = "inputTextBoxControls" ><!--fxFlex="95%"-->
+											<mat-label>Billed Date</mat-label>
+											<input matInput [textMask]="{mask: datemask}" formControlName="billedDate"
+												autocomplete="off" matTooltip="Enter Billed Date" placeholder="MM/DD/YY"
+												(input)="setDateToPicker('billedDate','billedDatepicker2')">
+											<mat-error *ngIf="hasError('billedDate','pattern')">Invalid Billed Date.
+											</mat-error>
+											<mat-error *ngIf="hasError('billedDate','required')">Billed Date is
+												required.</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="0.5px" class="pickerAlignment">
+											<input matInput formControlName="billedDatepicker2"
+												[matDatepicker]="billedDatepicker2" autocomplete="off"
+												(dateChange)="setDateToControl('billedDate','billedDatepicker2')"
+												tabIndex="-1">
+											<mat-datepicker-toggle matSuffix [for]="billedDatepicker2" tabIndex="-1">
+											</mat-datepicker-toggle>
+											<mat-datepicker #billedDatepicker2></mat-datepicker>
+										</mat-form-field>
+									</div>
+									<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row wrap"
+										fxLayout.md="row wrap" fxLayoutGap="5px">
+										<mat-form-field fxFlex="94">
+											<input matInput formControlName="printed" matTooltip="Enter Printed"
+												autocomplete="off" placeholder="Printed">
+										</mat-form-field>
+									</div>
+								</mat-card-content>
+							</mat-card>
+						</div>
+					</div>
+					<div fxFlex="17" fxFlexOffset.lg="0px" fxFlex.lg="18.5" fxFlex.md="17" fxFlex.sm="48">
+						<mat-card style="margin-top: 5px;">
+							<mat-card-header>
+								<mat-card-title>Inserts</mat-card-title>
+							</mat-card-header>
+							<mat-card-content style="padding:0px 5px 10px 5px;min-height:476px;">
+								<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column wrap"
+									fxLayout.md="row wrap" fxLayoutGap="15px">
+									<label fxLayoutAlign="center" fxFlexOffset="44" fxFlex="43">Pieces</label>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Global</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="globalInsert" type="text" autocomplete="off"
+											matTooltip="Enter Global Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Selective 1</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="selective1" type="text" autocomplete="off"
+											matTooltip="Enter Selective 1 Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Selective 2</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="selective2" type="text" autocomplete="off"
+											matTooltip="Enter Selective 2 Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Selective 3</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="selective3" type="text" autocomplete="off"
+											matTooltip="Enter Selective 3 Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Selective 4</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="selective4" type="text" autocomplete="off"
+											matTooltip="Enter Selective 4 Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Selective 5</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="selective5" type="text" autocomplete="off"
+											matTooltip="Enter Selective 5 Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+								<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px"
+									class="alignHeightforControls">
+									<label fxFlex="38" fxFlex.md="54">Total</label>
+									<mat-form-field fxFlex="43">
+										<input matInput formControlName="insertsTotal" type="text" autocomplete="off"
+											matTooltip="Enter Total Pieces" class="NumberInputAlignment">
+									</mat-form-field>
+								</div>
+							</mat-card-content>
+						</mat-card>
+					</div>
+				</div>
+				<mat-accordion>
+					<mat-expansion-panel class="details_ExpansionPanel" (afterExpand)="scrollToDown()"
+						(opened)="panelOpenState = true" (closed)="panelOpenState = false" style="margin-top:10px;">
+						<mat-expansion-panel-header>
+							<mat-panel-title>
+								<b>Comments / Additional Charges</b>
+							</mat-panel-title>
+							<mat-panel-description>
+								<b>Click {{panelOpenState ? 'to close' : 'for'}} Comments / Additional Charges</b>
+							</mat-panel-description>
+						</mat-expansion-panel-header>
+
+						<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutGap="10px"
+							id="matCardContentMoveSmooth">
+							<div fxFlex="40">
+								<mat-card style="margin-top:5px;overflow:auto;height:98%;margin-left: -1px;">
+									<mat-card-header>
+										<mat-card-title>Comments</mat-card-title>
+									</mat-card-header>
+									<mat-card-content style="padding:3px;">
+										<div fxLayout="column" fxLayoutGap="5px">
+											<button mat-button
+												[disabled]="isJobNameEntered || !hasScreenPostageUpdatetPriviledge"
+												type="button" fxFlexAlign="end"
+												style="line-height: 25px;color:#3f51b5;font-size:12px"
+												(click)="showAddComments()">
+												<mat-icon style="font-size:17px;margin-top:3px">add</mat-icon>Add
+												Comments
+											</button>
+											<div class="scrollgrid-container mat-elevation-z8">
+												<table mat-table [dataSource]="commentsDataSource" matSort
+													#sortComments="matSort" matSortActive="commentsDate"
+													matSortDirection="desc" [matSortDisableClear]="true">
+
+													<ng-container matColumnDef="jobComments">
+														<th mat-header-cell fxFlex="48" fxLayoutAlign="start center"
+															*matHeaderCellDef mat-sort-header>Comments</th>
+														<td mat-cell fxFlex="48" *matCellDef="let type"
+															style="padding-top: 10px;" class="columnTextElipsis"
+															[matTooltip]="type.jobComments">{{type.jobComments}}</td>
+													</ng-container>
+													<ng-container matColumnDef="commentsDate">
+														<th mat-header-cell fxFlex="17" *matHeaderCellDef fxLayoutAlign="center center"
+															mat-sort-header >Date</th>
+														<td mat-cell fxFlex="17" *matCellDef="let type"
+														fxLayoutAlign="center center"> {{type.commentsDate}} </td>
+													</ng-container>
+													<ng-container matColumnDef="userName">
+														<th mat-header-cell fxFlex="35" *matHeaderCellDef
+															mat-sort-header fxLayoutAlign="start center"> User </th>
+														<td mat-cell fxFlex="35" *matCellDef="let type"
+															style="padding-top: 10px;" class="columnTextElipsis"
+															[matTooltip]="type.userName"> {{type.userName}} </td>
+													</ng-container>
+													<ng-container matColumnDef="delete">
+														<th mat-header-cell *matHeaderCellDef
+														fxLayoutAlign="center center">Delete
+														</th>
+														<td mat-cell *matCellDef="let type" style="padding-left: 5px;">
+															<button *ngIf="hasScreenPostageDeletePriviledge"
+																type="button" mat-icon-button color="warn"
+																(click)="deletComments(type)">
+																<mat-icon class="mat-18">delete</mat-icon>
+															</button>
+														</td>
+													</ng-container>
+													<tr mat-header-row
+														*matHeaderRowDef="tableColumnsOfComments;sticky:true"></tr>
+													<tr mat-row (click)="selectRow(type)"
+														*matRowDef="let type; columns: tableColumnsOfComments"
+														[style.background]="highlightedRows.indexOf(type) != -1 ? '#eaf4f9' : ''">
+													</tr>
+												</table>
+												<div class="notFoundData" [hidden]="isCommentTableHasData">
+													No data found
+												</div>
+											</div>
+										</div>
+									</mat-card-content>
+								</mat-card>
+							</div>
+							<div fxFlex="80">
+								<mat-card style="margin-top:5px;max-width:100vw;overflow:auto;margin-right: -5px;">
+									<mat-card-header>
+										<mat-card-title>Additional Charges</mat-card-title>
+									</mat-card-header>
+									<mat-card-content style="padding:3px">
+										<div fxLayout="column" fxLayoutGap="5px">
+											<div fxLayout="row">
+												<div fxFlex="83">
+													<p *ngIf="processedFlag"
+														style="margin-top: 10px;margin-bottom: 0px; color:red;margin-left: 10px;font-size:12px;">
+														Job has been processed. Changes not allowed.</p>
+												</div>
+												<div fxFlex="12" fxFlex.lg="15" fxFlex.md="20">
+													<button type="button"
+														[disabled]="isJobNameEntered || !hasScreenAdditionalChargeInsertPriviledge || processedFlag"
+														fxFlexAlign="end"
+														style="line-height:25px;color:#3f51b5;font-size:12px;padding-right: 0px;" mat-button
+														color="Basic" (click)="showAdditionalChargesDialog('')">
+														<mat-icon style="font-size:17px;margin-top:3px;">add</mat-icon>
+														Add Charges
+													</button>
+												</div>
+											</div>
+											<div class="scrollgrid-container mat-elevation-z8">
+												<table mat-table [dataSource]="dataSource" matSort
+													#sortCharges="matSort" matSortActive="chargeType"
+													matSortDirection="asc" [matSortDisableClear]="true">
+													<ng-container matColumnDef="chargeType">
+														<th mat-header-cell fxFlex="32" fxFlex.md="23" *matHeaderCellDef
+															mat-sort-header fxLayoutAlign="start center"> Fee Description </th>
+														<td mat-cell *matCellDef="let element" fxFlex="32" fxFlex.md="23"
+															style="padding-top: 10px;" class="columnTextElipsis"
+															[matTooltip]="element.chargeType"> {{element.chargeType}}
+														</td>
+													</ng-container>
+													<ng-container matColumnDef="chargeAmount">
+														<th mat-header-cell fxFlex="14"  fxFlex.md="18"  *matHeaderCellDef
+															mat-sort-header style="padding-right: 10px;" fxLayoutAlign="end center">$ Amount
+														</th>
+														<td mat-cell fxFlex="14" fxFlex.md="18"  *matCellDef="let element"
+														fxLayoutAlign="end center" style="padding-right: 10px;">
+															{{element.chargeAmount  | number: '1.3-3'}} </td>
+													</ng-container>
+													<ng-container matColumnDef="description">
+														<th mat-header-cell fxFlex="20" fxFlex.md="29" *matHeaderCellDef
+															mat-sort-header fxLayoutAlign="start center"> Description
+														</th>
+														<td mat-cell *matCellDef="let element" fxFlex="20" fxFlex.md="29"
+															class="columnTextElipsis" [matTooltip]="element.description"
+															style="padding-top: 10px;"> {{element.description}} </td>
+													</ng-container>
+													<ng-container matColumnDef="chargeDate">
+														<th mat-header-cell fxFlex="20"  *matHeaderCellDef
+															mat-sort-header fxLayoutAlign="center center"> Date Entered</th>
+														<td mat-cell fxFlex="20" *matCellDef="let element"
+														fxLayoutAlign="center center" style="padding-right: 5px;">
+															{{changeToCustomDate(element.chargeDate)}} </td>
+													</ng-container>
+													<ng-container matColumnDef="userName">
+														<th mat-header-cell fxFlex="14" *matHeaderCellDef
+															mat-sort-header fxLayoutAlign="start center"> User </th>
+														<td mat-cell fxFlex="14" *matCellDef="let element"
+															class="columnTextElipsis" [matTooltip]="element.userName"
+															style="padding-top: 10px;"> {{element.userName}} </td>
+													</ng-container>
+													<ng-container matColumnDef="delete">
+														<th mat-header-cell *matHeaderCellDef
+														fxLayoutAlign="center center">Delete
+														</th>
+														<td mat-cell *matCellDef="let element"
+															style="padding-left: 5px;" fxLayoutAlign="center center"
+															(click)="$event.stopPropagation()">
+															<button *ngIf="hasScreenAdditionalChargeDeletePriviledge"
+																type="button" mat-icon-button color="warn">
+																<mat-icon class="mat-18"
+																	(click)="deleteAdditionalCharges(element)">delete
+																</mat-icon>
+															</button>
+														</td>
+													</ng-container>
+													<tr mat-header-row *matHeaderRowDef="tableColumns;sticky: true">
+													</tr>
+													<tr mat-row (click)="selectRow(element)"
+														(click)="hasScreenAdditionalChargeUpdatePriviledge && !processedFlag ? showAdditionalChargesDialog(element) : $event.stopPropagation()"
+														*matRowDef="let element; columns: tableColumns"
+														[style.background]="highlightedRows.indexOf(element) != -1 ? '#eaf4f9' : ''">
+													</tr>
+												</table>
+												<div class="notFoundData" style="margin-top:50px"
+													[hidden]="isTableHasData">
+													No data found
+												</div>
+											</div>
+										</div>
+									</mat-card-content>
+								</mat-card>
+							</div>
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+
+				<div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px" fxLayoutAlign="center"
+					fxLayoutAlign.xs="center center" style="margin-top:10px;">
+					<button type="button" (click)="updateJobDetail()" class ="filterButtonClass"
+						[disabled]="!(updatePostageForm.valid) || (!hasScreenPostageUpdatetPriviledge && !hasFileAdjustmentPrivilege) || !enableButtons"
+						mat-raised-button color="primary">
+						<mat-icon>save</mat-icon> Save
+					</button>
+					<button type="button" (click)="resetPostage()" *ngIf="isSearchVisible" class ="filterButtonClass" mat-raised-button
+						[disabled]="(!hasScreenPostageUpdatetPriviledge && !hasFileAdjustmentPrivilege) || !enableButtons">
+						<mat-icon>clear_all</mat-icon> Reset
+					</button>
+					<button type="button" class ="filterButtonClass" (click)="backToHome()" *ngIf="!isSearchVisible" mat-raised-button>
+						<mat-icon> arrow_back</mat-icon> Back
+					</button>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</form>
+</div>

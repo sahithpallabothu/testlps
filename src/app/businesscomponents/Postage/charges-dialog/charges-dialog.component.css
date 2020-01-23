@@ -1,0 +1,55 @@
+.dynamicList{
+	height:227px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+.dateInChargesComponent{
+	margin-left:3.1px !important;
+}	
+.mat-dialog-title
+{
+     background-color: #256275;
+	 color : white;
+	 font-size: 15px;
+	  text-align: center;
+	  size: 200px;
+	   margin: 0px;
+
+}
+
+.mat-icon{
+	font-size: 21px;
+    padding-top: 3px;
+}
+ /deep/ .operationButtons {	
+	color:red;
+	line-height:0px;
+	min-width:20px;
+	padding:0px !important;
+} 
+
+.mat-dialog-actions{
+		margin-bottom:0px;
+} 
+@media only screen and (max-width: 600px) {
+	
+	.mat-dialog-actions{
+		margin-bottom:10px;
+	}
+	/*to set the buttons i.e save ,cancel ,reset in proper alignment*/
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+/*to set the buttons i.e save ,cancel ,reset in proper alignment */
+@media only screen and (min-width: 601px) {
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+ .mat-option {
+height: 25px !important;
+line-height: 25px !important;
+font-size:12px;
+} 

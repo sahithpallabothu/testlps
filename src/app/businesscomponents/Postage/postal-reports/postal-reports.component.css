@@ -1,0 +1,109 @@
+
+.mat-icon{
+	font-size: 17px;
+padding-top: 3px;
+}
+
+.mat-raised-button
+{
+ width: 120px; 
+ align-content: center;
+ font-size: 15px;
+}
+
+.mat-header-row {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: inherit;
+  }
+  
+.mat-option {
+height: 25px !important;
+line-height: 25px !important;
+font-size:12px !important;
+}
+.mat-header-row {
+  top: 0;
+  position: sticky;
+  z-index: 1;
+  background-color: inherit;
+}
+/*Panel css start */
+
+ mat-card-header p{
+	    margin-top: 3px;
+    margin-left: -21px;
+}
+mat-card-header{
+	    padding: 0px;
+    /* text-align: center; */
+    color: white;
+	/* font-weight:bold; */
+    background-color: #008080;
+	border-radius: 5px 5px 0px 0px;
+	height:25px;
+	border-bottom:1px solid rgba(0,0,0,0.5);
+	
+}
+
+ mat-card{
+	    margin-right: 15px;
+    margin-top: 15px;
+    padding: 0px;
+	border-radius: 5px 5px 0px 0px;
+	border:1px solid rgba(0,0,0,0.5)
+}mat-card-content{
+    padding: 10px;
+}
+.mat-card-header-text{
+	margin: 0px 12px;
+	
+}
+.mat-card-header .mat-card-title{
+	font-size:14px;
+	padding-top: 3px;
+}
+
+/deep/ .applicationContentsDiv{
+	height:auto;
+	margin-top:0px !important;
+}
+
+/*Panel css end */
+
+label{
+	margin-top:21px;
+}
+/deep/ .postalReportsFormCard{
+	min-width:100% !important;
+}
+
+.linkButtons{
+	line-height:25px;
+	font-size:12px;
+	background-color:transparent;
+	margin-top:10px;
+	color:blue;
+	padding:0px
+}
+.spanClass{
+	margin-top:12px !important
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+	
+	
+}
+@media only screen and (max-width: 600px) {
+.spanClass{
+	margin-top:12px !important;
+	display:none;
+	
+}
+}

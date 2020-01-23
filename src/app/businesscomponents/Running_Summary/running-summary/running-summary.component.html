@@ -1,0 +1,292 @@
+<div>
+	<mat-card>
+		<mat-card-content fxLayout="column" [formGroup]="RunningSummaryForm">
+			<div fxLayout="row" fxLayoutGap="20px">
+				<div>
+					<mat-form-field  class="inputTextBoxControls">
+						<mat-label>Post Date</mat-label>
+						<input matInput [textMask]="{mask: datemask}" formControlName="postDate"  
+							(keydown.enter)="LoadTables()" #focusElement matTooltip="Enter Post Date"
+							placeholder="MM/DD/YY" (input)="setDateToPicker('postDate','postDate1')" errorMatcher
+							tabIndex="{{tabIndex+1}}" required>
+						<mat-error *ngIf="hasError('postDate','pattern')">
+							Invalid Post Date.
+						</mat-error>
+						<mat-error *ngIf="hasError('postDate','required')">
+							Post Date is required.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="0.5px" style="margin-left:-15px;margin-right: 15px;" >
+						<input matInput formControlName="postDate1" [matDatepicker]="picker"
+							(keydown.enter)="LoadTables()" (dateChange)="setDateToControl('postDate','postDate1' )"
+							tabIndex="{{tabIndex+1}}" required>
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+					</mat-form-field>
+				</div>
+				<mat-form-field  class="inputTextBoxControls">
+					<mat-label>Location</mat-label>
+					<mat-select formControlName="location_RunningSummary" matTooltip="Select Location"
+						(keydown.enter)="LoadTables()" tabIndex="{{tabIndex+1}}" required>
+						<mat-option [value]="">(Select)</mat-option>
+						<mat-option value="0">Duluth</mat-option>
+						<mat-option value="1">Winston-Salem</mat-option>
+					</mat-select>
+					<mat-error *ngIf="hasError('location_RunningSummary','required')">
+						Location is required.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field  class="inputTextBoxControls">
+					<mat-label>Trip</mat-label>
+					<mat-select formControlName="trip_RunningSummary" matTooltip="Select Trip"
+						(keydown.enter)="LoadTables()" tabIndex="{{tabIndex+1}}" required (selectionChange)="tripChange($event)">
+						<mat-option [value]="">(Select)</mat-option>
+						<mat-option value="1">1</mat-option>
+						<mat-option value="2">2</mat-option>
+						<mat-option value="3">3</mat-option>
+						<mat-option value="M">M</mat-option>
+					</mat-select>
+					<mat-error *ngIf="hasError('trip_RunningSummary','required')">
+						Trip is required.
+					</mat-error>
+				</mat-form-field>
+
+				<div fxLayout="row" fxLayoutGap="20px">
+					<button class="filterButtonClass" color="primary" (click)="LoadTables()" mat-raised-button
+						[disabled]="!(RunningSummaryForm.valid)" tabIndex="{{tabIndex+1}}">
+						<mat-icon> save</mat-icon> Submit
+					</button>
+					<button class="filterButtonClass" (click)="resetEverything('')" mat-raised-button
+						tabIndex="{{tabIndex+1}}">
+						<mat-icon>clear_all</mat-icon> Reset All
+					</button>
+					<button [disabled]="isSaveButtonClicked || !(RunningSummaryForm.valid)" color="primary"
+						(click)="exportDataAsPDF()" mat-raised-button tabIndex="{{tabIndex+1}}">
+						<mat-icon>print</mat-icon>Review / Print
+					</button>
+				</div>
+			</div>
+			<div fxLayout="row" fxLayoutGap="15px">
+				<mat-card fxLayout="column" fxFlex="47">
+					<mat-card-header fxLayoutAlign="center">
+						<p style="margin-top:5px;">Not Posted</p>
+					</mat-card-header>
+					<mat-card-content>
+						<div class="scrollgrid-container mat-elevation-z8 runningSummerMatTables">
+							<table mat-table [dataSource]="unPostedDataSource">
+								<!-- Checkbox Column -->
+								<ng-container matColumnDef="select">
+									<th mat-header-cell fxFlex="10%" style="padding-top: 18px;" *matHeaderCellDef>
+										<mat-checkbox (change)="$event ? masterToggleInUnPosted() : null"
+											[checked]="unPostedSelection.hasValue() && isAllSelectedInUnPosted()"
+											[indeterminate]="unPostedSelection.hasValue() && !isAllSelectedInUnPosted()"
+											[aria-label]="checkboxLabelInUnPosted()"
+											[disabled]="unPostedDataSource.data.length==0">
+										</mat-checkbox>
+									</th>
+									<td mat-cell fxFlex="10%" *matCellDef="let row">
+										<mat-checkbox (click)="$event.stopPropagation()"
+											(change)="$event ? unPostedSelection.toggle(row) : null"
+											[checked]="unPostedSelection.isSelected(row)"
+											[aria-label]="checkboxLabelInUnPosted(row)">
+										</mat-checkbox>
+									</td>
+								</ng-container>
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="position">
+									<th mat-header-cell *matHeaderCellDef style="padding-top: 18px;"
+										[style.display]="'none'"> No. </th>
+									<td mat-cell *matCellDef="let element" [style.display]="'none'">
+										{{element.position}} </td>
+								</ng-container>
+
+								<!-- Job Name Column -->
+								<ng-container matColumnDef="jobname">
+									<th mat-header-cell fxFlex="30%" style="padding-top: 18px;" *matHeaderCellDef>Job
+										Name </th>
+									<td mat-cell fxFlex="30%" class="columnTextElipsis" *matCellDef="let element"> {{element.jobname}} </td>
+								</ng-container>
+
+								<!-- pieces Column -->
+								<ng-container matColumnDef="pieces">
+									<th mat-header-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef>
+										Pieces </th>
+									<td mat-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;" *matCellDef="let element">
+										{{changeToPiecesFormat(element.pieces)}} </td>
+								</ng-container>
+
+								<!-- amount Column -->
+								<ng-container matColumnDef="amount">
+									<th mat-header-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef>
+										Amount </th>
+									<td mat-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;" *matCellDef="let element">
+										{{changeToAmountFormat(element.amount)}} </td>
+								</ng-container>
+
+								<!-- rundate Column -->
+								<ng-container matColumnDef="rundate">
+									<th mat-header-cell fxFlex="hideOZPieces? 20% : 20%" [style.text-align]="hideOZPieces ? 'right':'center'" style="padding-top: 18px;" *matHeaderCellDef> Run
+										Date </th>
+									<td mat-cell fxFlex="hideOZPieces? 20% : 20%" [style.text-align]="hideOZPieces ? 'right':'center'" *matCellDef="let element">
+										{{getDateOnly(element.rundate)}} </td>
+								</ng-container>
+
+								<!-- 2ozPieces Column -->
+								<ng-container matColumnDef="2ozPieces" *ngIf="hideOZPieces">
+									<th mat-header-cell fxFlex="hideOZPieces? 10% : 0%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef> 2 Ounce </th>
+									<td mat-cell fxFlex="hideOZPieces? 10% : 0%" style="text-align:right;" *matCellDef="let element"> {{changeToPiecesFormat(element._2Ounces)}}
+									</td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+								<tr mat-row style="padding-top: 15px;" *matRowDef="let row; columns: displayedColumns;">
+								</tr>
+								<!-- (click)="unPostedSelection.toggle(row)" -->
+							</table>
+						</div>
+					</mat-card-content>
+				</mat-card>
+
+
+				<mat-card fxLayout="column" fxFlex="6" fxLayoutAlign="center center">
+					<mat-card-content>
+						<button class="printLocationSwapButtons" type="button" mat-raised-button color="default"
+							[disabled]="!(RunningSummaryForm.valid)" (click)="moveToPosted()"
+							style="margin-bottom:15px;" tabIndex="{{tabIndex+1}}">
+							<mat-icon>navigate_next</mat-icon>
+						</button>
+						<button class="printLocationSwapButtons" type="button" mat-raised-button color="default"
+							[disabled]="!(RunningSummaryForm.valid)" (click)="moveToUnPosted()"
+							tabIndex="{{tabIndex+1}}">
+							<mat-icon>navigate_before</mat-icon>
+						</button>
+					</mat-card-content>
+				</mat-card>
+
+
+				<mat-card fxLayout="column" fxFlex="47">
+					<mat-card-header fxLayoutAlign="center">
+						<p style="margin-top:5px;">Posted</p>
+					</mat-card-header>
+					<mat-card-content>
+						<div class=" scrollgrid-container mat-elevation-z8 runningSummerMatTables">
+							<table mat-table [dataSource]="postedDataSource">
+								<!-- Checkbox Column -->
+								<ng-container matColumnDef="select">
+									<th mat-header-cell fxFlex="10%" style="padding-top: 18px;" *matHeaderCellDef>
+										<mat-checkbox (change)="$event ? masterToggleInPosted() : null"
+											[checked]="postedSelection.hasValue() && isAllSelectedInPosted()"
+											[indeterminate]="postedSelection.hasValue() && !isAllSelectedInPosted()"
+											[aria-label]="checkboxLabelInPosted()"
+											[disabled]="postedDataSource.data.length==0">
+										</mat-checkbox>
+									</th>
+									<td mat-cell fxFlex="10%" *matCellDef="let row">
+										<mat-checkbox (click)="$event.stopPropagation()"
+											(change)="$event ? postedSelection.toggle(row) : null"
+											[checked]="postedSelection.isSelected(row)"
+											[aria-label]="checkboxLabelInPosted(row)">
+										</mat-checkbox>
+									</td>
+								</ng-container>
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="position">
+									<th mat-header-cell style="padding-top: 18px;" *matHeaderCellDef [style.display]="'none'"> No. </th>
+									<td mat-cell *matCellDef="let element" [style.display]="'none'">
+										{{element.position}} </td>
+								</ng-container>
+
+								<!-- Job Name Column -->
+								<ng-container matColumnDef="jobname">
+									<th mat-header-cell fxFlex="30%" style="padding-top: 18px;" *matHeaderCellDef>Job Name </th>
+									<td mat-cell fxFlex="30%" class="columnTextElipsis" *matCellDef="let element"> {{element.jobname}} </td>
+								</ng-container>
+
+								<!-- pieces Column -->
+								<ng-container matColumnDef="pieces">
+									<th mat-header-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef> Pieces </th>
+									<td mat-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;" *matCellDef="let element">
+										{{changeToPiecesFormat(element.pieces)}} </td>
+								</ng-container>
+
+								<!-- amount Column -->
+								<ng-container matColumnDef="amount">
+									<th mat-header-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef> Amount </th>
+									<td mat-cell fxFlex="hideOZPieces? 15% : 20%" style="text-align:right;" *matCellDef="let element">
+										{{changeToAmountFormat(element.amount)}} </td>
+								</ng-container>
+
+								<!-- rundate Column -->
+								<ng-container matColumnDef="rundate">
+									<th mat-header-cell fxFlex="hideOZPieces? 20% : 20%" [style.text-align]="hideOZPieces ? 'right':'center'" style="padding-top: 18px;" *matHeaderCellDef> Run Date </th>
+									<td mat-cell fxFlex="hideOZPieces? 20% : 20%" [style.text-align]="hideOZPieces ? 'right':'center'" *matCellDef="let element"> {{getDateOnly(element.rundate)}} </td>
+								</ng-container>
+
+								<!-- 2ozPieces Column -->
+								<ng-container matColumnDef="2ozPieces" *ngIf="hideOZPieces">
+									<th mat-header-cell fxFlex="hideOZPieces? 10% : 0%" style="text-align:right;padding-top: 18px;" *matHeaderCellDef> 2 Ounce </th>
+									<td mat-cell fxFlex="hideOZPieces? 10% : 0%" style="text-align:right;" *matCellDef="let element"> {{changeToPiecesFormat(element._2Ounces)}}
+									</td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+								<tr mat-row style="padding-top: 15px;" *matRowDef="let row; columns: displayedColumns;">
+									<!-- (click)="postedSelection.toggle(row)" -->
+								</tr>
+							</table>
+						</div>
+					</mat-card-content>
+				</mat-card>
+			</div>
+			<br>
+			<div fxLayout="row" fxLayoutGap="15px">
+					<div fxLayout="row" fxFlex="100" fxLayoutGap="15px" fxLayoutAlign="end">
+							<mat-label class="runningSummerLabels" fxFlex="2" fxFlex.xs="20">Total: </mat-label>
+							<mat-form-field class="bottomTextFields" class="inputTextBoxControls">
+								<input matInput disabled style="text-align:right" matTooltip="Enter Pieces" matInput 
+									placeholder="Jobs" autofocus value={{TotalJobs}}>
+		
+							</mat-form-field>
+							<mat-form-field class="bottomTextFields" class="inputTextBoxControls">
+								<input matInput disabled style="text-align:right" matTooltip="Enter Pieces" matInput 
+									placeholder="Pieces" autofocus value={{TotalPostedPieces}}>
+		
+							</mat-form-field>
+							<mat-form-field class="bottomTextFields" class="inputTextBoxControls">
+								<input matInput disabled style="text-align:right" matTooltip="Enter Amount" matInput 
+									placeholder="Amount" autofocus value={{TotalPostedAmountData}}>
+		
+							</mat-form-field>
+							<mat-form-field *ngIf="hideOZPieces" class="bottomTextFields" class="inputTextBoxControls">
+								<input matInput disabled style="text-align:right" matTooltip="Enter 2 Ounce" matInput 
+									placeholder="2 Ounce" autofocus value={{TotalOzData}}>
+							</mat-form-field>
+						</div>
+			</div>
+
+			<div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center">
+				<div>
+					<button type="button" class="filterButtonClass" mat-raised-button color="primary" (click)="exportTableData()"
+						*ngIf="postedFlag" [disabled]="!(RunningSummaryForm.valid) || !(hasScreenUpdatePrivilege)"
+						tabIndex="{{tabIndex+1}}">
+						<mat-icon>save</mat-icon> Save
+					</button>
+				</div>
+				<div>
+					<button type="button" class="filterButtonClass" mat-raised-button *ngIf="postedFlag"
+						(click)="resetTablesOnlyWhilePressBottomResetButton()" tabIndex="{{tabIndex+1}}">
+						<mat-icon>clear_all</mat-icon> Reset
+					</button>
+				</div>
+			</div>
+
+			<div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv">
+				<div class="loader"></div>
+				<p class="spinnerLoadingText">{{spinnerText}}</p>
+			</div>
+
+		</mat-card-content>
+	</mat-card>
+</div>

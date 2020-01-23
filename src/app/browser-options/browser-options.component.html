@@ -1,0 +1,41 @@
+<div class="contactContainer">	
+  <header mat-dialog-title fxLayoutAlign="center center" >
+    <label style="
+      font-size: 20px; text-align: center; padding-bottom:3px;">
+      {{title}}
+    </label>
+  </header>
+  <mat-card style="margin-top:7px !important;margin-right:0px !important; ">
+    <mat-card-content>	
+      <div>
+          <b style="margin-bottom: 5px;">LPS requires the following browser settings to be set before proceeding:</b><br />
+          <p>
+          1. Open Internet Explorer.<br />
+          2. Click on Tools menu and select Internet Options.<br />
+          3. Click on the Security tab, then click on Internet zone.<br />
+          4. Click on Custom level button and scroll to User Authentication settings.<br />
+          5. Select "<i>Automatic logon with current username and password</i>" option and click on OK.<br />
+          6. Click on Apply in Security tab to apply the selected Option.<br />
+          7. Close Internet Explorer and you are now set to use the application.<br /> 
+        </p>
+        <b style="margin-bottom: 5px;">Firefox settings: </b><u style="cursor: pointer;color: blue;text-decoration:underline;" (click)="toggleFirefoxSettings()">{{settingsVisible?'Hide':'Show'}} </u><br />
+        <P *ngIf="settingsVisible">
+          1. Open Firefox, type "<i>about:config</i>" into the address bar and hit enter. <br />
+          2. Firefox will warn you that incorrectly editing your settings may lead to stability, security and performance issues. Click the "<i>I accept the risk!</i>" button.<br/>
+          3. Key in "<i>network.automatic-ntlm-auth.trusted-uris</i>" in the search bar that shows up at the top. As you start typing in, the list that is shown below gets filtered.<br/>
+             &nbsp;&nbsp;&nbsp;&nbsp;Right-click the setting and select "<i>Modify</i>".<br/>
+          4. The resulting popup lists websites that Firefox will automatically log into.<br/>
+          &nbsp;&nbsp;&nbsp; Add the URL of the server that hosts the application (ex:{{serverIp}} ) to have Firefox automatically log in as the currently logged on Windows user.<br/>
+          5. If there already exists another site, you can key in a comma towards the end of the existing value, followed by the URL of the server.<br/>
+          6. Restart Firefox.<br/>
+        </P>
+      </div>
+        
+          <div fxLayoutAlign="end" style="margin-top: 5px;">
+              <button tabindex="-1" mat-raised-button (click)="dialogCancel()"><mat-icon>cancel</mat-icon>Close</button>
+          </div>
+      </mat-card-content>
+    </mat-card>
+    
+    </div>
+

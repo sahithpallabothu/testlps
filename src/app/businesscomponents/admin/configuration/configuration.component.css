@@ -1,0 +1,21 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+
+.formWidth{
+  width:93%;
+  margin-left:14px
+}
+.notFoundData
+{
+  margin-top:25%;
+}
+mat-form-field.ng-invalid.ng-touched {
+  animation: example;
+  animation-duration: 0.3s;
+  margin-bottom: 7px;
+}
+
+@keyframes example {
+  from {margin-bottom: 0;}
+  to {margin-bottom: 7px;}
+}

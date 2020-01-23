@@ -1,0 +1,18 @@
+@import "../shared/Panel.css";
+@import "../shared/Common.css";
+
+.mat-dialog-title
+{
+    align-content: center;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: center;
+    padding-top: 5px;
+    margin: 0px;
+}
+p{
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 15px;
+}

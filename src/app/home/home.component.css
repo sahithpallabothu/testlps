@@ -1,0 +1,163 @@
+
+.mat-icon {
+	font-size:17px;
+	padding-top:3px;
+}
+.homeServiceLabel{
+ 	margin-top:5px !important;	
+}
+.mat-raised-button
+{
+	width:100%;
+	align-content:center;
+	text-align:center;
+	font-size: 15px;
+	overflow: visible; 
+}
+.btnColor
+{
+	background-color:#218cad;
+	color:white;
+}
+.container
+{
+	overflow-y:auto;
+}
+.notFoundData
+{
+	color:red;
+	margin-top:5%;
+	text-align:center;
+	font-size:18px;
+}
+.jobs,.inserts
+{
+	width:100%;
+	height: 280px;
+	overflow-y: scroll;
+	overflow-x:auto; 
+}
+.mat-header-cell
+{
+	width:auto;
+}
+.mat-table {
+
+  max-height: 100px;
+  overflow: auto;
+}
+
+.mat-expansion-panel-header
+{
+	    background: #eaecf5;
+}
+
+.mat-option {
+height: 25px !important;
+line-height: 25px !important;
+font-size:12px !important;
+}
+
+.mat-row:hover {
+  cursor:pointer;
+}
+
+/* .columnTextElipsis{
+	max-width: 100px!important;
+}
+ */
+
+.columnTextElipsis
+{
+	width: 190px;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+	display: pre-line;
+}
+
+/deep/.mat-tooltip-panel{
+	word-break: break-word !important;
+}
+.align-header{
+	padding-top : 0px;
+}
+
+
+.mat-header-row {
+	top: 0; 
+   	position: sticky;
+	z-index: 1;
+  }
+/*spinner outer div*/
+.spinnerDiv{
+	width: 300px;
+	height: 150px;
+	background-color:white;
+	position: absolute;
+	top: 41%;
+	left: 39%;
+	box-shadow: 1px 1px 17px #959595;
+	z-index: 222;
+  }
+   /*spinner text*/
+  .spinnerLoadingText{
+	left: 90px;
+	  position: absolute;
+	  top: 97px;
+	  font-size: 13px;
+	  font-weight: bold;
+	  display: inline;
+	  white-space: nowrap;
+	  color: #256275;
+  
+  }
+  
+  /*spinner animation css start*/
+  .loader {
+	border: 8px solid #256275;
+	  border-radius: 50%;
+	  border-top: 8px solid #efebeb;
+	  width: 50px;
+	  height: 50px;
+	  margin-left: 122px;
+	  margin-top: 29px;
+	  -webkit-animation: spin 1s linear infinite;
+	  animation: spin 1s linear infinite;
+  }
+  /* Safari */
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+  }
+
+.commonSpaceBwControls{
+	margin-right: 30px;
+}
+
+@media only screen and (width: 1280px)  {
+	.columnTextElipsis{
+		max-width: 68px!important;
+		/* text-overflow: ellipsis;
+		cursor: pointer;
+		word-break: break-all;
+		overflow:hidden;
+		white-space: nowrap;
+		display: pre-line; */
+	}
+}
+
+/* @media only screen and (width: 1680px)  {
+	.typeToolTipEllipsis{
+		max-width: 63px!important;
+		
+	}
+} */
+
+.mat-sort-header-arrow {
+    margin: 0 0 0 0px !important;
+}
+
+ 

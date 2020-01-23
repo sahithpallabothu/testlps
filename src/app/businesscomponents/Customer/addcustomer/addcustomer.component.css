@@ -1,0 +1,100 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+
+.mat-dialog-title{
+    align-content: center;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: center;
+    padding-top: 5px;
+    margin: 0px;
+}
+
+.mat-raised-button
+{
+	width:100%;
+	align-content:center;
+	text-align:center;
+	font-size: 15px;
+	overflow: visible; 
+}
+
+.legend{
+	margin:0;
+}
+
+.fieldset{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;	 
+	margin-right:5px
+}
+.mat-expansion-panel-header{
+	background:#e6ebec
+}
+
+.applicationBtn{
+	background-color:#218cad;
+	color:white;
+}
+
+/* new changes */
+
+.commonSpaceBwControls{
+	margin-right: 30px;
+}
+
+.commonSpaceBwAddressControls{
+	margin-right: 90px !important;
+}
+
+.cityControlSpace{
+	width: 50% !important;
+	margin-right: 90px !important;
+}
+
+
+@media only screen and (max-width:1440px){
+	.commonSpaceBwAddressControls{
+		margin-right: 30px !important;
+	}
+	.cityControlSpace{
+		width: 150px !important;
+		margin-right: 30px !important;
+	}
+	.customerMatCard{
+		margin-right: 0px !important;
+	}
+}
+
+
+@media only screen and(max-width:1280px){
+	.commonSpaceBwAddressControls{
+		margin-right: 15px !important;
+	}
+	.cityControlSpace{
+		width: 33% !important;
+		margin-right: 15px !important;
+	}
+	.customerMatCard{
+		margin-right: 0px !important;
+	}
+}
+
+@media only screen and (max-width:1152px){
+	.commonSpaceBwAddressControls{
+		margin-right: 10px !important;
+	}
+	.cityControlSpace{
+		width: 37% !important;
+		margin-right: 10px !important;
+	}
+	
+	.customerMatCard{
+		margin-right: 0px !important;
+	}
+}
+
+

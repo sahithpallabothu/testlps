@@ -1,0 +1,278 @@
+<div>
+	<mat-card>
+		<mat-card-content fxLayout="column" [formGroup]="PrintLocationForm">		
+			<div fxLayout="row" fxLayoutGap="20px">
+					<mat-form-field  style="width:395px">
+						  <input type="text" placeholder="Application Name" aria-label="Assignee" (keydown.enter)="doFilter(appCode)" matTooltip="Enter Application Name" matInput formControlName="ApplicationName"   [matAutocomplete]="autoApplicationName" (keyup)="validateApplicationNameAutoCompletes()" >
+							<mat-autocomplete #autoApplicationName="matAutocomplete" [displayWith]="displayFnApplicationName" (optionSelected)="isChangeInApplication($event)">
+							  <mat-option *ngFor="let app of filteredOptionsApplicationName | async" [value]="app" >
+								{{app.applicationName}}
+							  </mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					<mat-form-field  class="inputTextBoxControls"> 
+						<input type="text" placeholder="Application Code" [(ngModel)]="appCode" (keydown.enter)="doFilter(appCode)" matTooltip="Enter Application Code" aria-label="Assignee" matInput formControlName="ApplicationCode"  [matAutocomplete]="autoApplicationCode" (keyup)="validateApplicationCodeAutoCompletes()">
+							<mat-autocomplete #autoApplicationCode="matAutocomplete" [displayWith]="displayFnApplicationCode" (optionSelected)="isChangeInApplication($event)">
+							  <mat-option *ngFor="let app of filteredOptionsApplicationCode | async" [value]="app" >
+								{{app.applicationCode}}
+							  </mat-option>
+							</mat-autocomplete>
+					</mat-form-field>
+							
+					
+					<div fxLayout="row"  fxLayoutGap="10px">
+					     <button   class="filterButtonClass" color="primary" (click)="doFilter(appCode)" mat-raised-button ><mat-icon> save</mat-icon> Submit</button>
+						 <!-- <button  class= "runningSummaryButton"  (click)="resetFields()" mat-raised-button><mat-icon>clear_all</mat-icon> Reset</button> -->
+					</div>
+			</div>
+			<div fxLayout="row"  fxLayoutGap="15px" >
+			
+				<mat-card fxLayout="column" fxFlex="47">
+					<mat-card-header fxLayoutAlign="center">
+						<p style="margin-top:5px;">Duluth</p>
+					</mat-card-header>
+					<mat-card-content>
+					
+					<div  fxLayout="row" style="line-height:0px;border:1px solid #e0e0e0;" fxLayoutAlign="center center">
+						<p class="text-navi"  (click)="moveToRow('A','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='A'?'change':'dummy'">A</span></p> 
+						<p class="text-navi"  (click)="moveToRow('B','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='B'?'change':'dummy'">B</span></p> 
+						<p class="text-navi"  (click)="moveToRow('C','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='C'?'change':'dummy'">C</span></p> 
+						<p class="text-navi"  (click)="moveToRow('D','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='D'?'change':'dummy'">D</span></p> 
+						<p class="text-navi"   (click)="moveToRow('E','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='E'?'change':'dummy'">E</span></p> 
+						<p class="text-navi"   (click)="moveToRow('F','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='F'?'change':'dummy'">F</span></p> 
+						<p class="text-navi"   (click)="moveToRow('G','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='G'?'change':'dummy'">G</span></p> 
+						<p class="text-navi"   (click)="moveToRow('H','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='H'?'change':'dummy'">H</span></p> 
+						<p class="text-navi"   (click)="moveToRow('I','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='I'?'change':'dummy'">I</span></p> 
+						<p class="text-navi"   (click)="moveToRow('J','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='J'?'change':'dummy'">J</span></p> 
+						<p class="text-navi"   (click)="moveToRow('K','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='K'?'change':'dummy'">K</span></p> 
+						<p class="text-navi"   (click)="moveToRow('L','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='L'?'change':'dummy'">L</span></p> 
+						<p class="text-navi"   (click)="moveToRow('M','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='M'?'change':'dummy'">M</span></p> 
+						<p class="text-navi"  (click)="moveToRow('N','duluthTable')" ><span  [ngClass]="isChangeColor && selectedCharacter=='N'?'change':'dummy'">N</span></p> 
+						<p class="text-navi"   (click)="moveToRow('O','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='O'?'change':'dummy'">O</span></p> 
+						<p class="text-navi"   (click)="moveToRow('P','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='P'?'change':'dummy'">P</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Q','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='Q'?'change':'dummy'">Q</span></p> 
+						<p class="text-navi"   (click)="moveToRow('R','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='R'?'change':'dummy'">R</span></p> 
+						<p class="text-navi"   (click)="moveToRow('S','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='S'?'change':'dummy'">S</span></p> 
+						<p class="text-navi"   (click)="moveToRow('T','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='T'?'change':'dummy'">T</span></p> 
+						<p class="text-navi"   (click)="moveToRow('U','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='U'?'change':'dummy'">U</span></p> 
+						<p class="text-navi"   (click)="moveToRow('V','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='V'?'change':'dummy'">V</span></p> 
+						<p class="text-navi"   (click)="moveToRow('W','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='W'?'change':'dummy'">W</span></p> 
+						<p class="text-navi"    (click)="moveToRow('X','duluthTable')"><span [ngClass]="isChangeColor && selectedCharacter=='X'?'change':'dummy'">X</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Y','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='Y'?'change':'dummy'">Y</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Z','duluthTable')" ><span [ngClass]="isChangeColor && selectedCharacter=='Z'?'change':'dummy'">Z</span></p> 
+					</div>
+					
+					<div class="scrollgrid-container mat-elevation-z8 runningSummerMatTables" >
+						<table mat-table [dataSource]="duluthDataSource" id="duluthTable" class="MatTableClass"  >
+							  <!-- Checkbox Column -->
+							  <ng-container matColumnDef="select">
+								<th mat-header-cell  fxFlex="10%" *matHeaderCellDef>
+								  <mat-checkbox class="headerCheckBox"  (change)="$event ? masterToggleInUnPosted() : null"
+												[checked]="duluthSelection.hasValue() && isAllSelectedInUnPosted()"
+												[indeterminate]="duluthSelection.hasValue() && !isAllSelectedInUnPosted()"
+												[aria-label]="checkboxLabelInUnPosted()">
+								  </mat-checkbox>
+								</th>
+								<td mat-cell  fxFlex="10%" fxLayoutAlign="start center" *matCellDef="let row">
+								  <mat-checkbox [disabled]="disabledRow(row)" (click)="$event.stopPropagation()"
+												(change)="$event ? duluthSelection.toggle(row) : null"
+												[checked]="duluthSelection.isSelected(row)"
+												[aria-label]="checkboxLabelInUnPosted(row)">
+								  </mat-checkbox>
+								</td>
+							  </ng-container>
+
+							  <!-- Position Column -->
+								  <ng-container  matColumnDef="position">
+									<th mat-header-cell *matHeaderCellDef [style.display]="'none'"> No. </th>
+									<td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.position}} </td>
+								  </ng-container>
+
+								  <!-- app Name Column -->
+								  <ng-container matColumnDef="appName">
+									<th mat-header-cell fxFlex="45%" fxFlex.lg="39%"   fxLayoutAlign="start center" *matHeaderCellDef>Application Name</th>
+									<td mat-cell  fxFlex="45%" fxFlex.lg="39%"   class="columnTextElipsis" style="padding:15.5px 0px;" [matTooltip]="element.appName" *matCellDef="let element"> {{element.appName}} </td>
+								  </ng-container>
+
+								  <!-- code Column -->
+								  <ng-container matColumnDef="appCode">
+									<th mat-header-cell fxFlex="9%" fxFlex.lg="15%" fxLayoutAlign="start center" *matHeaderCellDef> Application<br/> Code </th>
+									<td mat-cell  fxFlex="9%" fxFlex.lg="15%" fxLayoutAlign="start center" *matCellDef="let element"> {{element.appCode}} </td>
+								  </ng-container>
+
+								  <!-- hold Column -->
+								  <ng-container  matColumnDef="hold">
+									<th mat-header-cell   fxFlex="9%"  fxLayoutAlign="center center" *matHeaderCellDef> Hold </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="center center" *matCellDef="let element"> {{element.hold=='Y' ? element.hold: ''}} </td>
+								  </ng-container>
+								  
+								  <!-- insert Column -->
+								  <ng-container matColumnDef="insert">
+									<th mat-header-cell   fxFlex="9%"  fxLayoutAlign="center center" *matHeaderCellDef> Insert </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="center center" *matCellDef="let element"> {{element.inserts == 'Y' ? element.inserts: ''}} </td>
+								  </ng-container>
+								  <!-- auto Column -->
+								  <ng-container matColumnDef="auto">
+									<th mat-header-cell   fxFlex="9%"  fxLayoutAlign="center center" *matHeaderCellDef> Auto </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="center center" *matCellDef="let element"> {{element.auto == 'Y' ? element.auto : ''}} </td>
+								  </ng-container>
+								  <!-- detailed Column -->
+								  <ng-container matColumnDef="detailed">
+									<th mat-header-cell   fxFlex="9%"  fxLayoutAlign="start center" *matHeaderCellDef>Details </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="start center"  *matCellDef="let element"> 
+										<span [ngClass]="showLink(element)=='View'?'viewAddlDetailsLnk':'dummyClass'"
+										  (click)="openInsertsModal(element, 1)">{{showLink(element) == 'View' ? showLink(element) : ''}}</span></td>
+								  </ng-container>
+							
+
+							  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+							  <tr mat-row  *matRowDef="let row; columns: displayedColumns;" >
+							    <!-- (click)="duluthSelection.toggle(row)" -->
+							  </tr>
+							</table>
+						</div>
+					</mat-card-content>
+				</mat-card>
+				
+				
+				<mat-card  fxLayout="column"  fxFlex="6" fxLayoutAlign="center center">
+					<mat-card-content>
+						<button class="printLocationSwapButtons"  type="button" mat-raised-button color="default"  (click)="moveToWinstonSalem()" style="margin-bottom:15px;" > <mat-icon>navigate_next</mat-icon> </button> 
+						<button class="printLocationSwapButtons"  type="button" mat-raised-button color="default" (click)="moveToDuluth()" > <mat-icon>navigate_before</mat-icon>  </button> 
+					</mat-card-content>
+				 </mat-card>
+					
+			
+				<mat-card fxLayout="column" fxFlex="47">
+						<mat-card-header fxLayoutAlign="center">
+						<p style="margin-top:5px;">Winston Salem</p>
+					</mat-card-header>
+					<mat-card-content>
+					
+					<div fxLayout="row" style="line-height:0px;border:1px solid #e0e0e0;" fxLayoutAlign="center center">
+						<p class="text-navi"  (click)="moveToRow('A','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='A'?'change':'dummy'">A</span></p> 
+						<p class="text-navi"  (click)="moveToRow('B','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='B'?'change':'dummy'">B</span></p> 
+						<p class="text-navi"  (click)="moveToRow('C','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='C'?'change':'dummy'">C</span></p> 
+						<p class="text-navi"  (click)="moveToRow('D','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='D'?'change':'dummy'">D</span></p> 
+						<p class="text-navi"   (click)="moveToRow('E','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='E'?'change':'dummy'">E</span></p> 
+						<p class="text-navi"   (click)="moveToRow('F','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='F'?'change':'dummy'">F</span></p> 
+						<p class="text-navi"   (click)="moveToRow('G','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='G'?'change':'dummy'">G</span></p> 
+						<p class="text-navi"   (click)="moveToRow('H','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='H'?'change':'dummy'">H</span></p> 
+						<p class="text-navi"   (click)="moveToRow('I','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='I'?'change':'dummy'">I</span></p> 
+						<p class="text-navi"   (click)="moveToRow('J','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='J'?'change':'dummy'">J</span></p> 
+						<p class="text-navi"   (click)="moveToRow('K','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='K'?'change':'dummy'">K</span></p> 
+						<p class="text-navi"   (click)="moveToRow('L','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='L'?'change':'dummy'">L</span></p> 
+						<p class="text-navi"   (click)="moveToRow('M','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='M'?'change':'dummy'">M</span></p> 
+						<p class="text-navi"   (click)="moveToRow('N','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='N'?'change':'dummy'">N</span></p> 
+						<p class="text-navi"   (click)="moveToRow('O','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='O'?'change':'dummy'">O</span></p> 
+						<p class="text-navi"   (click)="moveToRow('P','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='P'?'change':'dummy'">P</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Q','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='Q'?'change':'dummy'">Q</span></p> 
+						<p class="text-navi"   (click)="moveToRow('R','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='R'?'change':'dummy'">R</span></p> 
+						<p class="text-navi"   (click)="moveToRow('S','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='S'?'change':'dummy'">S</span></p> 
+						<p class="text-navi"   (click)="moveToRow('T','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='T'?'change':'dummy'">T</span></p> 
+						<p class="text-navi"   (click)="moveToRow('U','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='U'?'change':'dummy'">U</span></p> 
+						<p class="text-navi"   (click)="moveToRow('V','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='V'?'change':'dummy'">V</span></p> 
+						<p class="text-navi"   (click)="moveToRow('W','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='W'?'change':'dummy'">W</span></p> 
+						<p class="text-navi"   (click)="moveToRow('X','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='X'?'change':'dummy'">X</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Y','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='Y'?'change':'dummy'">Y</span></p> 
+						<p class="text-navi"   (click)="moveToRow('Z','WinSalemTable')" ><span [ngClass]="isChangeColorWinsalem && selectedCharacter=='Z'?'change':'dummy'">Z</span></p> 
+					</div>
+					
+						<div  class="scrollgrid-container mat-elevation-z8 runningSummerMatTables" >
+							<table mat-table [dataSource]="winstonSalemDataSource" id="WinSalemTable" class="MatTableClass">
+								  <!-- Checkbox Column -->
+								  <ng-container matColumnDef="select">
+									<th mat-header-cell fxFlex="10%" *matHeaderCellDef>
+									  <mat-checkbox  class="headerCheckBox" (change)="$event ? masterToggleInPosted() : null"
+													[checked]="winstonSalemSelection.hasValue() && isAllSelectedInPosted()"
+													[indeterminate]="winstonSalemSelection.hasValue() && !isAllSelectedInPosted()"
+													[aria-label]="checkboxLabelInPosted()">
+									  </mat-checkbox>
+									</th>
+									<td mat-cell fxFlex="10%" fxLayoutAlign="start center" *matCellDef="let row" >
+									  <mat-checkbox  [disabled]="disabledRow(row)"  (click)="$event.stopPropagation()"
+													(change)="$event ? winstonSalemSelection.toggle(row) : null"
+													[checked]="winstonSalemSelection.isSelected(row)"
+													[aria-label]="checkboxLabelInPosted(row)">
+									  </mat-checkbox>
+									</td>
+								  </ng-container>
+
+								 <!-- Position Column -->
+								  <ng-container  matColumnDef="position">
+									<th mat-header-cell *matHeaderCellDef [style.display]="'none'"> No. </th>
+									<td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.position}} </td>
+								  </ng-container>
+
+								  <!-- app Name Column -->
+								  <ng-container matColumnDef="appName">
+									<th mat-header-cell  fxFlex="45%" fxFlex.lg="39%" fxLayoutAlign="start center" *matHeaderCellDef>Application Name </th>
+									<td mat-cell  fxFlex="45%"  fxFlex.lg="39%" class="columnTextElipsis" style="padding:15.5px 0px;" [matTooltip]="element.appName" *matCellDef="let element"> {{element.appName}} </td>
+								  </ng-container>
+
+								  <!-- code Column -->
+								  <ng-container matColumnDef="appCode">
+									<th mat-header-cell fxFlex.lg="15%" fxFlex="9%" fxLayoutAlign="start center" *matHeaderCellDef> Application<br/> Code </th>
+									<td mat-cell  fxFlex="9%" fxFlex.lg="15%" fxLayoutAlign="start center" *matCellDef="let element"> {{element.appCode}} </td>
+								  </ng-container>
+
+								  <!-- hold Column -->
+								  <ng-container  matColumnDef="hold">
+									<th mat-header-cell   fxFlex="9%" fxLayoutAlign="center center" *matHeaderCellDef> Hold </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="center center" *matCellDef="let element"> {{element.hold == 'Y' ? element.hold : ''}} </td>
+								  </ng-container>
+								  
+								  <!-- insert Column -->
+								  <ng-container matColumnDef="insert">
+									<th mat-header-cell  fxLayoutAlign="center center" fxFlex="9%" *matHeaderCellDef> Insert </th>
+									<td mat-cell   fxFlex="9%"  fxLayoutAlign="center center" *matCellDef="let element"> 
+										{{element.inserts == 'Y' ? element.inserts : ''}} 
+									<!-- 	{{getInsertsFlag(element)}}  -->
+									</td>
+								  </ng-container>
+								  <!-- auto Column -->
+								  <ng-container matColumnDef="auto">
+									<th mat-header-cell   fxFlex="9%" fxLayoutAlign="center center" *matHeaderCellDef> Auto </th>
+									<td mat-cell   fxFlex="9%" fxLayoutAlign="center center" *matCellDef="let element"> {{element.auto == 'Y' ? element.auto : ''}} </td>
+								  </ng-container>
+								  <!-- detailed Column -->
+								  <ng-container matColumnDef="detailed">
+									<th mat-header-cell   fxFlex="9%"  *matHeaderCellDef fxLayoutAlign="start center">Details</th>
+									<td mat-cell   fxFlex="9%"  *matCellDef="let element" fxLayoutAlign="start center" >
+										 <span [ngClass]="showLink(element)=='View'?'viewAddlDetailsLnk':'dummyClass'"
+										   (click)="openInsertsModal(element, 2)">{{showLink(element) == 'View' ? showLink(element) : ''}}</span></td>
+								  </ng-container>
+							
+
+								
+
+								  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;" ></tr>
+								  <tr mat-row *matRowDef="let row; columns: displayedColumns;" >
+								  <!-- (click)="winstonSalemSelection.toggle(row)" -->
+								  </tr>
+								</table>
+							</div>
+					</mat-card-content>
+				</mat-card>
+				
+			</div >
+			<br>
+			
+				
+				<div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center"> 
+					<div >
+						<button type="button" class="filterButtonClass" mat-raised-button color="primary" (click)="SaveChanges()" *ngIf="postedFlag" [disabled]="!(hasScreenUpdatePrivilege)"  > <mat-icon>save</mat-icon> Save</button>         
+					</div>
+					<div> 
+						<button type="button" class="filterButtonClass" mat-raised-button  *ngIf="postedFlag" (click)="resetButtonClickEvent()" > <mat-icon>clear_all</mat-icon> Reset</button>
+					</div>
+				</div>
+				
+				<div fxLayout="column" *ngIf="hideSpinner" class="spinnerDiv" >
+					<div class="loader"></div>
+					<p class="spinnerLoadingText">{{spinnerText}}</p>
+				</div>
+			
+		</mat-card-content>  
+	</mat-card>
+</div>

@@ -1,0 +1,47 @@
+﻿<mat-card  fxFlex="30" fxFlexOffset="35"
+	style="margin-top:10%">
+	<mat-card-header fxLayoutAlign="center">
+		<p>Login</p>
+	</mat-card-header>
+	<mat-card-content>
+		<form [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px"
+			(ngSubmit)="onSubmit()">
+
+			<mat-form-field class="demo-full-width" style="width: 80%;">
+				<span class="icons_Login" matPrefix>
+					<mat-icon>person</mat-icon>&nbsp;&nbsp;
+				</span>
+				<input matInput #UserId type="text" matTooltip="Username" placeholder="Username"
+					formControlName="username" class="form-control"
+					[ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+			</mat-form-field>
+			<div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+				<div *ngIf="f.username.errors.required">Username is required</div>
+			</div>
+		<!-- 	<div *ngIf="inValidUser" class="invalid-feedback">
+				<div *ngIf="inValidUser">User does not have access.</div>
+			</div> -->
+
+			
+			<!-- <mat-form-field class="demo-full-width" style="width: 80%;">
+				<span class="icons_Login" matPrefix>
+					<mat-icon>vpn_key</mat-icon>&nbsp;&nbsp;
+				</span>
+				<input matInput matTooltip="Password" placeholder="Password" type="password" formControlName="password"
+					class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+			</mat-form-field> -->
+			<!-- <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+				<div *ngIf="f.password.errors.required">Password is required</div>
+			</div> -->
+			<button [disabled]="loading" mat-raised-button color="primary">Login</button>
+
+
+		 	<alert class="invalid-feedback"></alert> 
+		</form>
+	</mat-card-content>
+
+</mat-card>
+<div *ngIf="hideSpinner" class="spinnerDiv">
+	<div class="loader"></div>
+	<p class="spinnerLoadingText">{{spinnerText}}</p>
+</div>

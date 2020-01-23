@@ -1,0 +1,64 @@
+.mat-dialog-container {
+	overflow:auto;
+}
+.mat-card{
+	width:60%;
+}
+.mat-icon {
+	font-size:17px;
+	padding-top:3px;
+}
+.NumberInputAlignment{
+	text-align:right !important;
+	
+}
+
+.mat-dialog-title
+{
+     background-color: #256275;
+	 color : white;
+	 font-size: 15px;
+	  text-align: center;
+	  size: 200px;
+	   margin: 0px;
+}
+
+.ouncesHeadings td:nth-child(1){
+	font-weight:bold;
+	text-align: right
+}
+.ouncesHeadings tr{
+	    line-height: 20px;
+	
+}
+.ouncesHeadings td:nth-child(2){
+	text-align: left
+}
+
+
+label{
+	margin-top: 21px;
+	text-align:right;
+}
+
+
+@media only screen and (max-width: 600px) {
+	
+	.cancelButton{
+		margin-bottom:10px;
+	}
+	/*to set the buttons i.e save ,cancel ,reset in proper alignment*/
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+/*to set the buttons i.e save ,cancel ,reset in proper alignment*/
+@media only screen and (min-width: 601px) {
+	.mat-dialog-actions .mat-button+.mat-button, .mat-dialog-actions .mat-button+.mat-raised-button, .mat-dialog-actions .mat-raised-button+.mat-button, .mat-dialog-actions .mat-raised-button+.mat-raised-button {
+		margin-left:0px;
+	}
+}
+.ouncesDialogWidth{
+	width: 420px;
+}
+

@@ -1,0 +1,56 @@
+<!-- <app-layout> -->
+<!-- <app-header (sidenavToggle)="sidenav.toggle()"></app-header> -->
+  <!-- <mat-sidenav-container> -->
+    <!-- <mat-sidenav #sidenav role="navigation">	   -->
+       <!-- <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>	   -->
+    <!-- </mat-sidenav> -->
+	
+    <!-- <mat-sidenav-content> -->
+	<!-- <!-- <app-header (sidenavToggle)="sidenav.toggle()"></app-header>--> 
+      <!-- <!--in here all the content must reside. We will add a navigation header as well-->
+      <!-- <main> -->
+	    <!-- <!-- the follow alert line is used in code adopted from   http://jasonwatmore.com/post/2018/10/29/angular-7-user-registration-and-login-example-tutorial#alert-service-ts -->
+	      <!-- Remove  as we dont need such alert types  at higher level components, moved to login.html -->
+		<!-- <alert></alert> -->
+		<!-- -->		
+		
+		
+        <!-- <router-outlet></router-outlet> -->
+      <!-- </main> -->
+    <!-- </mat-sidenav-content> -->
+	
+  <!-- </mat-sidenav-container> -->
+  
+<!-- </app-layout> -->
+
+<!-- <!-- -->
+<!-- <p>   -->
+  <!-- <app-employee></app-employee>   -->
+<!-- </p> -->
+<!-- -->
+
+
+<app-layout>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav role="navigation">	  
+        <app-sidenav-list  *ngIf="isSideMenuLoaded || isReloadMenu" [isSideNavOnLoad]="isSideMenuLoaded" (sidenavClose)="sidenav.close()"  (isSideNavflagChange)="onSideNavflagChange($event)" #sidenavListComponent></app-sidenav-list>	  
+           
+    </mat-sidenav>
+	
+    <mat-sidenav-content>
+   <!-- <app-header (sidenavToggle)="sidenav.toggle()" ></app-header> -->
+   
+   <app-header (sidenavToggle)="sidenav.toggle()" (click)="onSidenavMenusLoad()"></app-header>
+
+      <!--in here all the content must reside. We will add a navigation header as well-->
+      <main style="margin-top:65px;">
+		
+		
+        <router-outlet></router-outlet>
+      </main>
+      <app-footer *ngIf="isFooterActive" (checkUserLoggedIn)='checkUserDetails($event)'></app-footer>
+    </mat-sidenav-content>
+	
+  </mat-sidenav-container>
+  
+</app-layout>

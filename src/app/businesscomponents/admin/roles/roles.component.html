@@ -1,0 +1,201 @@
+<!--starting of head div -->
+<div>
+	<mat-card style="margin-top:16px;" class="matCardAlign">
+		<!--starting of mat-card-content-->
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="39px" style="margin-top: 15px;">
+				<!--starting of Role table search fields-->
+				<div fxFlex="60" fxFlex.md="46">
+					<div fxLayout="row" fxLayoutGap="15px" style="margin-left: 15px;">
+						<mat-form-field style="width:35%">
+							<mat-label>Search By</mat-label>
+							<mat-select disableOptionCentering [(ngModel)]="selectedFilterByRole"
+								(selectionChange)="checkFilterBySelected()" matTooltip="Select Search By">
+								<mat-option *ngFor="let filterValue of filterByRole" [value]="filterValue.id">
+									{{ filterValue.name }}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<mat-form-field style="width:55%"  class="searchText"><!--fxFlex="55" fxFlex.md="45"-->
+							<input matInput type="text" #filterText [(ngModel)]="searchText" placeholder="Search Text"
+								(keypress)="omit_special_char($event)"
+								(keydown.enter)="doFilter(selectedFilterByRole,searchText)"
+								matTooltip="Enter Search Text">
+						</mat-form-field>
+						<div>
+							<button type="button" class="filterButtonClass" mat-raised-button color="primary"
+								(click)="doFilter(selectedFilterByRole,searchText)">
+								<mat-icon>search</mat-icon> Search
+							</button>
+						</div>
+
+					</div>
+					<div class="scrollgrid-container mat-elevation-z8" style="margin-left: 15px;">
+
+						<table class="tbpointer" mat-table [dataSource]="dataSource" #rolesTable="matSort" matSort
+							matSortActive="roleName" matSortDirection="asc" [matSortDisableClear]="true"
+							style="width:100%">
+
+							<ng-container matColumnDef="roleName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="30%"
+									fxLayoutAlign="start center">Role Name</th>
+								<td mat-cell *matCellDef="let roles" fxFlex="30%" style="padding-top: 15px;" 
+									class="columnTextElipsis" [matTooltip]="roles.roleName">{{roles.roleName}}</td>
+							</ng-container>
+							<ng-container matColumnDef="roleDescriprion">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header fxLayoutAlign="start center"
+									fxFlex="60%">Comments</th>
+								<td mat-cell *matCellDef="let roles" fxFlex="60%"  style="padding-top:15px"
+									class="columnTextElipsis" [matTooltip]="roles.roleDescriprion">{{roles.roleDescriprion}}
+								</td>
+							</ng-container>
+
+							<ng-container matColumnDef="roleActive">
+								<th mat-header-cell *matHeaderCellDef style="text-align:center;" fxLayoutAlign="center center"
+									fxFlex="10%">Active</th>
+
+								<td mat-cell *matCellDef="let roles" fxLayoutAlign="center center"
+									fxFlex="10%">
+
+									<mat-icon [ngStyle]="{'color':roles.roleActive? 'green':'orange'}">
+										<b>{{roles.roleActive ? 'check':'close'}}</b></mat-icon>
+								</td>
+							</ng-container>
+							<ng-container matColumnDef="delete">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center"
+									>
+									Delete </th>
+								<td mat-cell *matCellDef="let roles" fxLayoutAlign="center center">
+									<button *ngIf="hasScreenDeletePriviledge" mat-icon-button color="warn"
+									(click)= "$event.stopPropagation()" (click)="deleteRoles(roles.roleId)">
+										<mat-icon class="mat-18">delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<!-- Delete / Update buttons End -->
+							<tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></tr>
+							<tr mat-row *matRowDef="let roles; columns: tableColumns" (click)="selectRow(roles)"
+								[style.background]="highlightedRows.indexOf(roles) != -1 ? '#eaf4f9' : ''"> </tr>
+
+						</table>
+						<div class="notFoundData" [hidden]="isTableHasData">
+							No data found
+						</div>
+					</div>
+				</div>
+				<!--ending of Role table search fields-->
+				<div fxFlex="60" fxFlex.md="52" fxFlex.sm="100" fxFlex.xs="100">
+					<form [formGroup]="RolesForm" (ngSubmit)="onFormSubmit()" #f="ngForm" autocomplete="off" novalidate>
+						<mat-card style="margin-top:0px">
+							<mat-card-header>
+								<p style="margin-top:5px;">Role Privileges</p>
+							</mat-card-header>
+							<mat-card-content>
+								<div fxLayoutGap="8px">
+									<mat-form-field fxFlex="28" fxFlex.xs="100">
+										<input matInput #roleName formControlName="RoleName"
+											matTooltip="Enter Role Name" matInput placeholder="Role Name" maxlength="50"
+											required [errorStateMatcher]="errorMatcher">
+										<mat-error *ngIf="hasError('RoleName', 'required')">Role Name is required.
+										</mat-error>
+										<mat-error *ngIf="hasError('RoleName', 'space')">{{spaceMessage}}
+										</mat-error>
+									</mat-form-field>
+
+									<mat-form-field fxFlex="60" fxFlex.md="54" fxFlex.xs="100">
+										<textarea matInput #rolecomments formControlName="roleDescriprion"
+											placeholder="Comments" matTooltip="Enter Comments" rows="1"  style="resize:none" maxlength="100"
+											required [errorStateMatcher]="errorMatcher"></textarea>
+										<mat-error *ngIf="hasError('roleDescriprion', 'required')">Comments is required.
+										</mat-error>
+										<mat-error *ngIf="hasError('roleDescriprion', 'space')">{{spaceMessage}}
+										</mat-error>
+									</mat-form-field>
+									<div fxFlex="12" fxFlex.md="12" fxLayout="column">
+										<mat-checkbox style="text-align:left" matTooltip="Select Active" checked="true"
+											formControlName="RoleActive" [disabled]="isInUse">
+											Active</mat-checkbox>
+										<mat-error *ngIf="isInUse" style="padding-left:5px;font-size:11px;">Role in use.
+										</mat-error>
+									</div>
+								</div>
+
+								<!--starting of RolePrivileges columns-->
+								<div class="scrollgrid-container-privilages mat-elevation-z8" fxLayout="column"
+									style="overflow-y: auto;">
+									<table mat-table matSort matSortActive="screenName" #previlageTable="matSort"
+										[dataSource]="previlegesdataSource" matSortDirection="asc"
+										[matSortDisableClear]="true">
+										<ng-container matColumnDef="screenName">
+											<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="32"
+											fxLayoutAlign="start center"> Screen Name</th>
+											<td mat-cell *matCellDef="let element" fxFlex="32"
+											class="columnTextElipsis" [matTooltip]="element.screenName"  style=" padding-top: 10px;"> {{element.screenName}}</td>
+										</ng-container>
+										<ng-container matColumnDef="read">
+											<th mat-header-cell *matHeaderCellDef fxFlex="17" fxLayoutAlign="center center"
+												style="text-align: center;"> Read </th>
+											<td mat-cell *matCellDef="let element" fxFlex="17"
+												style="text-align: center; padding-top: 10px;">
+												<mat-checkbox [disabled]="element.rDisable"
+													(change)="onChange($event, 1, element)"
+													[checked]="element.rDisable?false:element.read"></mat-checkbox>
+
+											</td>
+										</ng-container>
+										<ng-container matColumnDef="insert">
+											<th mat-header-cell *matHeaderCellDef fxFlex="17"  fxLayoutAlign="center center"
+												style="text-align: center;"> Insert </th>
+											<td mat-cell *matCellDef="let element" fxFlex="17"
+												style="text-align: center; padding-top: 10px;">
+												<mat-checkbox [disabled]="element.iDisable"
+													(change)="onChange($event, 2, element)"
+													[checked]="element.iDisable?false:element.insert"></mat-checkbox>
+											</td>
+										</ng-container>
+										<ng-container matColumnDef="update">
+											<th mat-header-cell *matHeaderCellDef fxFlex="17"  fxLayoutAlign="center center"
+												style="text-align: center;"> Update </th>
+											<td mat-cell *matCellDef="let element" fxFlex="17"
+												style="text-align: center; padding-top: 10px;">
+												<mat-checkbox [disabled]="element.uDisable"
+													(change)="onChange($event, 3, element)"
+													[checked]="element.uDisable?false:element.update"></mat-checkbox>
+											</td>
+										</ng-container>
+										<ng-container matColumnDef="delete">
+											<th mat-header-cell *matHeaderCellDef fxFlex="17" fxLayoutAlign="center center"
+												style="text-align: center;"> Delete </th>
+											<td mat-cell *matCellDef="let element" fxFlex="17"
+												style="text-align: center; padding-top: 10px;">
+												<mat-checkbox [disabled]="element.dDisable"
+													(change)="onChange($event, 4, element)"
+													[checked]="element.dDisable?false:element.delete"></mat-checkbox>
+											</td>
+										</ng-container>
+										<tr mat-header-row *matHeaderRowDef="privilegestableColumns; sticky: true"></tr>
+										<tr mat-row *matRowDef="let element; columns: privilegestableColumns"> </tr>
+									</table>
+								</div>
+								<!--end of RolePrivileges columns-->
+								<div style="margin-top:10px" fxLayout.lg="row" fxLayoutAlign="center" fxLayout.md="row"
+									fxLayout.xs="column" fxLayoutGap="15px">
+									<button type="submit" [disabled]="!(RolesForm.valid && isAllowSave) || isAdmin"
+										mat-raised-button color="primary" class="filterButtonClass">
+										<mat-icon>save</mat-icon>&nbsp; Save
+									</button>
+
+									<button type="button" mat-raised-button class="billingButtons"
+										(click)="resetForm();" class="filterButtonClass">
+										<mat-icon>clear_all</mat-icon> Reset
+									</button>
+								</div>
+							</mat-card-content>
+						</mat-card>
+					</form>
+				</div>
+			</div>
+		</mat-card-content>
+		<!--ending of mat-card-content-->
+	</mat-card>
+</div>
+<!--ending of head div -->

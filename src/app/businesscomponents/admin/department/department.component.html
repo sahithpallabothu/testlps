@@ -1,0 +1,140 @@
+<div>
+	<!--Main mat card start-->
+	<mat-card class="matCardAlign">
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" style="margin-top:15px" fxLayoutGap="25px">
+				<div fxFlex="50" fxLayout="column">
+					<!--Table filter options row start-->
+					<div fxLayout="row" fxLayoutGap="15px" fxLayout.sm="row" fxLayout.md="row">
+						<mat-form-field fxFlex="30" fxFlexOffset="3px">
+							<mat-label>Search By</mat-label>
+							<mat-select disableOptionCentering [(ngModel)]="selectedoption"
+								(selectionChange)="checkFilterBySelected()" matTooltip="Select Search By">
+								<mat-option *ngFor="let option of searchOptions" [value]="option.id">{{ option.name }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<mat-form-field fxFlex="55" fxFlex.md="45%" fxFlex.xs="30%">
+							<input matInput type="text" #filterText [(ngModel)]="searchText" placeholder="Search Text"
+								(keydown.enter)="doFilter(selectedoption,searchText)"
+								(keypress)="omit_special_char($event)" matTooltip="Enter Search Text">
+						</mat-form-field>
+						<div>
+							<button type="submit" mat-raised-button color="primary" class="filterButtonClass"
+								style="text-align:center;margin-top: 5px;"
+								(click)="doFilter(selectedoption,searchText)">
+								<mat-icon>search</mat-icon>Search
+							</button>&nbsp;
+						</div>
+					</div>
+					<!--Table filter options row end-->
+
+					<!--Table start-->
+					<div class="scrollgrid-container mat-elevation-z8">
+						<table mat-table [dataSource]="departmentDataSource" matSort matSortActive="name"
+							matSortDirection="asc" [matSortDisableClear]="true">
+							<ng-container matColumnDef="name">
+								<th mat-header-cell fxFlex="35%" fxLayoutAlign="start center" *matHeaderCellDef
+									mat-sort-header>Department</th>
+								<td mat-cell fxFlex="35%" *matCellDef="let row"
+								style="text-align:left;padding-top: 10px;" class="columnTextElipsis"
+									[matTooltip]="row.name">{{row.name}}</td>
+							</ng-container>
+							<ng-container matColumnDef="description">
+								<th mat-header-cell fxFlex="55%" fxLayoutAlign="start center" *matHeaderCellDef
+									mat-sort-header>Description</th>
+								<td mat-cell fxFlex="55%" *matCellDef="let row"
+								  style="text-align:left;padding-top: 10px;" class="columnTextElipsis"
+									[matTooltip]="row.description">{{row.description}}</td>
+							</ng-container>
+							<ng-container matColumnDef="active">
+								<th mat-header-cell *matHeaderCellDef  fxLayoutAlign="center center"
+									fxFlex="10%">Active</th>
+
+								<td mat-cell *matCellDef="let row" fxLayoutAlign="center center"
+									fxFlex="10%">
+
+									<mat-icon [ngStyle]="{'color':row.active? 'green':'orange'}">
+										<b>{{row.active ? 'check':'close'}}</b></mat-icon>
+								</td>
+							</ng-container>
+							<ng-container matColumnDef="delete">
+								<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">Delete
+								</th>
+								<td mat-cell *matCellDef="let row" fxLayoutAlign="center center">
+									<button *ngIf="hasScreenDeletePriviledge" type="button" mat-icon-button color="warn"
+									(click)= "$event.stopPropagation()" (click)="deleteDepartment(row.deptID)" >
+										<mat-icon class="mat-18">delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="tableColumns;sticky:true"></tr>
+							<tr mat-row (click)="selectRow(row)" *matRowDef="let row; columns: tableColumns"
+								[style.background]="highlightedRows.indexOf(row) != -1 ? '#eaf4f9' : ''"></tr>
+						</table>
+						<div class="notFoundData" [hidden]="isTableHasData">
+							No data found
+						</div>
+
+					</div>
+					<!--Table end-->
+				</div>
+
+				<!--right side form group start-->
+				<div fxLayout="column" fxFlex="35"  fxLayout.sm="column" fxLayout.xs="column">
+					<form [formGroup]="departmentForm" #f="ngForm">
+						<mat-card style="margin-top:56px;height:auto">
+							<mat-card-header>
+								<p>Department Information</p>
+							</mat-card-header>
+							<mat-card-content>
+								<div fxLayout="column" style="margin-left:4px;margin-top:10px" fxLayoutGap="">
+									<mat-form-field class="deptName">
+										<input matInput formControlName="Name" #departmentName
+											matTooltip="Enter Department" type="text" matInput placeholder="Department"
+											maxlength="50" required (input)="isDeptChange()" autofocus
+											[errorStateMatcher]="errorMatcher">
+										<mat-error *ngIf="hasError('Name', 'required')">Department is required.
+										</mat-error>
+										<mat-error *ngIf="hasError('Name', 'space')">{{SpaceMessage}}</mat-error>
+									</mat-form-field>
+									<mat-form-field class="descriptionControls">
+										<input matInput formControlName="description" matTooltip="Enter Description"
+											type="text" matInput placeholder="Description" required maxlength="50"
+											(input)="isChange()" [errorStateMatcher]="errorMatcher">
+										<mat-error *ngIf="hasError('description', 'required')">Description is required.
+										</mat-error>
+										<mat-error *ngIf="hasError('description', 'space')">{{SpaceMessage}}</mat-error>
+									</mat-form-field>
+
+
+									<mat-checkbox fxLayoutAlign="left" checked="true" style="float: left"
+										formControlName="active" matTooltip="Select Active" (input)="isChange()">Active
+									</mat-checkbox>
+									<mat-error *ngIf="isInUse" style="font-size:11px;">Department in use.</mat-error>
+
+
+
+									<div fxLayout="row" fxLayoutAlign="center">
+										<div fxLayout="row" fxLayoutGap="10px">
+											<button mat-raised-button  class="mat-primary" class="filterButtonClass"
+												color="primary" [disabled]="!(departmentForm.valid && isAllowSave)"
+												(click)="onFormSubmit()" style="margin-top:1px;">
+												<mat-icon>save</mat-icon> Save
+											</button>
+											<button mat-raised-button type="button"  class="filterButtonClass" (click)="resetForm()">
+												<mat-icon>clear_all</mat-icon> Reset
+											</button>
+										</div>
+									</div>
+								</div>
+							</mat-card-content>
+						</mat-card>
+					</form>
+				</div>
+				<!--right side form group end-->
+			</div>
+		</mat-card-content>
+	</mat-card>
+	<!--Main mat card end-->
+</div>

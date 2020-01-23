@@ -1,0 +1,86 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+
+.mat-dialog-title{
+    align-content: left;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 5px;
+    margin: 0px;
+}
+
+.scrollgrid-container {
+    height: 200px;
+	width:100%;
+    overflow: auto;
+}
+
+.mat-header-row {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: inherit;
+}
+
+.inputNumberClass{
+    text-align:right;
+}
+
+.mat-row:hover {
+    cursor:pointer;
+}
+
+.mat-card-header-text{
+	margin: 0px 12px;
+}
+
+
+/deep/ .suppTable tr.mat-footer-row, tr.mat-row {
+    height: 39px;
+	padding: 2px;
+}
+
+/deep/ tr.mat-header-row {
+    /* height: 40px !important; */
+	border-radius: 5px;
+}
+
+
+
+/* new changes */
+
+.billingRateMatCard{
+    height:auto; 
+    overflow-y: auto;
+}
+
+@media only screen and (max-width:1920px){
+    .billingRateMatCard{
+        height: 54vh !important;
+        overflow-y: auto;
+    }
+}
+
+/* customer Name text overlap use elipsis */
+.columnTextElipsisName
+{	
+    /* width: 100px; */
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@media only screen and (max-width:1152px){
+   /*  .ConsolidationAccHeader{
+        padding-right:49px !important;
+    } */
+}
+
+
+

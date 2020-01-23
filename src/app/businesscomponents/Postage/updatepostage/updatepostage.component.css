@@ -1,0 +1,129 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+
+.notFoundData
+{
+	color:red;
+	margin-top:10%;
+	text-align:center;
+	font-size:25px;
+}
+
+ .ouncesButton
+{
+
+ align-content: center;
+ font-size: 15px;
+} 
+  
+.mat-expansion-panel-header
+{
+	background: #eaecf5;
+}
+  .scrollgrid-container {
+    height: 200px;
+    overflow: auto;	
+  }
+ .mat-row:hover {
+  cursor:pointer;
+}
+
+
+.mat-card-header .mat-card-title{
+	font-size:14px;
+	padding-top: 3px;
+}
+
+/deep/ .applicationContentsDiv{
+	height:auto;
+	margin-top:0px !important;
+}
+
+
+.pickerAlignment{
+margin-left:-22px !important; 
+}
+
+label{
+	margin-top:21px;
+}
+/deep/ .postageMatCard{
+	min-width:100% !important;
+}
+
+.NumberInputAlignment{
+	text-align:right !important;
+	
+}
+
+
+@media only screen and (max-width: 1414px) and (min-width: 1260px) {
+	.largeScreenPaddingClass{
+		padding:0px 5px 10px 5px !important;
+	}
+
+}
+@media only screen and (max-width: 600px) {
+   
+
+	.mat-expansion-panel-header-description, .mat-expansion-panel-header-title{
+		font-size:11px;
+	}
+   .scrollgrid-container {
+     height: 200px;
+	 max-width:100%;
+     overflow: auto;	
+  }
+}
+
+/*unorder list css for jobs list*/
+
+.mat-list-base .mat-list-item, .mat-list-base .mat-list-option{
+  height: 30px !important;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  
+}
+.mat-list-base .mat-list-item:hover, .mat-list-base .mat-list-option:hover{
+  background: #ccf2ff;
+  cursor:pointer;
+ 
+}
+
+.mat-list-base {
+ height:124px;
+ overflow-y:hidden;
+ padding-top:0px;
+ box-shadow: 3px 2px 3px rgba(0,0,0,0.2);
+ width: 25.7vw;
+}
+
+
+/deep/ .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+ padding:0px 5px !important;
+}
+
+/*unorder list css for jobs list end */
+
+@media only screen and (max-width: 1153px)  {
+	.controls1152WidthGrid{
+		width: 197px !important;
+	}
+}
+@media only screen and (max-width: 1153px)  {
+	.controls1152Width{
+		width: 313px !important;
+	}
+}
+@media only screen and (max-width: 1153px)  {
+	.customerControls1152Width{
+		width: 417px !important;
+	}
+}
+.feeDescAlgnment{
+	padding-top: 15px;
+}
+@media only screen and (max-width: 1153px)  {
+	.feeDescAlgnment{
+		padding-top: 10px;
+	}
+}

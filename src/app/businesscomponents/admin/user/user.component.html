@@ -1,0 +1,283 @@
+<!--starting of head div -->
+<div>
+	<mat-card class="matCardAlign">
+		<!--starting of mat-card-content-->
+		<mat-card-content>
+			<div fxLayout="row" fxLayoutGap="15px" fxLayout.sm="column" fxLayout.xs="column" style="margin-top:15px">
+				<div fxFlex="40" fxLayout="column">
+					<!--starting of user table search fields-->
+					<div fxLayout="row" fxLayoutGap="15px" fxLayout.sm="row" fxLayout.md="row">
+						<mat-form-field style="width:36%" fxFlex.md="30%" fxFlex.xs="30%" fxFlexOffset="3px">
+							<mat-label>Search By</mat-label>
+							<mat-select disableOptionCentering [(ngModel)]="selectedoption"
+								(selectionChange)="checkFilterBySelected()" matTooltip="Select Search By">
+								<mat-option *ngFor="let option of searchOptions" [value]="option.id">{{ option.name }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<mat-form-field style="width:44%" class="searchtext" fxFlex.md="37%" fxFlex.sm="32%"
+							fxFlex.xs="30%">
+							<input matInput type="text" #filterText [(ngModel)]="searchText"
+								(keydown.enter)="doFilter(selectedoption,searchText)" placeholder="Search Text"
+								matTooltip="Enter Search Text" (keypress)="omit_special_char($event)">
+						</mat-form-field>
+						<div>
+							<button type="submit" mat-raised-button color="primary" class="filterButtonClass"
+								style="text-align:center;margin-top: 5px;"
+								(click)="doFilter(selectedoption,searchText)">
+								<mat-icon>search</mat-icon>Search
+							</button>&nbsp;
+						</div>
+					</div>
+					<!--ending of user table search fields-->
+
+					<!--starting of user table columns-->
+					<div class="scrollgrid-container mat-elevation-z8 userstable">
+						<table mat-table [dataSource]="dataSource" matSort matSortActive="userName"
+							matSortDirection="asc" [matSortDisableClear]="true">
+							<ng-container matColumnDef="userName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="40"
+									fxLayoutAlign="start center">User Name</th>
+								<td mat-cell *matCellDef="let user" class="columnTextElipsis"
+									[matTooltip]="user.userName" fxFlex="40" style="padding-top: 12px;" >
+									{{user.userName}}</td>
+							</ng-container>
+
+							<ng-container matColumnDef="name">
+								<th mat-header-cell *matHeaderCellDef fxFlex="40" fxLayoutAlign="start center">Name</th>
+								<td mat-cell class="columnTextElipsis" [matTooltip]="user.firstName"
+									*matCellDef="let user" fxFlex="40" style="padding-top: 12px;">{{user.firstName}}
+									{{user.lastName}}</td>
+							</ng-container>
+
+
+							<ng-container matColumnDef="isActive">
+								<th mat-header-cell *matHeaderCellDef fxFlex="20" fxLayoutAlign="center center">Active
+								</th>
+								<td mat-cell *matCellDef="let user" fxLayoutAlign="center center"
+									fxFlex="20" [ngStyle]="{'color':user.isActive? 'green':'orange'}">
+									<mat-icon class="mat-18"><b>{{user.isActive ? 'done' : 'clear'}}</b></mat-icon>
+								</td>
+							</ng-container>
+
+							<tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></tr>
+							<tr mat-row (click)="selectRow(user)" *matRowDef="let user; columns: tableColumns"
+								[style.background]="highlightedRows.indexOf(user) != -1 ? '#eaf4f9' : ''"></tr>
+						</table>
+						<div class="notFoundData" [hidden]="isTableHasData">
+							No data found
+						</div>
+					</div>
+					<!--ending of user table columns-->
+				</div>
+
+				<div fxFlex="60" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" style="margin-left:15px;">
+					<mat-card style="margin-top:5px;height:500px;" class="userInfoMatCard">
+						<mat-card-header>
+							<p style="margin-top:5px;">User Information</p>
+						</mat-card-header>
+						<mat-card-content>
+							<!--starting of user form fields -->
+						<div fxLayout="row">
+							<div fxFlex="60" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column"
+								style="margin-left:15px;padding-right: 8px;">
+								<div *ngIf="isAdmin" style="margin-top:-13px;">
+									<p *ngIf="isAdmin" style="font-size:11px;color:red">Changes not allowed for this
+										User.</p>
+								</div>
+								<form [formGroup]="userForm"
+									[ngStyle]="{'margin-top':isAdmin === true ? '-19px' : '0px' }" #f="ngForm"
+									(ngSubmit)="onFormSubmit()">
+									<mat-card style="height:350px;" class="userMatCard">
+										<mat-card-header>
+											<p style="margin-top:5px;">User </p>
+										</mat-card-header>
+										<mat-card-content>
+											<div fxLayout="row" fxLayoutGap="15px">
+												<mat-form-field class="control-space-row">
+													<input matInput formControlName="userName" #userName maxlength="50"
+														matTooltip="Enter User Name" matInput placeholder="User Name"
+														(change)="userNameChanged()" (blur)="ValidateUserInDomain()"
+														[errorStateMatcher]="errorMatcher" required>
+													<mat-error *ngIf="hasError('userName', 'required')">User Name is
+														required.</mat-error>
+													<!-- <mat-error *ngIf="hasError('userName', 'maxlength')">User Name
+																cannot have more than 50 characters.</mat-error> -->
+													<mat-error *ngIf="hasError('userName', 'pattern')">User Name should
+														be characters.</mat-error>
+													<mat-error *ngIf="hasError('userName', 'space')">{{SpaceMessage}}
+													</mat-error>
+												</mat-form-field>
+												<mat-form-field class="control-space-row">
+													<input matInput disabled value="{{domainName}}"
+														matTooltip="Enter Domain Name" matInput
+														placeholder="Domain Name" />
+
+												</mat-form-field>
+												<mat-form-field class="control-space-row">
+													<mat-label>Department</mat-label>
+													<mat-select disableOptionCentering formControlName="departmentId"
+														(selectionChange)="isChangeDepartment($event)"
+														matTooltip="Select Department" required
+														[errorStateMatcher]="errorMatcher">
+														<mat-option [value]="">(Select)</mat-option>
+														<mat-option *ngFor="let dept of departmentArray"
+															[value]="dept.deptID">{{dept.name}}</mat-option>
+													</mat-select>
+													<mat-error *ngIf="hasError('departmentId', 'required')">Department
+														is
+														required.</mat-error>
+													<mat-error *ngIf="hasError('departmentId', 'space')">
+														{{SpaceMessage}}</mat-error>
+												</mat-form-field>
+											</div>
+											<div fxLayout="row" fxLayoutGap="15px">
+												<mat-form-field class="control-space-fname">
+													<input matInput #firstName formControlName="firstName"
+														maxlength="50" matTooltip="Enter First Name" matInput
+														placeholder="First Name" (input)="isChange()"
+														(keypress)="allowAlphabetsOnly($event)" required
+														[errorStateMatcher]="errorMatcher">
+													<mat-error *ngIf="hasError('firstName', 'required')">First Name is
+														required.</mat-error>
+													<mat-error *ngIf="hasError('firstName', 'space')">{{SpaceMessage}}
+													</mat-error>
+												</mat-form-field>
+
+												<mat-form-field class="control-space-lname">
+													<input matInput formControlName="lastName" maxlength="50"
+														matTooltip="Enter Last Name" matInput placeholder="Last Name"
+														(keypress)="allowAlphabetsOnly($event)" (input)="isChange()"
+														required [errorStateMatcher]="errorMatcher">
+													<mat-error *ngIf="hasError('lastName', 'required')">Last Name is
+														required.</mat-error>
+													<mat-error *ngIf="hasError('lastName', 'space')">{{SpaceMessage}}
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+
+											<div fxLayout="row" fxLayoutGap="15px">
+												<mat-form-field style="width:66%">
+													<input matInput formControlName="emailAddress" (input)="isChange()"
+														(keydown)="spaceNotAllowed($event)" matTooltip="Enter Email"
+														maxlength="100" matInput placeholder="Email" required
+														[errorStateMatcher]="errorMatcher">
+													<mat-error *ngIf="hasError('emailAddress', 'required')">Email is
+														required.
+													</mat-error>
+													<mat-error *ngIf="hasError('emailAddress', 'pattern')">Please enter
+														valid
+														Email.</mat-error>
+												</mat-form-field>
+												<mat-form-field style="width:28%;	margin-right:0px !important;">
+													<input matInput formControlName="extension" (input)="isChange()"
+														matTooltip="Enter Extension" Numerics numericType="number"
+														matInput placeholder="Extension" maxlength="4"
+														[errorStateMatcher]="errorMatcher">
+												</mat-form-field>
+											</div>
+
+											<div fxLayout="row" fxLayoutGap="15px">
+												<mat-form-field class="inputContactNumberControls">
+													<input matInput formControlName="cellPhone"
+														matTooltip="Enter Cell Phone" matInput placeholder="Cell Phone"
+														[textMask]="{mask: telephonemask}" (input)="isChange()"
+														[errorStateMatcher]="errorMatcher">
+													<mat-error *ngIf="hasError('cellPhone', 'InvalidTelephone')">Invalid
+														Cell Phone. </mat-error>
+												</mat-form-field>
+												<mat-form-field class="control-space">
+													<mat-label>Location</mat-label>
+													<mat-select disableOptionCentering formControlName="locationID"
+														(selectionChange)="isChangeLocation($event)"
+														matTooltip="Select Location" required
+														[errorStateMatcher]="errorMatcher">
+														<mat-option [value]="">(Select)</mat-option>
+														<mat-option *ngFor="let loc of locationArray"
+															[value]="loc.locationId">
+															{{loc.description}}</mat-option>
+													</mat-select>
+													<mat-error *ngIf="hasError('locationID', 'required')">Location is
+														required.</mat-error>
+													<mat-error *ngIf="hasError('locationID', 'space')">{{SpaceMessage}}
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+											<mat-checkbox formControlName="isActive" matTooltip="Select Active"
+												checked="true" (input)="isChange()">Active</mat-checkbox>
+
+										</mat-card-content>
+
+										
+									</mat-card>
+
+									<br>
+									<div fxLayout.lg="row" fxLayout.sm="row" fxLayout.md="row" fxLayout.xs="row"
+										fxLayoutGap="15px" style="padding-left: 225px;" class="btnAlign">
+										<button type="submit" mat-raised-button color="primary"
+											class="filterButtonClass"
+											[disabled]="!(userForm.valid && isAllowSave) || isAdmin">
+											<mat-icon>save</mat-icon> Save
+										</button>
+										<button type="button" (click)="resetData()" mat-raised-button
+											class="filterButtonClass">
+											<mat-icon>clear_all</mat-icon> Reset
+										</button>
+									</div>
+
+								</form>
+							</div>
+							<!--ending of user form fields -->
+
+							<!--starting of roles -->
+							<div fxFlex="40" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column">
+								<mat-card style="height:350px;overflow-y:auto;" class="roleMatCard">
+									<mat-card-header>
+										<p style="margin-top:5px;">Roles</p>
+									</mat-card-header>
+									<mat-card-content>
+										<div class="scrollgrid-container mat-elevation-z8 roleTable"
+											style="height:234px;overflow-x: hidden;">
+											<table #roleUITable mat-table [dataSource]="rolesdataSource"
+												class="roleTableMatCard">
+												<ng-container matColumnDef="roleName">
+													<td mat-cell *matCellDef="let oRole" style="width:180px"
+														class="columnTextElipsisUsers" [matTooltip]="oRole.roleName">
+														{{oRole.roleName}}</td>
+												</ng-container>
+												<ng-container matColumnDef="selected">
+													<td mat-cell *matCellDef="let oRole">
+														<mat-checkbox (change)="isRoleChange($event,oRole)"
+															[checked]="oRole.selected">
+														</mat-checkbox>
+													</td>
+												</ng-container>
+												<tr mat-row *matRowDef="let oRole; columns: roletabledisplayedColumns">
+												</tr>
+											</table>
+										</div><br>
+										<div fxLayoutAlign="center center">
+											<button type="submit" mat-raised-button color="primary" class="roleBtnWidth"
+												(click)="openRolesDialog()">
+												<mat-icon>add</mat-icon>Add Roles
+											</button>
+
+										</div>
+									</mat-card-content>
+
+								</mat-card>
+							</div>
+							<!--ending of roles -->
+						</div>
+						
+						</mat-card-content>
+					</mat-card>
+				</div>
+			</div>
+		</mat-card-content>
+		<!--ending of mat-card-content-->
+	</mat-card>
+</div>
+<!--ending of head div -->

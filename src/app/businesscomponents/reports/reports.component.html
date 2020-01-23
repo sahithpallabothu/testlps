@@ -1,0 +1,304 @@
+<div class="container">
+	<mat-card>
+		<mat-card-content [formGroup]="reportsForm">
+        <div style="display: inline;flex-direction: row;" fxLayout.sm="row" fxLayout.xs="row">
+            <mat-form-field style="width:153px;padding-right: 30px;" >
+								<mat-label>Report</mat-label>
+								<mat-select disableOptionCentering matNativeControl formControlName="searchBy" tabindex="1" #selectFocus
+									(selectionChange)="isChangeSearchBy($event.source.value)" matTooltip="Select Report" required>
+									<mat-option *ngFor="let data of searchByOptions" [value]="data">
+										{{data}}</mat-option> 
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field class="inputTextBoxControls" style="padding-right: 30px;">
+                  <mat-label>Options</mat-label>
+                  <mat-select disableOptionCentering matNativeControl formControlName="searchValue" tabindex="2"
+                     matTooltip="Select Options" required>
+                    <mat-option *ngFor="let data of searchByValue" [value]="data">
+                      {{data}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="inputTextBoxControls" style="padding-right: 30px;">
+                    <mat-label>Search Active / Inactive</mat-label>
+                    <mat-select disableOptionCentering matNativeControl formControlName="searchStatus" tabindex="3"
+                      matTooltip="Select Active / Inactive" required>
+                      <mat-option *ngFor="let data of searchStatus" [value]="data">
+                        {{data}}</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+
+                  <button type="submit" class="filterButtonClass" mat-raised-button color="primary"   (click)="submitData()" style="margin-right: 15px;" tabindex="4">
+                  <mat-icon>search</mat-icon>Search
+                  </button>
+                  <button type="button"  class="filterButtonClass" mat-raised-button (click)="resetForm()" style="margin-right: 15px;" tabindex="5">
+                      <mat-icon>clear_all</mat-icon>Reset
+                    </button> 
+                    <button type="button"  mat-raised-button color="primary" (click)="generateReports()" [disabled]= "!printButtonEnabled" style="width:150px;margin-right: 15px;" tabindex="6">
+                        <mat-icon>print</mat-icon>Review / Print
+                      </button> 
+                      <button type="button"  mat-raised-button color="primary" (click)="exportDataToCSV()" [disabled]= "!printButtonEnabled" style="width:150px;" tabindex="7">
+                        <mat-icon>arrow_upward</mat-icon>Export to CSV
+                      </button> 
+
+        </div>
+        <div fxLayout>
+            <div class="scrollgrid-container mat-elevation-z8" fxFlex="100" >
+                <table mat-table  [dataSource]="dataSourceReports" style="width: 100%;" matSort matSortActive="{{initialSortColumn}}"
+                [matSortDisableClear]="true" matSortDirection="asc">
+                 <!-- For Dynamic Columns start-->
+                  <div  *ngIf="!manualRowSelection && !manualRowSelectionPrint">
+                    <div *ngFor="let data of tableColumns">
+                      <ng-container matColumnDef="{{data.tableName}}">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="{{data.width}}" fxLayoutAlign="{{data.fxLayoutAlign}}" >
+                              {{data.columnName}}</th>
+                          <td mat-cell *matCellDef="let insertDetails" fxFlex="{{data.width}}" [ngClass]="data.class" [ngStyle]="{'text-align':data.textAlign}" style="padding-top: 17px;text-align: left;"   [matTooltip]="data.class=='columnOverFlow'  ?insertDetails[data.tableName]:data.class=='columnOverFlow1' ? insertDetails[data.tableName]:''">{{insertDetails[data.tableName]}}
+                          </td>
+                        </ng-container>
+                        
+                  </div>
+                  </div>
+                <!-- For Dynamic Columns End-->
+                 <!-- For Bill Type Start -->
+                  <div *ngIf="manualRowSelection">
+                    <ng-container matColumnDef="applicationName">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="11" mat-sort-header   fxLayoutAlign="start center" >
+                        Customer Name  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="11" class="columnOverFlow" [matTooltip]="insertDetails.applicationName" style="padding-top: 17px;text-align: left;padding-left: 25px;">
+                        {{insertDetails.applicationName}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="applicationCode">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6"  mat-sort-header fxLayoutAlign="start center" >
+                        Customer Code  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" style="padding-top: 17px;text-align: left;padding-left: 3px;">
+                        {{insertDetails.applicationCode}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ancillaryBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6" mat-sort-header  fxLayoutAlign="center center" >
+                        Ancillary Bill  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="center center">
+                        {{insertDetails.ancillaryBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="detailBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="7" mat-sort-header fxLayoutAlign="center center" >
+                       Detail Bill   </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="7" fxLayoutAlign="center center">
+                        {{insertDetails.detailBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="invoiceBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="4" mat-sort-header fxLayoutAlign="center center">
+                        Invoice Bill  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="4" fxLayoutAlign="center center">
+                        {{insertDetails.invoiceBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="itemized">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6" mat-sort-header fxLayoutAlign="center center" >
+                         Itemized </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="center center">
+                        {{insertDetails.itemized}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="mdm">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="4"  mat-sort-header  fxLayoutAlign="center center">
+                       MDM   </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="4" fxLayoutAlign="center center">
+                        {{insertDetails.mdm}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="multimeterBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="8"  mat-sort-header  fxLayoutAlign="center center">
+                        MultiMeter Bill  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="8" fxLayoutAlign="center center">
+                        {{insertDetails.multimeterBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="multiUp">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="4"  mat-sort-header  fxLayoutAlign="start center" >
+                       Multi Up   </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="4" class="columnOverFlow1" [matTooltip]="insertDetails.multiUp" style="padding-top: 17px;">
+                        {{insertDetails.multiUp}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="municipalBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6"  mat-sort-header  fxLayoutAlign="center center" >
+                       Municipal Bill   </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="center center">
+                        {{insertDetails.municipalBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="summaryBill">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6"  mat-sort-header  fxLayoutAlign="center center" >
+                        Summary Bill  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" fxLayoutAlign="center center">
+                        {{insertDetails.summaryBill}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tdhud">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header fxLayoutAlign="center center">
+                        TDHUD  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" fxLayoutAlign="center center">
+                        {{insertDetails.tdhud}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tva">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="3" mat-sort-header  fxLayoutAlign="center center" >
+                         TVA </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="3" fxLayoutAlign="center center">
+                        {{insertDetails.tva}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="unBundled">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="7"  mat-sort-header fxLayoutAlign="center center" >
+                       Unbundled   </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="7" fxLayoutAlign="center center">
+                        {{insertDetails.unBundled}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="check">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header  fxLayoutAlign="center center" >
+                        Check  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" fxLayoutAlign="center center">
+                        {{insertDetails.check}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="delinquent">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="7" mat-sort-header fxLayoutAlign="center center" >
+                        Delinquent  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="7" fxLayoutAlign="center center">
+                        {{insertDetails.delinquent}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="thirdParty">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5"  mat-sort-header  fxLayoutAlign="center center" >
+                        Third Party  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" fxLayoutAlign="center center">
+                        {{insertDetails.thirdParty}}
+                      </td>
+                    </ng-container>
+                  </div>
+                    <!-- For Bill Type End -->
+                  <!-- For Print / Mail Columns -->
+                  <div *ngIf="manualRowSelectionPrint">
+                    <ng-container matColumnDef="applicationName">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="14" mat-sort-header fxLayoutAlign="start center">
+                        Customer Name </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="14" [matTooltip]="insertDetails.applicationName" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 25px;">
+                        {{insertDetails.applicationName}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="applicationCode">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="8" mat-sort-header fxLayoutAlign="start center" >
+                        Customer Code  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="8" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.applicationCode}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="customerState">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header fxLayoutAlign="start center" >
+                        State  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5"  class="columnOverFlow" [matTooltip]="insertDetails.customerState" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.customerState}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="customerFlag">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header fxLayoutAlign="start center" >
+                        Flag Desc. </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" class="columnOverFlow" [matTooltip]="insertDetails.customerFlag" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.customerFlag}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="appType">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="7" mat-sort-header fxLayoutAlign="start center" >
+                        AppType Desc.  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="7" [matTooltip]="insertDetails.appType" class="columnOverFlow1" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.appType}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="printLocation">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="10" mat-sort-header  fxLayoutAlign="center center" >
+                        Print WinSalem  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="10" fxLayoutAlign="center center">
+                        {{insertDetails.printLocation}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="formCode">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="6" mat-sort-header fxLayoutAlign="start center">
+                        Form Code  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="6" [matTooltip]="insertDetails.formCode" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.formCode}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="windowEnvCode">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="9" mat-sort-header  fxLayoutAlign="start center" >
+                       Window EnvCode </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="9" [matTooltip]="insertDetails.windowEnvCode" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.windowEnvCode}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="returnEnvCode">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="7" mat-sort-header fxLayoutAlign="start center" >
+                       Return EnvCode  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="7" [matTooltip]="insertDetails.returnEnvCode" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.returnEnvCode}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="pdf">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header fxLayoutAlign="center center" >
+                       PDF </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" fxLayoutAlign="center center">
+                        {{insertDetails.pdf}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="runFrequency">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="9" mat-sort-header fxLayoutAlign="start center">
+                        Run Frequency  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="9" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.runFrequency!=null?obj_RunFrequency[insertDetails.runFrequency]:''}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="stid">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header fxLayoutAlign="start center" >
+                        STID  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.stid}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="perfPatternDescription">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5"  mat-sort-header fxLayoutAlign="start center" >
+                        Perf Desc. </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" [matTooltip]="insertDetails.perfPatternDescription" class="columnOverFlow" style="padding-top: 17px;text-align: left;padding-left: 0px;">
+                        {{insertDetails.perfPatternDescription}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="active">
+                      <th mat-header-cell *matHeaderCellDef fxFlex="5" mat-sort-header  fxLayoutAlign="center center" >
+                        Active  </th>
+                      <td mat-cell *matCellDef="let insertDetails" fxFlex="5" fxLayoutAlign="center center">
+                        {{insertDetails.active}}
+                      </td>
+                    </ng-container>
+                   <!-- For Print / Mail Columns End -->
+                  </div>
+                  <tr mat-header-row *matHeaderRowDef="resultColumnNames; sticky: true"></tr>
+						<tr mat-row (click)="selectRow(insertDetails)"
+							*matRowDef="let insertDetails; columns: resultColumnNames"
+							[style.background]="highlightedRows.indexOf(insertDetails) != -1 ? '#eaf4f9' : ''"></tr>
+                  </table>
+
+                  <div class="notFoundData" [hidden]="isTableHasData">
+                      No data found
+                    </div>
+                    <div *ngIf="hideSpinner" class="spinnerDiv">
+                      <div class="loader"></div>
+                      <p class="spinnerLoadingText">{{spinnerText}}</p>
+                    </div>
+                  </div>
+
+        </div>
+    </mat-card-content>
+  </mat-card>
+  </div>

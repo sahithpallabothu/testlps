@@ -1,0 +1,129 @@
+<div>
+  <!--Contract Form-->
+  <form [formGroup]="contractsForm" (ngSubmit)="onFormSubmit()">
+    <header mat-dialog-title fxLayoutAlign="center center">
+      <label style="
+          font-size: 20px; text-align: center; padding-bottom:3px;">
+        {{title}}
+      </label>
+    </header>
+    <mat-card style="margin-top:7px !important; ">
+      <mat-card-content>
+        <div fxLayout="row" style="height:30px; margin-top: 4px; font-size:13px;">
+          <p style="margin-left:10px;margin-top: 0px;width: 500px;" class="columnTextElipsisName" [matTooltip]="clientName+(clientCode)">
+            <mat-icon style="position: absolute;margin-top: -6px; ">person</mat-icon>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Customer Name: &nbsp;</b>
+            {{clientName}} ({{clientCode}})
+          </p>
+        </div>
+
+       <!--Contract Division-->
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column">
+          <!-- Contract Table -->
+          <div fxFlex="70" class=" scrollgrid-container mat-elevation-z8" style=" height: 246px !important;">
+            <table class="suppTable" mat-table [dataSource]="contractDataSource">
+              <ng-container matColumnDef="contractType">
+                <th mat-header-cell *matHeaderCellDef fxFlex="45" style=" padding-right: 5px; padding-top: 18px;">
+                  Contract Type </th>
+                <td mat-cell *matCellDef="let row" fxFlex="45" class="columnTextElipsis"
+                  [matTooltip]="row.contractTypeDesc"
+                  style=" word-wrap: break-word; padding-right: 5px; text-align:left">{{row.contractTypeDesc}} </td>
+              </ng-container>
+              <ng-container matColumnDef="contractDate">
+                <th mat-header-cell *matHeaderCellDef fxFlex="30" fxLayoutAlign = "start center"><!--  style=" padding-right: 5px; padding-top: 18px;" -->
+                  Contract Date</th>
+                <td mat-cell *matCellDef="let row" fxFlex="30" style="padding-bottom: 10px;" fxLayoutAlign = "start center" >
+                  {{convertDate(row.contractDate)}} </td><!--  {{row.contractDate | date : 'MM/dd/yy'}} \\ style=" word-wrap: break-word; padding-right: 5px;"-->
+              </ng-container>
+              <ng-container matColumnDef="contract">
+                <th mat-header-cell *matHeaderCellDef fxFlex="25"  fxLayoutAlign = "start center" ><!-- style=" padding-right: 5px; padding-top: 18px;" -->
+                  Contract</th>
+                <td mat-cell *matCellDef="let row" fxFlex="25" style="padding-bottom: 10px;"  fxLayoutAlign = "start center" ><!-- style=" word-wrap: break-word; padding-right: 5px;" -->
+                  <a [routerLink]="" title={{row.fileName}} (click)="openPreviewPopUp(row)"
+                    tabindex="-1"><span>View</span></a></td>
+              </ng-container>
+              <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef  fxLayoutAlign = "center center" > Delete </th><!-- style=" padding-right: 5px; padding-top: 18px;" -->
+                <td mat-cell *matCellDef="let row" style="padding-bottom: 10px;" fxLayoutAlign = "center center" ><!-- style="padding-right: 5px;" -->
+                  <button type="button" mat-icon-button color="warn" tabindex="-1" (click)="$event.stopPropagation()"
+                  (click)= "$event.stopPropagation()" (click)="deleteAgreement(row)" >
+                    <mat-icon style="padding-bottom: 0px;padding-top: 0px;" class="mat-18">delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="contractTableColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: contractTableColumns" [style.background]="highlightedRows.indexOf(row) != -1 ? '#eaf4f9' : ''" 
+                style="padding-top:9px" (click)="selectContractRow(row)">
+              </tr>
+            </table>
+            <div class="notFoundData" [hidden]="isTableHasData">No data found</div>
+          </div><!-- Agreements Table -->
+
+          <div fxFlex="30" fxLayout="column" fxFlexOffset="2%" fxLayout.sm="column" fxLayout.xs="column">
+            <!-- Contract Type -->
+            <mat-form-field style="padding-right:20px;">
+              <mat-label>Contract Type</mat-label>
+              <mat-select formControlName="contractType" matTooltip="Select Contract Type" #focusContractType
+                (selectionChange)="contractTypeChange()">
+                <mat-option>(Select)</mat-option>
+                <mat-option *ngFor="let ct of contractTypes" [value]="ct">{{ct.description}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- Contract Date -->
+            <div>
+              <mat-form-field class="inputTextBoxControls" style="padding-right:20px;" >
+                <mat-label>Contract Date</mat-label>
+                <input matInput #focusContractDate [textMask]="{mask: dateMask}" formControlName="contractDate"
+                  (input)="setDateInDatePicker('contractDate','contractDateWithPicker')"
+                  matTooltip="Enter Contract Date" placeholder="MM/DD/YY" autocomplete="off"
+                  (input)="isContractChange()">
+                <mat-error *ngIf="hasError('contractDate','pattern')">Invalid Contract Date.</mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="1px">
+                <input matInput formControlName="contractDateWithPicker" tabindex="-1" (input)="isContractChange()"
+                  [matDatepicker]="contractDatepicker" (dateChange)="contractDateEvent()">
+                <mat-datepicker-toggle matSuffix [for]="contractDatepicker" tabindex="-1" style="margin-left:-37px">
+                </mat-datepicker-toggle>
+                <mat-datepicker #contractDatepicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <!-- Choose File -->
+            <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" fxLayout.md="row">
+              <div class="sup_boxcss">
+                <input #file type="file" (change)="preview($event.target.files)" accept="application/pdf"
+                  (input)="isContractChange()" formControlName="chooseFile"
+                  style="margin-top: 2px;outline:none;margin-left: 3px;">
+              </div>
+            </div>   
+            
+            <!--Action Buttons -->
+            <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px" fxLayout.xs="column" style="margin-left:-12px;margin-top:15px;">
+                <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column">
+                  <button type="submit" [disabled]="!(contractsForm.valid) || !isAllowSave" mat-raised-button
+                    class="filterButtonClass" color="primary">
+                    <mat-icon>save</mat-icon>{{isContractUpdate ? 'Update' : 'Submit'}}
+                  </button>
+                </div>
+                <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column">
+                  <button type="button" mat-raised-button (click)="resetContract()"
+                      class="filterButtonClass" [disabled]="!isAllowSave">
+                    <mat-icon>clear_all</mat-icon>Reset
+                  </button>
+                </div>
+              </div>
+
+          </div>
+        </div> <!--Contract Division-->
+        
+        <!--Close Action-->
+        <div fxLayout="row" fxLayoutGap="2%" fxLayoutAlign="center center" style="margin-top:10px;">
+          <button type="button" mat-raised-button class="filterButtonClass" (click)="dialogClose()">
+            <mat-icon style="color:black">cancel</mat-icon> Close
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+  <!--Contract Form-->
+</div>

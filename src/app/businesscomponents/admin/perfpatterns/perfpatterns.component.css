@@ -1,0 +1,10 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+@import "../../../shared/gridStyle.css";
+
+
+/deep/.mat-tooltip-panel{
+
+  word-break: break-word !important;
+
+}

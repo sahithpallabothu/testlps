@@ -1,0 +1,253 @@
+<div class="container ouncesDialog" >
+	<form [formGroup]="ouncesForm">
+		<header mat-dialog-title>
+			<label style="font-size: 20px;">{{title}}</label>
+		</header>
+		<div class="container" style="margin-top:0px" class="ouncesDialogWidth">
+			<mat-card fxFlex fxFlexAlign="start">
+				<mat-card-content class="ouncesLargeScreenPaddingClass" style="padding-right:10px" >
+					<div fxLayout="row" fxLayout.xs="column" style="margin-top:-20px;padding-bottom:10px;"
+						fxLayout.sm="column wrap" fxLayout.md="row wrap" fxLayoutGap="15px">
+						<label fxLayoutAlign="center" fxFlexOffset="40" fxFlex="20">Pieces</label>
+						<label fxLayoutAlign="center" fxFlex="20">$ Amount</label>
+					</div>
+					<div fxLayout="column" style="max-height: 53.5vh;overflow:auto;padding-top:0px;margin-top: 0px;">
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">1</label>
+							<mat-form-field fxFlex="17">
+								<input formControlName="oz1" matTooltip="Enter 1 Pieces" matInput type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input formControlName="oz1Amount" matTooltip="Enter 1 Amount" matInput type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">2 oz Permit</label>
+							<mat-form-field fxFlex="17">
+								<input formControlName="ozPermit2" matTooltip="Enter 2 oz Permit Pieces" matInput
+									type="text" autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input formControlName="ozPermit2Amount" matTooltip="Enter 2 oz Permit Amount" matInput
+									type="text" autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">2 oz Residual Single</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="ozSingle2"
+									matTooltip="Enter 2 oz Residual Single Pieces" type="text" autocomplete="off"
+									matInput class="NumberInputAlignment" >
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="ozSingle2Amount"
+									matTooltip="Enter 2 oz Residual Single Amount" type="text" autocomplete="off"
+									class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">2</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz2" matTooltip="Enter 2 Pieces" matInput
+									class="NumberInputAlignment" type="text" autocomplete="off">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz2Amount" matTooltip="Enter 2 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">3</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz3" matTooltip="Enter 3 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz3Amount" matTooltip="Enter 3 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">4</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz4" matTooltip="Enter 4 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz4Amount" matTooltip="Enter 4 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">5</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz5" matTooltip="Enter 5 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz5Amount" matTooltip="Enter 5 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">6</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz6" matTooltip="Enter 6 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz6Amount" matTooltip="Enter 6 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">7</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz7" matTooltip="Enter 7 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz7Amount" matTooltip="Enter 7 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">8</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz8" matTooltip="Enter 8 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz8Amount" matTooltip="Enter 8 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">9</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz9" matTooltip="Enter 9 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz9Amount" matTooltip="Enter 9 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">10</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz10" matTooltip="Enter 10 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz10Amount" matTooltip="Enter 10 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">11</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz11" matTooltip="Enter 11 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz11Amount" matTooltip="Enter 11 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">12</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz12" matTooltip="Enter 12 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz12Amount" matTooltip="Enter 12 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">13</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz13" matTooltip="Enter 13 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz13Amount" matTooltip="Enter 13 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">14</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz14" matTooltip="Enter 14 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz14Amount" matTooltip="Enter 14 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">15</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz15" matTooltip="Enter 15 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz15Amount" matTooltip="Enter 15 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayout.xs="column wrap" class="alignHeightforControls"
+							fxLayout.sm="row wrap" fxLayout.md="row wrap" fxLayoutGap="10px">
+							<label fxFlex="41">16</label>
+							<mat-form-field fxFlex="17">
+								<input matInput formControlName="oz16" matTooltip="Enter 16 Pieces" type="text"
+									autocomplete="off" matInput class="NumberInputAlignment">
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls">
+								<input matInput formControlName="oz16Amount" matTooltip="Enter 16 Amount" type="text"
+									autocomplete="off" class="NumberInputAlignment">
+							</mat-form-field>
+						</div>
+
+
+						<!-- </fieldset> -->
+					</div>
+				</mat-card-content>
+				<div fxLayout="row" fxLayoutAlign="center" style="margin-top:10px;margin-bottom:10px">
+					<mat-dialog-actions fxLayout.xs="column wrap" fxLayout.sm="column wrap" fxLayoutGap="10px">
+						<button *ngIf = 'false'  mat-raised-button class=" mat-primary"
+							[disabled]="!(ouncesForm.valid) || !hasUpdateOuncesAccess" (click)="updateOuncesData()"
+							style="margin-top:1px">
+							<mat-icon>save</mat-icon> Save
+						</button>
+						<button mat-raised-button class ="filterButtonClass" (click)="dialogCancel()" style="margin-top:1px">
+							<mat-icon>cancel</mat-icon> Close
+						</button>
+					</mat-dialog-actions>
+				</div>
+			</mat-card>
+		</div>
+	</form>
+</div>

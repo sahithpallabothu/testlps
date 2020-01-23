@@ -1,0 +1,76 @@
+.mat-icon
+{
+  font-size: 18px;
+} 
+
+
+
+.mat-dialog-title
+{
+    align-content: left;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: left;
+    padding-left: 10px;
+    margin: 0px;
+	line-height:44px;
+}
+
+.headerdisplay
+{
+    background-color: #256275;
+    color : white;
+    font-size: 18px;
+} 
+
+
+.mat-raised-button
+{
+ width: 120px; 
+ align-content: center;
+ font-size: 15px;
+}
+
+.mat-dialog-actions
+{
+  background-color: white;
+}
+
+.mat-header-row {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: inherit;
+  }
+  
+ th.mat-header-cell{
+	padding:1px 30px;
+}
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell{
+		padding:1px 30px;
+	}
+
+tr.mat-header-row {
+height:39px;
+}
+  .scrollgrid-container{
+		max-width:100%;
+		overflow-x:scroll;
+
+	}
+  .notFoundData{
+	text-align:center;
+	padding-top:10px;
+	padding-bottom:10px;
+	font-style:italic;
+}
+
+.mat-row:hover {
+  cursor:pointer;
+}
+/deep/.mat-select-panel {
+	margin-top:11px;
+}
+ 

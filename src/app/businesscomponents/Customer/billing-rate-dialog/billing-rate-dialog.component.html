@@ -1,0 +1,202 @@
+<div>
+    <form [formGroup]="billingRateForm" (ngSubmit)="onFormSubmit()">
+      <header mat-dialog-title>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="90" fxLayoutAlign="center">
+            <label style="font-size: 20px;padding-bottom:3px;">{{title}}</label>
+          </div>
+          <div fxFlex="4"></div>
+        </div>
+      </header>
+      <mat-card style="height: auto !important;">
+        <mat-card-content>
+			<div fxLayout="row" style="height:30px; margin-top: 4px; font-size:13px;"> 
+				<p style="margin-left:10px;margin-top: 0px;width:500px;" class="columnTextElipsisName" [matTooltip]="clientName+(clientCode)">
+				  <mat-icon style="position: absolute;margin-top: -6px; ">person</mat-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Customer Name:&nbsp;</b>
+				  <span> {{clientName}} ({{clientCode}})</span>
+				</p>
+			</div>
+        <div class="billingRateMatCard">			
+          <!--Billing Rate-->
+			<div  fxLayout="row">
+				<!--Table Billing Rate-->
+				<div class=" scrollgrid-container mat-elevation-z8">
+					<table mat-table matSort #sortBillingRates="matSort" matSortActive="applicationName" matSortDirection="asc" [dataSource]="billingRateDataSource" [matSortDisableClear]="true" style="width:100%">
+						<ng-container matColumnDef="applicationName">
+							<th mat-header-cell fxFlex="28" *matHeaderCellDef mat-sort-header fxLayoutAlign="start center">Application Name </th>
+							<td mat-cell fxFlex="28" *matCellDef="let approw" style="padding-top: 10px;" class="columnTextElipsis"
+							[matTooltip]="approw.applicationName"> {{approw.applicationName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="applicationCode">
+							<th mat-header-cell fxFlex="17" *matHeaderCellDef mat-sort-header fxLayoutAlign="start center">Application<br/> Code </th>
+							<td mat-cell fxFlex="17" style="padding-top: 10px;" *matCellDef="let approw"> {{approw.applicationCode}}</td>
+						</ng-container>
+						<ng-container matColumnDef="statementName">
+							<th mat-header-cell fxFlex="17" *matHeaderCellDef mat-sort-header fxLayoutAlign="start center"> Statement<br/> Name </th>
+							<td mat-cell fxFlex="17" style="padding-top: 10px;" class="columnTextElipsis"
+							[matTooltip]="approw.statementName"  *matCellDef="let approw"> {{approw.statementName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="printOrder">
+							<th mat-header-cell fxFlex="11" *matHeaderCellDef mat-sort-header fxLayoutAlign="center center"> Print<br/> Order </th>
+							<td mat-cell fxFlex="11" style="padding-top: 10px;text-align: center;" 
+							*matCellDef="let approw"  class="columnTextElipsis" [matTooltip]="approw.printOrder"> {{approw.printOrder}}</td>
+						</ng-container>
+						<ng-container matColumnDef="consolidationAcc">
+							<th mat-header-cell fxFlex="20" *matHeaderCellDef mat-sort-header fxLayoutAlign="start center"> Consolidation <br/>Account</th>
+							<td mat-cell fxFlex="20" style="padding-top: 10px;" *matCellDef="let approw"  
+							class="columnTextElipsis" [matTooltip]="approw.consolidationAcc"> {{approw.consolidationAcc}}</td>
+						</ng-container>
+						<ng-container matColumnDef="isActive">
+							<th mat-header-cell fxFlex="7" *matHeaderCellDef mat-sort-header fxLayoutAlign="start center"> Active </th>
+							<td mat-cell fxFlex="7" *matCellDef="let approw" style="padding-top: 10px; text-align: center">
+								<mat-icon [ngStyle]="{'color': approw.isActive?'green':'orange'}">
+									<b>{{approw.isActive ? 'check':'close'}}</b></mat-icon>
+							</td>	
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="billingRateTableColumns; sticky: true"></tr>
+						<tr mat-row *matRowDef="let approw; columns: billingRateTableColumns"
+							(click)="selectBillingRateRow(approw);"										
+							[style.background]="highlightedRowsInAssignedApplications.indexOf(approw) != -1 ? '#eaf4f9' : ''">
+						</tr>
+					</table>
+				</div>
+				<!--Table Billing Rate-->
+			</div>
+			<div fxLayout.lg="row" fxLayout.xs="column" fxLayout.sm="column" fxLayout.md="row" fxLayoutGap="15px" style="margin-top:11px;margin-left:7px;">
+				<!--Application Name-->
+				<mat-form-field fxFlex="18">
+					<input matInput formControlName="appName" matInput placeholder="Application Name" (input)="isBillRateChange()" >
+				</mat-form-field>
+				<!--Application Code-->
+				<mat-form-field fxFlex="12">
+					<input matInput formControlName="appCode" matInput placeholder="Application Code" (input)="isBillRateChange()" >
+				</mat-form-field>
+				<!--Statement Name-->
+				<mat-form-field fxFlex="14">
+					<input matInput formControlName="statementName" matInput maxlength="50" placeholder="Statement Name" (input)="isBillRateChange()" 
+					matTooltip="Enter Statement Name"  (input)="validateSpaces($event, 'statementName')" required>	
+					<mat-error *ngIf="hasError('statementName','required')">Statement Name is required.</mat-error>						
+					<mat-error *ngIf="billingRateForm.controls['statementName'].hasError('incorrectSpace')">{{SpaceMessage}}</mat-error>
+				</mat-form-field>
+				<!-- Print Order -->
+				<mat-form-field fxFlex="11">
+					<input matInput formControlName="printOrder" matInput maxlength="50" placeholder="Print Order" (input)="isBillRateChange()" 
+						matTooltip="Enter Print Order"  Numerics numericType="number" required>							
+					<mat-error *ngIf="hasError('printOrder','required')">Print Order is required.</mat-error>
+									
+				</mat-form-field>
+				<!--Consolidation Account-->
+				<mat-form-field fxFlex="16">
+					<input type="text" matInput formControlName="consolidationAccount" maxlength="50" matInput (input)="isBillRateChange()" 
+						placeholder="Consolidation Account" matTooltip="Enter Consolidation Account"  (input)="validateSpaces($event, 'consolidationAccount')">						
+					<mat-error *ngIf="billingRateForm.controls['consolidationAccount'].hasError('incorrectSpace')">{{SpaceMessage}}</mat-error>
+				</mat-form-field>
+				<!--Active-->
+				<mat-checkbox fxFlex="6" formControlName="billingActive" (input)="isBillRateChange()" [checked]='isstatementactive'
+					fxLayoutAlign="left center" >Active
+				</mat-checkbox>
+				<div fxLayout="column">
+					<button type="button" [disabled]=" enableRatesWhenBillRate || !isAllowSave || isSpace" mat-raised-button
+						class="filterButtonClass" color="primary"
+						(click)="submitBillingRate()"  >
+						<mat-icon>save</mat-icon> Submit
+					</button>
+				</div>			
+			</div>
+
+			<!--Billing Rate Details-->
+			<mat-card style="height: auto !important;width: 99.7%;">
+				<mat-card-content>
+					<div fxLayout="row" fxLayoutGap="15px" style="width:100%;height:200px;">
+						<!--Table Rate Details-->
+						<div fxFlex="60" class=" scrollgrid-container mat-elevation-z8">
+							<table mat-table #sortRateDetail="matSort" [dataSource]="customerRateDetailDataSource" matSort matSortActive="description" matSortDirection="asc" [matSortDisableClear]="true" style="width:100%;height:200px; overflow-y:auto;overflow-x:auto;">
+								<ng-container matColumnDef="description">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="70" fxLayoutAlign="start center"> Rate Type </th>
+									<td mat-cell *matCellDef="let billingrow" fxFlex="70" class="columnTextElipsis"
+									[matTooltip]="billingrow.description"  style="padding-top:10px"> {{billingrow.description}} </td>
+								</ng-container>
+								<ng-container matColumnDef="rate">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="30" fxLayoutAlign="end center" style="padding-right:20px" > Rate</th>
+									<td mat-cell *matCellDef="let billingrow" fxFlex="30" fxLayoutAlign="end center" style="padding-right:20px" >{{billingrow.rate | number: '1.4-4'}} </td>
+								</ng-container>
+								<ng-container matColumnDef="delete">
+									<th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center"> Delete </th>
+									<td mat-cell *matCellDef="let billingrow" fxLayoutAlign="center center" >
+										<button type="button" mat-icon-button color="warn" tabindex ="-1" (click)="$event.stopPropagation()"
+										(click)= "$event.stopPropagation()" (click)="deleteBillingRateDetail(billingrow.customerRateID)">
+											<mat-icon style="padding-bottom: 7px;padding-top: 0px;">delete</mat-icon>
+										</button>
+									</td>
+								</ng-container>
+								<tr mat-header-row *matHeaderRowDef="customerRateDetailTableColumns"></tr>
+								<tr mat-row *matRowDef="let billingrow; columns: customerRateDetailTableColumns"
+									(click)="selectCustomerRateRow(billingrow)"
+									[style.background]="highlightedRowsInBillingRate.indexOf(billingrow) != -1 ? '#eaf4f9' : ''">
+								</tr>
+							</table>
+						</div><!--Table Rate Details-->
+
+						<div fxFlex="40" fxLayout="column" fxFlexOffset="2%">
+							<!--Description-->
+							<div class="row" fxLayout="row">										
+								<mat-form-field fxFlex="83">	
+									<mat-label>Rate Type</mat-label>											
+									<mat-select formControlName="billingDescription" matTooltip="Select Rate Type" 
+									(selectionChange)="rateTypeChange()">
+										<mat-option>(Select)</mat-option>
+										<mat-option *ngFor="let rt of rateTypes"  [value]="rt">
+											{{rt.description}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+							<!--Rate-->
+							<div fxLayout="row">
+								<mat-form-field class="inputContactNumberControls commonSpaceBwControls">
+									<input matInput formControlName="billingRate" type="text" maxlength="12" style="text-align:right;" placeholder="Rate"
+									autofocus	#rate matTooltip="Enter Rate"
+									 (blur) = "changeToAmount('billingRate')" (keypress)="validateDecimals($event)">
+									<mat-error *ngIf="hasError('billingRate', 'pattern')">Invalid Rate.</mat-error>	
+									<mat-error *ngIf="billingRateForm.controls['billingRate'].hasError('incorrect')">
+										Please enter a valid Rate.
+									</mat-error>												
+								</mat-form-field>
+							</div>
+							<!--Buttons-->
+							<div fxLayout ="row" fxLayoutGap="15px" fxLayoutAlign='center center'>
+								<button type="button"  mat-raised-button class="filterButtonClass" color="primary" 
+									(click)="saveCustomerRateDetails()" [disabled]="enableRatesWhenBillRate ||!isAllowSave" >
+									<mat-icon>save</mat-icon>{{isRateUpdate ? 'Update' : 'Submit'}}
+								</button>
+								<button type="button" mat-raised-button class="filterButtonClass"
+									(click)="resetCustomerRateDetails()" [disabled]="enableRatesWhenBillRate || !isAllowSave ">
+									<mat-icon>clear_all</mat-icon>Reset
+								</button>
+							</div>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<!--Billing Rate Details-->
+		</div>
+
+		<!--Actions-->
+		<div style="margin-top: 25px;" fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center">
+			<button type="submit" mat-raised-button class="filterButtonClass" color="primary" [disabled]="!isAllowSave">
+				<mat-icon>save</mat-icon> Save
+			</button>
+			<button type="button" mat-raised-button  class="filterButtonClass" (click)="resetServiceAgreement()" 
+				[disabled]="!isAllowSave">
+				<mat-icon>clear_all</mat-icon > Reset
+			</button>
+			<button type="button" mat-raised-button class="filterButtonClass" (click)="dialogCancel()">
+				<mat-icon style="color:black">cancel</mat-icon> Close
+			</button>
+		</div><br>			
+		<!--Actions-->
+
+	</mat-card-content>
+	</mat-card>
+</form>
+</div>

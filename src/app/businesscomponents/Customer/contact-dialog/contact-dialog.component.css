@@ -1,0 +1,197 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+.mat-dialog-title
+{
+    align-content: center;
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+    size: 200px;
+    text-align: center;
+    padding-top: 5px;
+    margin: 0px;
+}
+.mat-icon {
+	font-size:17px;
+	padding-top:0px;
+	/* line-height: 18px; */
+}
+/* It contains the css related to the mat list that contains applications  */
+.mat-list-base .mat-list-item .mat-list-icon, .mat-list-base .mat-list-option .mat-list-icon {
+	font-size:22px;
+	width:8px;
+}
+.contactContainer
+{	
+	flex-direction:column;
+	overflow-y:auto;
+}
+.mat-row:hover {
+  cursor:pointer;
+}
+
+.notFoundData {
+    color: red;
+    margin-top: 25%;
+    text-align: center;
+    font-size: 25px;
+}
+.headerdisplay
+{
+    background-color: #256275;
+    color : white;
+    font-size: 15px;
+} 
+
+.mat-header-row {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: inherit;
+	
+  }
+
+.notificationsCheckBoxes .mat-checkbox-layout .mat-checkbox-label{
+	line-height:26px;
+}
+
+.control-space{
+	margin-right:0px !important;
+}
+.control-space:last-child{
+	margin-bottom:-9px !important;
+	
+}
+.scrollgrid-container {
+	/* width:63%; */
+	width: 100%;
+    overflow: auto;
+	height:250px;
+	margin-top: 16px !important;
+  }
+ 
+  .mat-row:hover {
+    cursor:pointer;
+  }
+  
+  /*unorder list css for applications*/
+
+.mat-list-base .mat-list-item, .mat-list-base .mat-list-option{
+	 height: 30px !important;
+	 border-bottom: 1px solid rgba(0,0,0,0.3);
+	 
+}
+.mat-list-base .mat-list-item:hover, .mat-list-base .mat-list-option:hover{
+	 background: #ccf2ff;
+	 cursor:pointer;
+	
+}
+
+.mat-list-base {
+	height:124px;
+	overflow-y:auto;
+	padding-top:0px;
+	box-shadow: 3px 2px 3px rgba(0,0,0,0.2);
+	width: 31.5vw;
+}
+@media only screen and (min-width: 1920px) {
+	.mat-list-base {
+		width: 32.5vw;
+	}
+}
+
+
+
+/deep/ .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+	padding:0px 5px !important;
+}
+
+ /*unorder list css for applications end */
+
+
+
+@media only screen and (max-width: 600px) {
+	
+	
+	.applicationControls{
+		min-width:100%;
+		flex-direction:column;
+	}
+	
+	.scrollgrid-container{ 
+		max-width:100%; 
+		overflow-x:scroll; 
+		/* /* margin-right:-215px; */ 
+	 } 
+	
+
+
+}
+@media only screen and (max-width: 1290px) {
+	.mat-list-base {
+		width: 29vw;
+	}
+
+	.notFoundData {
+		color: red;
+		margin-top: 42%;
+		text-align: center;
+		font-size: 25px;
+	}
+}
+@media only screen and (max-width: 1150px) {
+	.mat-list-base {
+		width: 19vw;
+	}
+}
+
+
+
+/deep/.mat-select-panel {
+	margin-top:11px;
+}
+
+/* new changes */
+.commonSpaceBwControls{
+	margin-right: 30px !important;
+}
+
+@media only screen and (max-width: 1152px) {
+	.stockDivContactType {
+		width: 167px;
+	}
+	.inputContactNumberControls{
+		width: 113.6px;
+	}
+
+	.notFoundData {
+		color: red;
+		margin-top: 52%;
+		text-align: center;
+		font-size: 25px;
+	}
+}
+
+/* customer Name text overlap use elipsis */
+.columnTextElipsisName
+{
+	text-overflow: ellipsis;
+	cursor: pointer;
+	word-break: break-all;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+@media only screen and (min-height: 609px) and (max-height: 656px)  {
+	.contactContainer{
+		height: 480px !important;
+		overflow-y: auto ;
+	}
+}
+@media only screen and (min-height: 489px) and (max-height: 608px)  {
+	.contactContainer{
+		height: 400px !important;
+		overflow-y: auto ;
+	}
+}
+

@@ -1,0 +1,83 @@
+@import "../../../shared/Panel.css";
+@import "../../../shared/Common.css";
+@import "../../../shared/gridStyle.css";
+
+
+/deep/.mat-tooltip-panel{
+
+    word-break: break-word !important;
+  
+  }
+.control-space{
+	width:47%;
+}
+.control-space-lname{
+	width:47%;
+}
+.control-space-fname{
+	width:47%;
+}
+/* .control-space-initials{
+	width:27%;
+} */
+mat-item{
+	padding:0px;
+}
+
+.mat-select-panel {
+	padding-left:14px;
+}
+
+.control-space-row{
+	width:30%;
+}
+
+/* table column text overlap use elipsis */
+.columnTextElipsisUsers
+{
+	
+    width:100px;
+   /* color: #0079c1;*/
+    text-overflow: ellipsis;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+	display: pre-line;
+    max-width: 80px;
+}
+.roleBtnWidth{
+    width:125px;
+    text-align: center !important;
+    vertical-align: middle;
+}
+
+@media only screen and (max-width: 1280px)  {
+.searchtext{
+    width:33% !important;
+}
+}
+
+ @media only screen and  (max-height: 720px)  {
+	.userInfoMatCard {		 
+		height: 400px !important;
+    }
+    .userMatCard{
+        height: 290px !important;
+    }
+    .roleMatCard{
+        height: 290px !important;
+    }
+    .roleTable{
+        height: 190px !important;
+    }
+} 
+@media only screen and  (max-width: 1280px)  {
+    .btnAlign{
+        padding-left: 196px !important;
+    }
+}
+
+	 
+ 
+

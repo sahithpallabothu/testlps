@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Comment the below line for CDN loading  */
+@import '~material-design-icons/iconfont/material-icons.css';
+
+ 
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+/* @import '@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+
+/* for sidenav to take a whole page */
+html, body { 
+    margin: 0;
+    height: 100%;
+}
+
+.mat-header-cell
+{
+  background-color: #3f51b5;
+  color : white;
+  font-size: 15px;
+  margin-top:0px;
+}
+.mat-table
+{
+	margin-top:0px;
+}
+
+.mat-sort-header-arrow
+{
+    color: white;
+}
+
+.mat-raised-button
+{
+ width: 20%; 
+ align-content: center;
+ font-size: 15px;
+}
+

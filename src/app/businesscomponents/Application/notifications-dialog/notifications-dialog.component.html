@@ -1,0 +1,98 @@
+
+<div style="width:100%;">
+<form [formGroup]="form">
+
+<header mat-dialog-title style="height: 45px; text-align: center;font-size:20px;" >
+        <label  >{{title}}</label>
+</header>
+
+
+<mat-card  style="height: auto;" >
+   <mat-card-content>
+		<div fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column"  fxLayoutGap="15px">
+					<mat-form-field style="width:395px;" >
+								<input matInput  formControlName="customername" matTooltip="Enter customer name" matInput placeholder="Customer Name"> 
+					</mat-form-field>
+					<mat-form-field  class="inputTextBoxControls">
+								<input matInput  formControlName="customercode" matTooltip="Enter customer code" matInput  placeholder="Customer Code" > 
+					</mat-form-field>
+					<mat-form-field style="width:395px" >
+								<input matInput  formControlName="applicationname" matTooltip="Enter application name" matInput  placeholder="Application Name" > 
+					</mat-form-field>
+					<mat-form-field   class="inputTextBoxControls" style="padding-right:0px;">
+								<input matInput  formControlName="applicationcode" matTooltip="Enter application code" matInput  placeholder="Application Code" > 
+					</mat-form-field>
+			</div>
+		<div  class="leftAlignment" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="30px">
+			
+			    <fieldset style="height:auto;" fxFlex="50" >
+				   <legend> <b>Contact(s)</b></legend>
+						 
+					<mat-list style="height: 410px; overflow: auto;">
+					 <mat-list-item  *ngFor="let notification of notificationList" (click)="setSelectedItem(notification)" [ngStyle]="{'background-color': notification.contactID===ChangeColor ? 'rgb(234, 244, 249)' : '#f7f1f1' }">
+							<mat-icon mat-list-icon >contact_mail</mat-icon>
+							<h4 mat-line>{{notification.contactFirstName}} {{ notification.contactLastName}}</h4>
+							<p mat-line> {{notification.contactEmail }} </p>
+							<mat-icon *ngIf="notification.alarmExist">notifications_active</mat-icon>
+							<!--<mat-icon *ngIf="CheckMark">save</mat-icon>--> 
+						</mat-list-item> 
+						
+					</mat-list>
+
+				</fieldset>
+		
+				<fieldset class="notificationFieldSet" fxFlex="45" fxLayout="column" style="padding-left: 30px;padding-right: 30px;">
+				
+					<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+						<input matInput  formControlName="contactname" matTooltip="Enter contact name" matInput placeholder="Contact Name" > 
+					</mat-form-field>
+					<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+						<input matInput  formControlName="contacttitle" matTooltip="Enter contact title" matInput placeholder="Title" > 
+					</mat-form-field>
+					<mat-form-field style="width:289px"  class="control-space applicationControls" >
+						<input matInput  formControlName="email" matTooltip="Enter email" matInput placeholder="Email" > 
+					</mat-form-field>
+					<div fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px">
+						<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+							<mat-label>Direct Phone</mat-label>
+							<input matInput  formControlName="directphone" [textMask]="{mask: telephonemask}" matTooltip="Enter direct phone" matInput placeholder="(___)___-___" > 
+						</mat-form-field>
+						<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+							<input matInput  formControlName="extension" matTooltip="Enter extension" matInput placeholder="Extension" > 
+						</mat-form-field>
+					</div>
+					<div fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px">
+						<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+							<mat-label>Cell Phone</mat-label>
+							<input matInput  formControlName="cellphone" [textMask]="{mask: telephonemask}" matTooltip="Enter cell phone" matInput  placeholder="(___)___-___"> 
+						</mat-form-field>
+						<mat-form-field   class="inputTextBoxControls control-space applicationControls">
+							<mat-label>Home Phone</mat-label>
+							<input matInput  formControlName="homephone" [textMask]="{mask: telephonemask}" matTooltip="Enter home phone" matInput  placeholder="(___)___-___"> 
+						</mat-form-field>
+					</div>
+					<mat-checkbox formControlName="filehasbeenreceived" (change)="applicationCheckBoxOnChange($event)" [disabled]="notificationCheckBox">Notify that File Receipt</mat-checkbox>
+					<mat-checkbox formControlName="emailrmt" (change)="applicationCheckBoxOnChange($event)" [disabled]="notificationCheckBox">RMT - Statistics</mat-checkbox>
+					<mat-checkbox formControlName="emailcode1" (change)="applicationCheckBoxOnChange($event)" [disabled]="notificationCheckBox">Post Cleanse</mat-checkbox>
+					<mat-checkbox formControlName="pdfisready" (change)="applicationCheckBoxOnChange($event)" [disabled]="notificationCheckBox">Notify that PDF </mat-checkbox>
+					<mat-checkbox formControlName="jobhascompleted" (change)="applicationCheckBoxOnChange($event)" [disabled]="notificationCheckBox">Notify that Mail Receipt</mat-checkbox>
+					
+					
+			
+				</fieldset>
+			
+		</div>		
+
+      
+		<div fxLayout="row" fxLayoutAlign="center" style="margin-top:10px;" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" >
+		 
+				<button mat-raised-button  class="filterButtonClass" color="primary" [disabled]="openAsView || notificationCheckBox ||!isAllowSave" (click)="saveSelectedNotifications();" > <mat-icon>save</mat-icon> Save</button>
+				<button mat-raised-button  class="filterButtonClass" (click)="resetDetailsInForm()" [disabled]="openAsView ||!isAllowSave" > <mat-icon>clear_all</mat-icon> Reset</button>      
+				<button mat-raised-button   class="filterButtonClass"  (click)="dialogClose()" > <mat-icon>cancel</mat-icon> Close</button>      
+		  
+		</div>
+	</mat-card-content>
+</mat-card>
+</form>
+</div>
+   

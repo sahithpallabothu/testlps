@@ -1,0 +1,31 @@
+<mat-nav-list>
+<div class="nav-wrapper" mat-list-item routerLink="/home" (click)="onSidenavClose(-1)" style="border-bottom:1px solid rgba(255,255,255,0.3);outline:none;text-align:center">
+     <!-- <img style="margin-right:10px;" _ngcontent-c5="" class="img" src="assets\navLogo.png" width="210" height="70"> -->
+	 <img style="margin-right:0px;margin-top:-8px;" _ngcontent-c5="" class="img" src="assets\AristaCMYK_Bevel_with_Full_Name.jpg" width="250" height="135">
+  </div>
+  <ng-container *ngFor="let menuItem of sidenav_menus">
+    <ng-container *ngIf="menuItem.isActive && menuItem.subMenus?.length > 0">
+        <button [matMenuTriggerFor]="submenu" class="subMenu" [style.background-color] ="selectedMenuItem === menuItem.id ? highlightColor : defaultColor" (click) = "onSelectedMenuItem(menuItem.id)"  mat-menu-item>
+            <mat-icon>{{ menuItem.icon }}</mat-icon>
+            <span class="nav-caption">{{ menuItem.screenName }}</span>
+        </button>
+        <mat-menu #submenu class="sideNavBar">
+            <a *ngFor="let subMenu of menuItem.subMenus" >
+
+                <button mat-menu-item *ngIf="subMenu.isActive" routerLink="{{ subMenu.routerLink }}" (click)="onSidenavClose(menuItem.id)"> 
+                    <!-- <mat-icon>{{ subMenu.icon }}</mat-icon> -->
+                    <span class="nav-caption">{{ subMenu.screenName }}</span>
+                  </button>
+            </a>
+            
+        </mat-menu>
+    </ng-container>
+
+    <a *ngIf="menuItem.isActive && !(menuItem.subMenus?.length > 0)" class="subMenu" (click)="onSidenavClose(menuItem.id)" routerLink ="{{ menuItem.routerLink }}" mat-menu-item>
+        <mat-icon>{{ menuItem.icon }}</mat-icon>
+         <span class="nav-caption">{{ menuItem.screenName }}</span>
+    </a>
+
+</ng-container>
+	</mat-nav-list>
+	

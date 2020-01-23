@@ -1,0 +1,41 @@
+a {
+     text-decoration: none;
+    /*color: white;*/
+	text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.9);
+	color: white;
+	font-size: 27px;
+	text-align: center;
+	font-family: "Aclonica";
+	letter-spacing:1px;
+}
+ 
+a:hover, a:active{
+    color: white;
+}
+ 
+.navigation-items{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.hamburgerMenuIcon{
+	color: white;
+}
+ 
+mat-toolbar{
+    border-radius: 3px;
+	background-color:#256275;
+}
+.example-icon{
+	color: white;
+	cursor: pointer;
+	margin-right:35px !important;
+	 padding-top: 3px;
+}
+ 
+@media(max-width: 959px){
+    mat-toolbar{
+        border-radius: 0px;
+    }
+}
+

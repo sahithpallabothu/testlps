@@ -1,0 +1,519 @@
+<div [ngClass]="{'customerDialog':editCustomerDialog}">
+	<!--form starts here -->
+	<form [formGroup]="customerForm"   #f="ngForm"  (ngSubmit)="onFormSubmit()">
+		<!--To start component header name-->
+		<header *ngIf="editCustomerDialog" mat-dialog-title fxLayoutAlign="center center">
+			<label style="font-size: 20px; text-align: center; padding-bottom:3px;">
+				{{title}}
+			</label>
+		</header>
+		<!--To end component header name-->
+		<mat-card [ngClass]="{'customerMatCard':editCustomerDialog}">
+			<mat-card-content class="subMatCard">
+				<fieldset  style="border:2px solid rgba(0,0,0,0.3);border-radius: 10px;padding: 15px;padding-left: 40px;">
+					<!--To start required form fields-->
+					<div fxLayout="row" fxFlex="35" fxLayoutGap="45px" fxLayout.xs="column" style="margin-bottom:35px">
+						<mat-checkbox formControlName="active" (input)="isChange()" checked="true">Active</mat-checkbox>
+						<mat-checkbox formControlName="sedc" (input)="isChange()">SEDC</mat-checkbox>
+						<mat-checkbox formControlName="ivr" (input)="isChange()">IVR</mat-checkbox><br>
+					</div>
+					<div fxLayout="row">
+						<!-- <div fxFlex=" 39.5" fxLayout="row" > -->
+							<mat-form-field style="width:395px;" class="commonSpaceBwControls">
+								<input type="text" formControlName="customerName" aria-label="Assignee" #custName maxlength="255"
+								(input)="isChange()" matTooltip="Enter Customer Name" matInput placeholder="Customer Name"  [errorStateMatcher]="errorMatcher" autofocus required>						
+								<mat-error *ngIf="hasError('customerName', 'required')">Customer Name is required.</mat-error>
+								<mat-error *ngIf="hasError('customerName', 'space')">{{SpaceMessage}}</mat-error>
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls" style="margin-right:149px !important;">
+								<input type="text" formControlName="customerCode" aria-label="Assignee" #custCode 
+								(input)="isChange()" matTooltip="Enter Customer Code" matInput placeholder="Customer Code" maxlength="4" [errorStateMatcher]="errorMatcher" required>							
+								<mat-error *ngIf="hasError('customerCode', 'required')">Customer Code is required.</mat-error>
+								<mat-error *ngIf="hasError('customerCode', 'space')">{{SpaceMessage}}</mat-error>
+							</mat-form-field>
+						<!-- </div> -->
+						<div fxLayout="column" style="width:185px;" fxLayout.xs="column">
+							<button type="button" mat-raised-button (click)="createcontact()" *ngIf="showButtons"
+								style="background-color:#218cad;color:white;">
+								<mat-icon>contacts</mat-icon> Contacts
+							</button><br>
+						</div>
+					</div>
+
+					<div fxLayout="row">						
+						<mat-form-field class="inputContactNumberControls commonSpaceBwControls" >
+							<mat-label>Telephone</mat-label>
+							<input matInput formControlName="telephone" [textMask]="{mask: telephonemask}" 
+								matTooltip="Enter Telephone" matInput placeholder="(___)___-___" (input)="isChange()" minlength="10" [errorStateMatcher]="errorMatcher" required>
+							<mat-error *ngIf="hasError('telephone', 'required')">Telephone is required.</mat-error>
+							<mat-error *ngIf="hasError('telephone', 'pattern')">Telephone should be number.</mat-error>
+							<mat-error *ngIf="hasError('telephone', 'InvalidTelephone')">Invalid  Telephone.</mat-error>
+						</mat-form-field>
+
+						<mat-form-field class="inputContactNumberControls commonSpaceBwControls" >
+							<mat-label>Fax</mat-label>
+							<input matInput formControlName="fax" [textMask]="{mask: telephonemask}"
+								matTooltip="Enter Fax" matInput placeholder="(___)___-___" (input)="isChange()" minlength="10" [errorStateMatcher]="errorMatcher">
+							<mat-error *ngIf="hasError('fax', 'pattern')">Fax should be number.</mat-error>
+							<mat-error *ngIf="hasError('fax', 'InvalidTelephone')">Invalid  Fax.</mat-error>
+						</mat-form-field>
+
+						<mat-form-field class="inputContactNumberControls"  style="margin-right:264px;" >
+							<mat-label>IVR</mat-label>
+							<input matInput formControlName="ivrPhoneNumber" [textMask]="{mask: telephonemask}" 
+								matTooltip="Enter Fax" matInput placeholder="(___)___-___" (input)="isChange()" minlength="10" [errorStateMatcher]="errorMatcher">
+							<mat-error *ngIf="hasError('ivrPhoneNumber', 'pattern')">IVR should be number.</mat-error>
+							<mat-error *ngIf="hasError('ivrPhoneNumber', 'InvalidTelephone')">Invalid  IVR.</mat-error>
+						</mat-form-field>
+
+						<div fxLayout="column" style="width:185px;" fxLayout.xs="column">
+							<button type="button" mat-raised-button *ngIf="showButtons" (click)="OpenServiceAgreementDialog()"
+								style="background-color:#218cad;color:white;"><mat-icon>assignment</mat-icon>Service Agreement
+							</button>
+						</div>
+					</div>
+
+					<div fxLayout="row">
+						<mat-form-field class="inputTextBoxControls commonSpaceBwControls">
+							<input matInput formControlName="mailerId" matTooltip="Enter Mailer ID" matInput  
+								placeholder="Mailer ID" (input)="isChange()" Numerics numericType="number" maxlength="9" 
+							[errorStateMatcher]="errorMatcher" autocomplete="off">		
+						</mat-form-field>
+
+						<mat-form-field class="inputTextBoxControls" style="margin-right:419px !important;">
+							<input matInput formControlName="crid" matTooltip="Enter CRID" matInput placeholder="CRID"
+							Numerics numericType="number"	(input)="isChange()"  maxlength="9"  [errorStateMatcher]="errorMatcher" 
+							autocomplete="off" >
+						</mat-form-field>
+						
+						<div fxLayout="column" style="width:185px;" fxLayout.xs="column" >
+							<button type="button" mat-raised-button *ngIf="showButtons" (click)="openApplicationScreen()" 
+							class ="applicationBtn" [disabled]="!hasApplicationScreenInsertPriviledge" >
+							<mat-icon>phone_iphone</mat-icon>Add Application(s)</button>			
+						</div>
+					</div>
+
+					<div fxLayout="row" >
+						<mat-form-field style="width:551px;margin-right: 211px;">
+							<textarea matInput formControlName="comment" matTooltip="Enter Comments"  (blur)="validateSpaces($event)"
+								placeholder="Comments" rows="1" (input)="isChange()"  maxlength="255" style="resize: none" [errorStateMatcher]="errorMatcher"></textarea>
+							<mat-error *ngIf="hasError('comment', 'space')">{{SpaceMessage}}</mat-error>
+						</mat-form-field>
+					</div>
+
+				<!-- 	<div fxLayout="column" *ngIf = "!showPanals" style="margin-top: 30px;">
+						<mat-label>New Application</mat-label>
+						<div fxLayout="row" style="margin-top: 10px;">
+							<mat-form-field style="width:395px;" class="commonSpaceBwControls">
+								<input type="text" formControlName="applicationName" aria-label="Assignee" #custName maxlength="255"
+								(input)="isChange()" matTooltip="Enter Application Name" matInput placeholder="Application Name"  [errorStateMatcher]="errorMatcher" >						
+								<mat-error *ngIf="hasError('applicationName', 'required')">Application Name is required.</mat-error>
+								<mat-error *ngIf="hasError('applicationName', 'space')">{{SpaceMessage}}</mat-error>
+							</mat-form-field>
+							<mat-form-field class="inputTextBoxControls" style="margin-right:149px !important;">
+								<input type="text" formControlName="applicationCode" aria-label="Assignee" #custCode 
+								(input)="isChange()" matTooltip="Enter Application Code" matInput placeholder="Application Code" maxlength="4" [errorStateMatcher]="errorMatcher" >							
+								<mat-error *ngIf="hasError('applicationCode', 'required')">Application Code is required.</mat-error>
+								<mat-error *ngIf="hasError('applicationCode', 'space')">{{SpaceMessage}}</mat-error>
+							</mat-form-field>
+						</div>
+				</div> -->
+					
+					<!--To end required form fields-->
+				</fieldset><br>
+
+				<!-- <mat-accordion *ngIf = "(hasScreenUpdatePriviledge || hasScreenReadPriviledge ) && showPanals"> -->
+				<mat-accordion *ngIf = "showPanals">
+					<mat-expansion-panel [expanded]="pysicalPanelOpenState" (afterExpand)="scrollToDown()" 
+					(opened)="pysicalPanelOpenState = true" (closed)="pysicalPanelOpenState = false">
+						<mat-expansion-panel-header>
+							<mat-panel-title><b>Mailing / Physical Address </b></mat-panel-title>
+							<mat-panel-description style="padding-left:130px">
+								<b>{{pysicalPanelOpenState ? 'Click to close' : 'Click for'}} Mailing / Physical Address</b>
+							</mat-panel-description>
+						</mat-expansion-panel-header>
+						<div fxLayout="row" fxLayoutGap="15px" fxLayout.sm="column" fxLayout.xs="column">							
+							<mat-card fxFlex="50">
+								<!--To start mailing address fields-->
+								<mat-card-header><p>Mailing Address</p></mat-card-header>
+								<mat-card-content style="padding: 15px; ">
+									<div fxLayout="column" fxLayout.xs="column">
+
+										<mat-form-field>
+											<input matInput formControlName="mailingAddress1" matTooltip="Enter Mailing Address 1" 
+												 maxlength="255" matInput placeholder="Address 1" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+											<mat-error *ngIf="hasError('mailingAddress1', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<mat-form-field>
+											<input matInput formControlName="mailingAddress2" matTooltip="Enter Mailing Address 2" 
+											maxlength="255"	matInput placeholder="Address 2"(input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('mailingAddress2', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<div fxLayout="row" fxLayout.xs="column">
+
+											<mat-form-field style="width: 50%" [ngClass]="{'cityControlSpace':editCustomerDialog,'commonSpaceBwAddressControls':!editCustomerDialog}">
+												<input matInput formControlName="mailingCity"
+													maxlength="255"	matTooltip="Enter City" matInput placeholder="City" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('mailingCity', 'pattern')">City should be characters.</mat-error>
+												<mat-error *ngIf="hasError('mailingCity', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+											
+											<mat-form-field class="inputTextBoxControls commonSpaceBwAddressControls" floatLabel="never">
+												<input type="text"  formControlName="mailingState" maxlength="2" placeholder="State" aria-label="Number" #mState 
+													matTooltip="Select State"  matInput [matAutocomplete]="auto1" (input)="isChange()"  (input)="validateMailingStateAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayStates" (optionSelected)="validateMailingStateAutoCompletes()">
+													<mat-option *ngFor="let option of filteredOptionsMailingStates | async" [value]="option">
+														{{option.stateCode}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('mailingState', 'pattern')">State should be characters.</mat-error>
+												<mat-error *ngIf="customerForm.controls['mailingState'].hasError('incorrect')">
+													Please select a valid state.
+												</mat-error>												
+											</mat-form-field>
+
+										<!-- 	<mat-form-field *ngIf="editCustomerDialog" class="inputTextBoxControls commonSpaceBwAddressControls">
+													<input type="text" formControlName="mailingState" maxlength="2" placeholder="State" aria-label="Number" #mState 
+														matTooltip="Select State" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+										
+											<mat-form-field class="inputTextBoxControls">
+												<input matInput formControlName="mailingZip" maxlength="10" matTooltip="Enter Zip Code" 
+													matInput placeholder="Zip Code" style="text-align:right" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('mailingZip', 'pattern')">Invalid Zip Code.</mat-error>		
+												<mat-error *ngIf="hasError('mailingZip', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+										</div>
+									</div>
+								</mat-card-content>
+								<!--To end mailing address fields-->
+							</mat-card>
+							
+							<mat-card fxFlex="50">
+								<!--To start physical address fields-->
+								<mat-card-header><p>Physical Address</p></mat-card-header>
+								<mat-card-content style="padding:15px;">
+									<div fxLayout="column" fxLayout.xs="column">
+										<mat-form-field>
+											<input matInput formControlName="physicalAddress1" matTooltip="Enter Physical Address 1" 
+												maxlength="255" matInput placeholder="Address 1" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('physicalAddress1', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<mat-form-field>
+											<input matInput formControlName="physicalAddress2" matTooltip="Enter Physical Address 2" 
+											maxlength="255" matInput placeholder="Address 2" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('physicalAddress2', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<div fxLayout="row" fxLayout.xs="column">
+											<mat-form-field style="width: 50%" [ngClass]="{'cityControlSpace':editCustomerDialog,'commonSpaceBwAddressControls':!editCustomerDialog}">
+												<input matInput formControlName="physicalCity" matTooltip="Enter City" 
+													maxlength="255"	matInput placeholder="City" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('physicalCity', 'pattern')">City should be characters.</mat-error>
+												<mat-error *ngIf="hasError('physicalCity', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+											
+											<mat-form-field class="inputTextBoxControls commonSpaceBwAddressControls">
+												<input type="text" formControlName="physicalState" maxlength="2" placeholder="State" aria-label="Number" #pState 
+													matTooltip="Select State" matInput [matAutocomplete]="auto2" (input)="isChange()"  (input)="validatePhysicalStateAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayStates"  (optionSelected)="validatePhysicalStateAutoCompletes()">
+													<mat-option *ngFor="let option1 of filteredOptionsPhysicalStates | async" [value]="option1">
+														{{option1.stateCode}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('physicalState', 'pattern')">State should be characters.</mat-error>
+												<mat-error *ngIf="customerForm.controls['physicalState'].hasError('incorrect')">
+													Please select a valid state.
+												</mat-error>
+											</mat-form-field>
+
+											<!-- to populate state when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" class="inputTextBoxControls commonSpaceBwAddressControls">
+													<input type="text" formControlName="physicalState" maxlength="2" placeholder="State" aria-label="Number" #pState  
+														matTooltip="Select State" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+											<!-- <mat-form-field style="width: 33%"> -->
+											<mat-form-field class="inputTextBoxControls">
+												<input matInput formControlName="physicalZip" maxlength="10" matTooltip="Enter Zip Code" 
+													matInput placeholder="Zip Code" style="text-align:right" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('physicalZip', 'pattern')">Invalid Zip Code.</mat-error>
+												<mat-error *ngIf="hasError('physicalZip', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+										</div>
+									</div>
+								</mat-card-content>
+								<!--To end physical address fields-->
+							</mat-card>
+						</div>
+					</mat-expansion-panel>
+														
+					<mat-expansion-panel [expanded]="heldPanelOpenState" (afterExpand)="scrollToDown()" 
+					(opened)="heldPanelOpenState = true" (closed)="heldPanelOpenState = false">
+						<mat-expansion-panel-header><mat-panel-title><b>Held Address </b></mat-panel-title>
+							<mat-panel-description style="padding-left:176px">
+								<b>{{heldPanelOpenState ? 'Click to close' : 'Click for'}} Held Address</b>
+							</mat-panel-description>
+						</mat-expansion-panel-header>
+						<div fxLayout="row" fxLayoutGap="15px" fxLayout.sm="column" fxLayout.xs="column">							
+							<mat-card fxFlex="50">
+								<!--To start Check held address fields-->
+								<mat-card-header><p>Held Address </p></mat-card-header>
+								<mat-card-content  style="padding: 15px;">
+									<div fxLayout="column" fxLayout.xs="column">
+										<mat-form-field class="inputTextBoxControls">
+											<mat-label>Held Type</mat-label>
+											<mat-select matTooltip="Select Held Type" formControlName="checkHeld1TypeId"  (selectionChange)="isChange()">
+												<mat-option [value]="">(Select)</mat-option>
+												<mat-option *ngFor="let item of heldAddressTypes" [value]="item.heldTypeId">
+												{{item.description}}
+											  </mat-option>
+											</mat-select>
+										  </mat-form-field>
+										<mat-form-field>
+											<input matInput formControlName="checkHeldAddress1" matTooltip="Enter Held Address 1"
+												maxlength="255" matInput placeholder="Address 1" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('checkHeldAddress1', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+										<mat-form-field>
+											<input matInput formControlName="checkHeldAddress2" matTooltip="Enter Held Address 2"
+												maxlength="255"	matInput placeholder="Address 2" style="width: 380px;" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+											<mat-error *ngIf="hasError('checkHeldAddress2', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+										<div fxLayout="row" fxLayout.xs="column">
+											<mat-form-field style="width: 50%" [ngClass]="{'cityControlSpace':editCustomerDialog,'commonSpaceBwAddressControls':!editCustomerDialog}">
+												<input matInput formControlName="checkHeldCity" matTooltip="Enter City"
+													maxlength="255"	matInput placeholder="City" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('checkHeldCity', 'pattern')">City should be characters.</mat-error>
+												<mat-error *ngIf="hasError('checkHeldCity', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+											
+											<mat-form-field class="inputTextBoxControls commonSpaceBwAddressControls">
+												<input type="text" formControlName="checkHeldState" placeholder="State" aria-label="Number" 
+													#checkHeldState matTooltip="Select State" matInput [matAutocomplete]="auto3" 
+													(input)="isChange()" maxlength="2" (input)="validateCheckHeldStateAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayStates" (optionSelected)="validateCheckHeldStateAutoCompletes()">
+													<mat-option *ngFor="let option of filteredOptionsCheckHeldStates | async" [value]="option">
+														{{option.stateCode}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('checkHeldState', 'pattern')">State should be characters.</mat-error>												
+												<mat-error *ngIf="customerForm.controls['checkHeldState'].hasError('incorrect')">
+													Please select a valid state.
+												</mat-error>
+											</mat-form-field>
+
+											<!-- to populate state when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" class="inputTextBoxControls commonSpaceBwAddressControls">
+													<input type="text" formControlName="checkHeldState" maxlength="2" placeholder="State" aria-label="Number" #checkHeldState  
+														matTooltip="Select State" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+											<!-- <mat-form-field style="width: 33%"> -->
+											<mat-form-field class="inputTextBoxControls">
+												<input matInput formControlName="checkHeldZip" maxlength="10" matTooltip="Enter Zip Code" 
+													matInput placeholder="Zip Code" style="text-align:right" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('checkHeldZip', 'pattern')">Invalid Zip Code.</mat-error>													
+												<mat-error *ngIf="hasError('checkHeldZip', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+										</div>
+										<div fxLayout="row" fxLayout.xs="column">
+											<mat-form-field style="width:60%" class="commonSpaceBwAddressControls">
+												<input type="text" formControlName="checkHeldContact" #checkHeldContact placeholder="Contact" aria-label="Number"
+													matInput (input)="isChange()" matTooltip="Select Contact" [matAutocomplete]="autoHC" [errorStateMatcher]="errorMatcher"
+												maxlength="255" (input)="validateHeldCheckContactsAutoComplete()">
+												<mat-autocomplete #autoHC="matAutocomplete" [displayWith]="displayFnHeldContacts" (optionSelected)="validateHeldCheckContactsAutoComplete()">
+													<mat-option *ngFor="let method of filteredOptionsHeldCheckContacts | async" [value]="method">
+														{{method.contactFirstName}} {{method.contactLastName}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="customerForm.controls['checkHeldContact'].hasError('incorrect')">
+													Please select a valid Contact.
+												</mat-error>
+												<mat-error *ngIf="customerForm.controls['checkHeldContact'].hasError('noContacts')">
+													Please add a contact for customer.
+												</mat-error>	
+											</mat-form-field>
+
+											<!-- to populate Held Contact when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" style="width:60%" class="commonSpaceBwAddressControls">
+													<input type="text" formControlName="checkHeldContact" placeholder="Contact" aria-label="Number" #checkHeldContact  
+														matTooltip="Select Contact" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+											<mat-form-field style="width:35%" fxFlex.md = "40">
+												<input type="text" formControlName="checkHeldShipmentMethod"
+													#checkHeldShipMent placeholder="Shipment Method" aria-label="Number" matInput (input)="isChange()"
+													matTooltip="Select Shipment Method" [matAutocomplete]="auto7" (input)="validateCheckShipmentMethodAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #auto7="matAutocomplete" [displayWith]="displayFnShipmentMethod" (optionSelected)="validateCheckShipmentMethodAutoCompletes()">
+													<mat-option *ngFor="let method of filteredOptionsCheckShipmentMethod | async" [value]="method">
+														{{method.shipmentMethod}}
+													</mat-option>
+												</mat-autocomplete>		
+												<mat-error *ngIf="customerForm.controls['checkHeldShipmentMethod'].hasError('incorrect')">
+													Please select a valid shipmentMethod.
+												</mat-error>										
+											</mat-form-field>
+
+											<!-- to populate Shipment Method when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" style="width:35%" fxFlex.md = "40">
+												<input type="text" formControlName="checkHeldShipmentMethod" placeholder="Shipment Method" aria-label="Number" 
+													#checkHeldShipMent  matTooltip="Select Shipment Method" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+										</div>
+									</div>
+								</mat-card-content>
+								<!--To end Check held address fields-->
+							</mat-card>
+								
+							<mat-card fxFlex="50">
+								<mat-card-header><p>Held Address </p></mat-card-header>								
+								<mat-card-content style="padding: 15px;">
+									<!--To start Other held address fields-->
+									<div fxLayout="column" fxLayout.xs="column">
+										<mat-form-field class="inputTextBoxControls">
+											<mat-label>Held Type</mat-label>
+											<mat-select matTooltip="Select Held Type" formControlName="held2TypeId"  (selectionChange)="isChange()">
+												<mat-option [value]="">(Select)</mat-option>
+												<mat-option *ngFor="let item of heldAddressTypes" [value]="item.heldTypeId">
+												{{item.description}}
+											  </mat-option>
+											</mat-select>
+										  </mat-form-field>
+										<mat-form-field>
+											<input matInput formControlName="heldAddress1"
+												maxlength="255" matTooltip="Enter Held Address 1" matInput placeholder="Address 1"(input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('heldAddress1', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+										<mat-form-field>
+											<input matInput formControlName="heldAddress2" matTooltip="Enter Held Address 2" 
+												maxlength="255" matInput placeholder="Address 2"style="width: 380px;" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('heldAddress2', 'space')">{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+										<div fxLayout="row" fxLayout.xs="column">
+											<mat-form-field style="width: 50% ;" [ngClass]="{'cityControlSpace':editCustomerDialog,'commonSpaceBwAddressControls':!editCustomerDialog}">
+												<input matInput formControlName="heldCity" matTooltip="Enter City"
+												maxlength="255"	matInput placeholder="City" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('heldCity', 'pattern')">City should be characters.</mat-error>
+												<mat-error *ngIf="hasError('heldCity', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+											<!-- <mat-form-field style="width: 25.2%"> -->
+											<mat-form-field class="inputTextBoxControls commonSpaceBwAddressControls">
+												<input type="text" formControlName="heldState" placeholder="State" aria-label="Number" #hState 
+													matTooltip="Select State" matInput [matAutocomplete]="autoS"
+													(input)="isChange()" maxlength="2" (input)="validateHeldStateAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #autoS="matAutocomplete" [displayWith]="displayStates" (optionSelected)="validateHeldStateAutoCompletes()">
+													<mat-option *ngFor="let option of filteredOptionsHeldStates | async" [value]="option">
+														{{option.stateCode}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="hasError('heldState', 'pattern')">State should be characters.</mat-error>
+												<mat-error *ngIf="customerForm.controls['heldState'].hasError('incorrect')">
+													Please select a valid state.
+												</mat-error>
+											</mat-form-field>
+
+											<!-- to populate state when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" class="inputTextBoxControls commonSpaceBwAddressControls">
+												<input type="text" formControlName="heldState" maxlength="2" placeholder="State" aria-label="Number" #hState  
+													matTooltip="Select State" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+											<!-- <mat-form-field style="width: 33%">  -->
+											<mat-form-field class="inputTextBoxControls" > 
+												<input matInput formControlName="heldZip" maxlength="10" matTooltip="Enter Zip Code" 
+													matInput placeholder="Zip Code" style="text-align:right" (input)="isChange()" [errorStateMatcher]="errorMatcher">
+												<mat-error *ngIf="hasError('heldZip', 'pattern')">Invalid Zip Code.</mat-error>
+												<mat-error *ngIf="hasError('heldZip', 'space')">{{SpaceMessage}}</mat-error>
+											</mat-form-field>
+										</div>
+										<div fxLayout="row" fxLayout.xs="column">
+											<mat-form-field style="width:60%" class ="commonSpaceBwAddressControls" >											
+												<input type="text" formControlName="heldContact" #heldOtherContact placeholder="Contact" aria-label="Number"
+													matInput (input)="isChange()" matTooltip="Select Contact" [matAutocomplete]="autoHOC"
+													maxlength="255"  (input)="validateHeldOtherContactsAutoComplete()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #autoHOC="matAutocomplete" [displayWith]="displayFnHeldContacts" (optionSelected)="validateHeldOtherContactsAutoComplete()">
+													<mat-option *ngFor="let hoc of filteredOptionsHeldOtherContacts | async" [value]="hoc">
+														{{hoc.contactFirstName}} {{hoc.contactLastName}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="customerForm.controls['heldContact'].hasError('incorrect')">
+													Please select a valid Contact.
+												</mat-error>
+												<mat-error *ngIf="customerForm.controls['heldContact'].hasError('noContacts')">
+													Please add a contact for customer.
+												</mat-error>										
+											</mat-form-field>
+
+											<!-- to populate Held Contact when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" style="width:60%" class ="commonSpaceBwAddressControls">
+												<input type="text" formControlName="heldContact" placeholder="Contact" aria-label="Number" #heldOtherContact  
+													matTooltip="Select Contact" matInput  (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+
+											<!-- <mat-form-field  *ngIf="!editCustomerDialog" style="width:35%" fxFlex.md = "40"> -->
+											<mat-form-field style="width:35%" fxFlex.md = "40">
+												<input type="text" formControlName="heldShipmentMethod" #heldShipMent placeholder="Shipment Method" 
+													aria-label="Number" matInput (input)="isChange()" matTooltip="Select Shipment Method" 
+													[matAutocomplete]="autoSm" (input)="validateHeldShipmentMethodAutoCompletes()" [errorStateMatcher]="errorMatcher">
+												<mat-autocomplete #autoSm="matAutocomplete" [displayWith]="displayFnShipmentMethod" (optionSelected)="validateHeldShipmentMethodAutoCompletes()">
+													<mat-option *ngFor="let method of filteredOptionsShipmentMethod | async" [value]="method">
+														{{method.shipmentMethod}}
+													</mat-option>
+												</mat-autocomplete>
+												<mat-error *ngIf="customerForm.controls['heldShipmentMethod'].hasError('incorrect')">
+													Please select a valid shipmentMethod.
+												</mat-error>
+											</mat-form-field>
+
+											<!-- to populate Shipment Method when mat-dialog -->
+											<!-- <mat-form-field *ngIf="editCustomerDialog" style="width:35%" fxFlex.md = "40">
+												<input type="text" formControlName="heldShipmentMethod" placeholder="Shipment Method" aria-label="Number" 
+													#heldShipMent  matTooltip="Select Shipment Method" matInput 
+													 (input)="isChange()" [errorStateMatcher]="errorMatcher">																								
+											</mat-form-field> -->
+
+										</div>
+									</div>
+								</mat-card-content>
+								<!--To end Other held address fields-->
+							</mat-card>
+						</div>
+					</mat-expansion-panel>	
+
+				</mat-accordion><br><br>
+				<!--To end Expansion panels-->
+
+				<!-- action buttons -->
+				<div fxLayout="row" fxLayoutGap="15px" id="matCardCustomerHeldAddressMoveSmooth"
+				fxLayoutAlign="center center">					
+					<button  type="submit" mat-raised-button color="primary" 
+						[disabled]="!(customerForm.valid) || !isAllowSave" class="filterButtonClass">
+						<mat-icon>save</mat-icon> Save
+					</button>						
+					<button type="button" mat-raised-button (click)="ResetAddCustomer()"
+						[disabled]="!isAllowSave " class="filterButtonClass">
+						<mat-icon>clear_all</mat-icon> Reset
+					</button>
+
+					<button *ngIf="showBackButton" type="button" mat-raised-button class="filterButtonClass" 
+					(click)="backToViewCustomer()">
+						<mat-icon>arrow_back</mat-icon> Back
+					</button>
+					<button *ngIf="editCustomerDialog" type="button" mat-raised-button 
+					class="filterButtonClass" (click)="dialogCancel()">
+						<mat-icon>cancel</mat-icon>Close
+					</button>
+				</div>
+				<!-- action buttons -->
+
+			</mat-card-content>
+		</mat-card>
+	</form>
+	<!--form ends here -->
+</div>

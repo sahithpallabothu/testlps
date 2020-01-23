@@ -1,0 +1,192 @@
+<div class="container chargesDialogComponent">
+	<form [formGroup]="chargesForm">
+		<header mat-dialog-title>
+			<label style="font-size:20px;">{{title}}</label>
+		</header>
+		<div class="container" style="margin-top:0px;">
+			<mat-card fxFlex fxFlexAlign="start">
+				<mat-card-content style="">
+					<div fxLayout="column" >
+						<form class="additionalChargeForm" [formGroup]="AdditionalChargeForm">
+							<div *ngIf="!isEdit" formArrayName="itemRows" class="dynamicList">
+								<div fxLayout="row" *ngFor="let itemrow of formArr.controls; let i=index"
+									[formGroupName]="i">
+									<div fxLayout.xs="column" fxLayout.sm="row wrap"
+										fxLayout.md="row wrap">
+										<mat-form-field fxFlex="24%" fxFlex.md="20%"  style="margin-right:15px">
+											<input type="text" placeholder="Fee Description" matInput
+												formControlName="chargesChargeType" matTooltip="Select Fee Description"
+												autocomplete="off" [matAutocomplete]="auto1"
+												tabIndex="{{editChargeIndex+1}}" required>
+											<mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn">
+												<mat-option *ngFor="let type of filteredOptionsChargeType | async"
+													matTooltip='{{type.description}}' [value]="type">
+													{{type.description}}
+												</mat-option>
+											</mat-autocomplete>
+											<mat-error
+												*ngIf="hasErrorDynamic('chargesChargeType', 'required', itemrow)">Fee Description is required.</mat-error>
+											<mat-error *ngIf="hasErrorDynamic('chargesChargeType', 'space', itemrow)">
+												{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<mat-form-field class = "inputTextBoxControls" style="margin-right:15px"><!--fxFlex="16%" -->
+											<input type="text" matInput formControlName="chargesAmount"
+												style="text-align: right" autocomplete="off" matTooltip="Enter $ Amount"
+												placeholder="$ Amount" tabIndex="{{editChargeIndex+1}}"
+												(keypress)=" validateDecimals($event)"
+												(blur)="changeToAmountPattern('chargesAmount', itemrow)" required>
+											<mat-error *ngIf="hasErrorDynamic('chargesAmount', 'pattern', itemrow)">
+												Please enter a valid $ Amount.</mat-error>
+											<mat-error *ngIf="hasErrorDynamic('chargesAmount','required', itemrow)">
+												$ Amount is required.
+											</mat-error>
+											<mat-error *ngIf="itemrow.controls['chargesAmount'].hasError('incorrect')">
+												Please enter a valid $ Amount.
+											</mat-error>
+										</mat-form-field>
+										<mat-form-field fxFlex="38%" fxFlex.md="30%" style="margin-right:15px">
+											<input matInput formControlName="chargesComments" maxlength="200"
+												matTooltip="Enter Description" autocomplete="off" maxlength="255"
+												placeholder="Description" tabIndex="{{editChargeIndex+1}}">
+											<mat-error *ngIf="hasErrorDynamic('chargesComments', 'space', itemrow)">
+												{{SpaceMessage}}</mat-error>
+										</mat-form-field>
+
+										<!-- <div fxFlex="15"> -->
+											<mat-form-field class = "inputTextBoxControls" style="margin-right: 0px !important;"><!--fxFlex="15%"-->
+												<mat-label> Date Entered</mat-label>
+												<input matInput [textMask]="{mask: datemask}"
+													formControlName="datePickerInCharges" autocomplete="off"
+													matTooltip="Enter  Date Entered" placeholder="MM/DD/YY"
+													(input)="setDateToPicker('datePickerInCharges','datePickerInCharges1', itemrow)"
+													tabIndex="{{editChargeIndex+1}}" required>
+
+												<mat-error
+													*ngIf="hasErrorDynamic('datePickerInCharges','pattern', itemrow)">
+													Invalid Date.
+												</mat-error>
+												<mat-error
+													*ngIf="hasErrorDynamic('datePickerInCharges','required', itemrow)">
+													Date Entered is required.
+												</mat-error>
+												<mat-error *ngIf="itemrow.controls['datePickerInCharges'].hasError('incorrectDate')">Date should be less than or equal to current date.</mat-error>
+											</mat-form-field>
+											<mat-form-field fxFlex="1px" style="margin-right:15px">
+												<input matInput formControlName="datePickerInCharges1"
+													[matDatepicker]="chargesDatepicker" [max]="maxDate"
+													(dateChange)="setDateToControl($event, 'datePickerInCharges','datePickerInCharges1',itemrow )"
+													tabIndex="-1">
+												<mat-datepicker-toggle matSuffix [for]="chargesDatepicker" style="margin-left:-16px;"
+													tabIndex="-1"></mat-datepicker-toggle>
+												<mat-datepicker #chargesDatepicker></mat-datepicker>
+											</mat-form-field>
+										<!-- </div> -->
+										<button type="button" class="operationButtons" *ngIf="itemrow.ShowDeleteButton"
+											mat-flat-button (click)="deleteRow(i)" tabIndex="{{editChargeIndex+1}}">
+											<mat-icon>delete_outline</mat-icon>
+										</button>
+										<button type="button" *ngIf="!itemrow.ShowAddButton" 
+											(click)="addNewRow(itemrow)" style="color:blue;font-size:20px"
+											class="operationButtons" mat-flat-button color="Basic"
+											tabIndex="{{editChargeIndex+1}}">
+											<mat-icon>add</mat-icon>
+										</button>
+										
+									</div>
+								</div>
+								<p id="scrollToDownInCharges" style="visibility:hidden;padding:0px">Scroll Down </p>
+							</div>
+						</form>
+						<div *ngIf="isEdit" fxLayout="column" fxLayoutGap="5px">
+							<!-- isViewACScreen -->
+
+							<div *ngIf="isViewACScreen" fxFlex="24">
+								<div fxLayout = "row" style="margin-top: 0px;">
+									<p><b>Customer: </b>&nbsp;&nbsp; </p><p style="width: 192px;">{{presentClientName}}
+										({{presentCustomerCode}})</p>
+								</div>
+								<p><b>Job Name: </b>&nbsp; {{presentJobName}} </p>
+								
+							</div>
+
+							<mat-form-field fxFlex="24">
+								<input type="text" placeholder="Fee Description" #chargeType maxlength="49" matInput
+									formControlName="editchargesChargeType" matTooltip="Select Fee Description"
+									[matAutocomplete]="auto" tabIndex="{{editChargeIndex+1}}" required>
+								<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+									<mat-option *ngFor="let type of filteredOptionsChargeTypeEdit | async"
+										matTooltip='{{type.description}}' autocomplete="off" [value]="type">
+										{{type.description}}
+									</mat-option>
+								</mat-autocomplete>
+								<mat-error *ngIf="hasError('editchargesChargeType', 'required')">Fee Description is
+									required.</mat-error>
+								<mat-error *ngIf="hasError('editchargesChargeType', 'space')">{{SpaceMessage}}
+								</mat-error>
+
+							</mat-form-field>
+
+							<mat-form-field class = "inputTextBoxControls" ><!--fxFlex="16"-->
+								<input type="text" matInput formControlName="editchargesAmount"
+								 autocomplete="off" matTooltip="Enter $ Amount"
+									placeholder="$ Amount" (keypress)="validateDecimals($event)"
+									(blur)="changeToAmountPattern('editchargesAmount', -1)"
+									tabIndex="{{editChargeIndex+1}}" required>
+								<mat-error *ngIf="hasError('editchargesAmount', 'required')">$ Amount is required.
+								</mat-error>
+								<mat-error *ngIf="hasError('editchargesAmount', 'pattern')">Please enter a valid $
+									Amount.</mat-error>
+								<mat-error
+									*ngIf="chargesForm.controls['editchargesAmount'].hasError('incorrectAmount')">
+									Please enter a valid $ Amount.
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field fxFlex="38">
+								<input matInput formControlName="editchargesComments" matTooltip="Enter Description"
+									autocomplete="off" maxlength="255" placeholder="Description"
+									tabIndex="{{editChargeIndex+1}}">
+								<mat-error *ngIf="hasError('editchargesComments', 'space')">{{SpaceMessage}}</mat-error>
+							</mat-form-field>
+							<div fxFlex="15">
+								<mat-form-field class = "inputTextBoxControls" ><!--fxFlex="95"-->
+									<mat-label> Date Entered</mat-label>
+									<input matInput [textMask]="{mask: datemask}"
+										formControlName="editdatePickerInCharges" autocomplete="off"
+										matTooltip="Enter  Date Entered" placeholder="MM/DD/YY"
+										(input)="setDateToPickerInEdit('editdatePickerInCharges','editdatePickerInCharges1')"
+										errorMatcher tabIndex="{{editChargeIndex+1}}" required>
+									<mat-error *ngIf="hasError('editdatePickerInCharges','required')">Date Entered is required.
+									</mat-error>
+									<mat-error *ngIf="hasError('editdatePickerInCharges','pattern')">Invalid Date.
+									</mat-error>
+									<mat-error *ngIf="chargesForm.controls['editdatePickerInCharges'].hasError('incorrectDate')">Date should be less than or equal to current date.</mat-error>
+								</mat-form-field>
+								<mat-form-field fxFlex="0.5px" style="margin-left:-15px">
+									<input matInput formControlName="editdatePickerInCharges1"
+										[matDatepicker]="chargesDatepicker1" [max]="maxDate"
+										(dateChange)="setDateToControlInEdit($event, 'editdatePickerInCharges','editdatePickerInCharges1')">
+									<mat-datepicker-toggle matSuffix [for]="chargesDatepicker1"></mat-datepicker-toggle>
+									<mat-datepicker #chargesDatepicker1></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="center">
+							<mat-dialog-actions fxLayout.xs="column" fxLayout.sm="column" fxLayoutGap="10px">
+								<button class ="filterButtonClass" mat-raised-button (click)="addChargesToArray()"
+									[disabled]="callFromDblClick ?!(chargesForm.valid):false || !callFromDblClick ?!(AdditionalChargeForm.valid):false" color="primary"
+									style="margin-top:1px" tabIndex="{{editChargeIndex+1}}">
+									<mat-icon>save</mat-icon> Submit
+								</button>
+								<button class ="filterButtonClass" mat-raised-button (click)="dialogCancel()" style="margin-top:1px"
+									tabIndex="{{editChargeIndex+1}}">
+									<mat-icon>cancel</mat-icon> Close
+								</button>
+							</mat-dialog-actions>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</div>
+	</form>
+</div>

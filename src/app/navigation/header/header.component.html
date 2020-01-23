@@ -1,0 +1,41 @@
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Aclonica" />
+<mat-toolbar  style="position:fixed;z-index:222;" >
+  
+  
+  
+  <!-- auto hide the hamburger menu //satya
+  <div fxHide.gt-xs>
+  -->  
+  <div fxHide='false' *ngIf="showMenu">  
+      <button mat-icon-button class="hamburgerMenuIcon" (click)="onToggleSidenav()">
+          <mat-icon>menu</mat-icon>
+      </button>
+  </div>
+  
+  
+  <div fxFlex fxLayout fxLayoutAlign="left" >
+   <a routerLink="/home" style="  border: 1px solid black; margin-top: 14px;background-color:white;">
+			<!-- <img _ngcontent-c5="" class="img" src="assets\aristaLogo_rrs.png" width="55"> -->
+		<img _ngcontent-c5="" class="img" src="assets\AristaCMYK_Bevel_with_Arista_Name.jpg" width="110" height="70">
+		</a>
+     <!-- <a routerLink="/home" style="padding-top:11px;padding-left:3px">
+		Arista LPS</a>-->
+		<!-- <a routerLink="/home" style="padding-top: 28px;padding-left: 7px;">LPS</a> -->
+  </div>
+  
+   <div fxFlex fxLayout fxLayoutAlign="center" fxHide.xs >
+      <app-breadcrumb></app-breadcrumb>
+  </div>
+  
+  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs >
+      <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+          <span class="example-spacer"> </span>
+		  <!-- <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon"  >account_circle</mat-icon> -->
+		    <label  style="border: 0px solid #ccc;color:white;font-size:15px;"  #LoggedInUserName ></label>
+		  <span class="example-spacer">  </span>
+		<mat-icon class="example-icon"   (click)="onLogout()" *ngIf="showLogoutBtn" matTooltip="Logout" >exit_to_app</mat-icon>
+  <!--  <mat-icon class="example-icon" style="cursor: pointer;">help</mat-icon> -->
+		  
+      </ul>
+  </div>
+</mat-toolbar>
